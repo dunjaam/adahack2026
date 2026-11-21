@@ -30,13 +30,15 @@ export interface Municipality {
   total_wood_systems: number;
   total_dwellings: number;
   total_pre_1980_buildings?: number;
+  diesel_fleet_limit: number;
+  diesel_subsidy_eur: number;
   districts: District[];
 }
 
 export interface SimParams {
   electric_bus_pct: number;
   wood_systems_replaced: number;
-  traffic_reduction_pct: number;
+  diesel_cars_replaced: number;
   pre1980_retrofit_pct: number;
   budget_eur: number;
 }
@@ -45,8 +47,10 @@ export interface DistrictResult {
   cs_ime: string;
   pm25_before: number;
   pm25_after: number;
+  pm25_after_outside: number;
   pm10_before: number;
   pm10_after: number;
+  pm10_after_outside: number;
   delta_pm25: number;
   delta_pct: number;
   heating_before: number;
@@ -65,7 +69,7 @@ export interface Cost {
   wood_cost: number;
   bus_cost: number;
   n_buses: number;
-  traffic_cost: number;
+  diesel_cost: number;
   retrofit_cost: number;
   n_retrofits: number;
   total_cost: number;
@@ -78,9 +82,16 @@ export interface SimResult {
   municipality_pm25_after: number;
   municipality_pm10_before: number;
   municipality_pm10_after: number;
+  municipality_pm25_after_outside: number;
+  municipality_pm10_after_outside: number;
   delta_pm25: number;
   delta_pm25_pct: number;
   cost: Cost;
+  diesel_avoided_kg_per_year: {
+    nox_kg: number;
+    pm25_kg: number;
+    pm10_kg: number;
+  };
   affected_dwellings: number;
   affected_area_km2: number;
   eur_per_ug_m3: number | null;
@@ -90,6 +101,7 @@ export interface SimResult {
 
 export interface OptimizeResult {
   budget_eur: number;
+  diesel_cars_replaced: number;
   best: {
     params: Partial<SimParams>;
     cost: number;
@@ -117,7 +129,10 @@ export interface Scenario {
   id: string;
   name: string;
   district: string | null;
-  params: SimParams;
+  params: Omit<SimParams, "diesel_cars_replaced"> & {
+    diesel_cars_replaced?: number;
+    traffic_reduction_pct?: number;
+  };
   result: SimResult;
   createdAt: number;
 }

@@ -7,14 +7,18 @@ import { eur, num } from "../lib";
 
 export function Optimizer() {
   const budget = useStore((s) => s.params.budget_eur);
+  const dieselCount = useStore((s) => s.params.diesel_cars_replaced);
   const applyParams = useStore((s) => s.applyParams);
-  const [res, setRes] = useState<OptimizeResult | null>(null);
+  const [recommendation, setRecommendation] = useState<OptimizeResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const res = recommendation?.budget_eur === budget && recommendation.diesel_cars_replaced === dieselCount
+    ? recommendation
+    : null;
 
   const run = async () => {
     setLoading(true);
     try {
-      setRes(await api.optimize(budget));
+      setRecommendation(await api.optimize(budget, dieselCount));
     } finally {
       setLoading(false);
     }
@@ -26,6 +30,7 @@ export function Optimizer() {
         <p className="text-xs text-slate-500">
           Poišči kombinacijo ukrepov z največjim znižanjem PM2.5 znotraj proračuna{" "}
           <span className="font-semibold text-brand-600">{eur(budget)}</span>.
+          {dieselCount > 0 && " Izbrano število zamenjav dizlov je fiksno. Učinek predpostavlja vožnje v MOL."}
         </p>
         <button
           onClick={run}
@@ -49,10 +54,9 @@ export function Optimizer() {
           <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-brand-700">
             <Sparkles className="h-4 w-4" /> Priporočeni scenarij
           </div>
-          <div className="grid grid-cols-4 gap-2 text-center">
+          <div className="grid grid-cols-3 gap-2 text-center">
             <Mini label="e-busi" v={`${res.best.params.electric_bus_pct ?? 0}%`} />
             <Mini label="kurišč" v={num(res.best.params.wood_systems_replaced ?? 0, 0)} />
-            <Mini label="promet" v={`-${res.best.params.traffic_reduction_pct ?? 0}%`} />
             <Mini label="pred 1980" v={`${res.best.params.pre1980_retrofit_pct ?? 0}%`} />
           </div>
           <div className="mt-3 flex items-center justify-between text-sm">
@@ -68,6 +72,10 @@ export function Optimizer() {
             <Check className="h-4 w-4" /> Uporabi ta scenarij
           </button>
         </div>
+      )}
+
+      {res && !res.best && (
+        <p className="text-xs text-amber-700">Izbrane zamenjave dizlov presegajo proračun.</p>
       )}
 
       {res && (

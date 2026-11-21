@@ -153,9 +153,13 @@ export function DocsPage() {
                 Koliko malih kurišč na drva/premog zamenjamo s toplotnimi črpalkami.
                 Največ učinka v predmestjih, kjer prevladuje ogrevanje (npr. Sostro).
               </Bullet>
-              <Bullet icon={<Car className="h-4 w-4 text-sky-500" />} name="Znižanje prometnih emisij (%)">
-                Skupni učinek con, parkiraj-in-presedi, kolesarjenja itd. Največ učinka v
-                prometno obremenjenem centru.
+              <Bullet icon={<Car className="h-4 w-4 text-sky-500" />} name="Zamenjava dizlov EURO 4 (št.)">
+                Izberete število osebnih dizlov, ki jih na začetku leta umaknemo iz prometa
+                in zamenjamo z rabljenimi baterijskimi električnimi vozili. Subvencija
+                znaša 3.000 € na avto po referenčni postavki{" "}
+                <a className="underline" href="https://borzen.si/enkratne-subvencije/mobilnost/elektricna-vozila/subvencije-za-nakup-elektricnih-vozil-po-javnem-pozivu-sub-ev26">Borzen JP SUB-EV26</a>.
+                Zgornja meja je 14.753 dizlov EURO 4, registriranih 30. 6. 2023
+                po <a className="underline" href="https://www.ljubljana.si/assets/20260309_EB_MOL_2024.pdf#page=47">tabeli 16 MOL</a>.
               </Bullet>
               <Bullet icon={<Wallet className="h-4 w-4 text-emerald-600" />} name="Razpoložljiv proračun (€)">
                 Letna investicija občine. Vrstica »Poraba proračuna« pokaže, ali ukrepi
@@ -234,11 +238,29 @@ export function DocsPage() {
                 Izhodišče PM2.5 je <b>izmerjeno</b> zimsko sidro 2025/26.
               </li>
               <li>
-                <b>Simulacijski model</b> — politike (e-busi, kurišča, promet) pretvori v
-                prej/potem PM po območjih, strošek in vpliv. Fizikalno utemeljen odziv;
-                napovedni model ga lahko le izostri.
+                <b>Simulacijski model</b> oceni spremembo koncentracij PM zaradi e-busov,
+                zamenjave kurišč, obnove stavb in zamenjave dizlov. Pri dizlih delež
+                preprečenih primarnih emisij izračunamo glede na evidenco prometa MOL
+                (187,1 t/leto za vsako velikost delcev,{" "}
+                <a className="underline" href="https://www.ljubljana.si/assets/20260309_EB_MOL_2024.pdf#page=89">preglednici 30 in 31</a>).
+                Za enak delež zmanjšamo ocenjeni prometni prispevek v četrti. To je
+                približek ob enakem vremenu in predpostavki, da zamenjana vozila sledijo
+                prostorskemu in sezonskemu vzorcu prometa. Zemljevid in izračun stroškov
+                na enoto izboljšanja prikazujeta scenarij z vsemi vožnjami v MOL.
+                Glavni prikaz poda tudi oceno, če vse vožnje potekajo zunaj MOL. Dejanski
+                lokalni delež voženj in odziv koncentracij nista izmerjena.
               </li>
             </ol>
+            <p className="mt-2">
+              Pri zamenjavi dizlov uporabimo približno 12.907 km na leto za obe vozili.
+              To je državno povprečje za dizle, stare 15–19 let, na domačih in tujih cestah
+              (<a className="underline" href="https://pxweb.stat.si/SiStatData/pxweb/sl/Data/Data/2282005S.px/">SURS 2282005S</a>).
+              Uporabimo faktorje EMEP/EEA za srednje velika vozila,{" "}
+              <a className="underline" href="https://copert.emisia.com/wp-content/uploads/2026/09/1.A.3.b.i-iv-Road-transport-June-2026.pdf#page=28">izpušne emisije</a>{" "}
+              in <a className="underline" href="https://copert.emisia.com/wp-content/uploads/2025/10/1.A.3.b.vi-vii-Road-tyre-and-brake-wear-2025.pdf#page=18">obrabo</a>{" "}
+              pri povprečni hitrosti pod 40 km/h. PM₂.₅ je del PM₁₀. NOₓ je izražen v
+              ekvivalentu mase NO₂.
+            </p>
             <Callout>
               Približno <b>30 % zimskega PM2.5</b> je regionalno ozadje, ki ga lokalni
               ukrepi ne morejo spremeniti (dokumentirana predpostavka). Preostanek se
