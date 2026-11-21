@@ -1,0 +1,101 @@
+[
+  {
+    "name": "delez_pred_1980",
+    "label_sl": "Delež stavb pred 1980",
+    "group": "Stavbe",
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.01,
+    "unit": "delež",
+    "direction": "higher_worse",
+    "description_sl": "Starejše stavbe imajo slabšo izolacijo in porabijo več goriva."
+  },
+  {
+    "name": "pct_solid",
+    "label_sl": "Delež ogrevanja na trda goriva",
+    "group": "Mešanica ogrevanja",
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.01,
+    "unit": "delež",
+    "direction": "higher_worse",
+    "description_sl": "Ocena deleža stanovanj, ki se ogrevajo na trda goriva (drva, premog, peleti)."
+  },
+  {
+    "name": "pct_district",
+    "label_sl": "Delež daljinskega ogrevanja",
+    "group": "Mešanica ogrevanja",
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.01,
+    "unit": "delež",
+    "direction": "higher_better",
+    "description_sl": "Delež stavb, povezanih na vročevodno omrežje (čistejše)."
+  },
+  {
+    "name": "kurisca_na_km2",
+    "label_sl": "Gostota kurišč",
+    "group": "Kurilne naprave",
+    "min": 0.0,
+    "max": 200.0,
+    "step": 1.0,
+    "unit": "kurišč/km²",
+    "direction": "higher_worse",
+    "description_sl": "Število malih kurišč na kvadratni kilometer četrtne skupnosti."
+  },
+  {
+    "name": "delez_pod_30m",
+    "label_sl": "Delež površine pod 30 m nad dnom",
+    "group": "Vreme",
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.01,
+    "unit": "delež",
+    "direction": "higher_worse",
+    "description_sl": "Kakšen del CS leži v nižinskem delu kotline (zadrževanje hladnega zraka)."
+  },
+  {
+    "name": "delez_ob_plinovodu",
+    "label_sl": "Dostop do plinovoda",
+    "group": "Omrežja",
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.01,
+    "unit": "delež",
+    "direction": "higher_better",
+    "description_sl": "Delež stavb blizu plinovoda — alternativa trdim gorivom."
+  },
+  {
+    "name": "inv_exposure",
+    "label_sl": "Izpostavljenost inverziji",
+    "group": "Vreme",
+    "min": 0.0,
+    "max": 0.3,
+    "step": 0.005,
+    "unit": "indeks",
+    "direction": "higher_worse",
+    "description_sl": "Pogostost temperaturnih inverzij × delež nižinskega površja."
+  },
+  {
+    "name": "stavbe_brez_omrezij_km2",
+    "label_sl": "Stavbe brez omrežij / km²",
+    "group": "Omrežja",
+    "min": 0.0,
+    "max": 100.0,
+    "step": 1.0,
+    "unit": "stavb/km²",
+    "direction": "higher_worse",
+    "description_sl": "Gostota stavb, ki nimajo dostopa niti do plinovoda niti vročevoda."
+  },
+  {
+    "name": "pct_gas",
+    "label_sl": "Delež ogrevanja na plin",
+    "group": "Mešanica ogrevanja",
+    "min": 0.0,
+    "max": 1.0,
+    "step": 0.01,
+    "unit": "delež",
+    "direction": "neutral",
+    "description_sl": "Delež stanovanj z dostopom do plinovoda (lokalno ogrevanje na plin)."
+  }
+]
