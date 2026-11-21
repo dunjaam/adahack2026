@@ -4,8 +4,8 @@ import React from "react";
 export function pmColor(v: number): string {
   // breakpoints tuned for PM2.5 winter range
   const stops: [number, string][] = [
-    [0, "#10b981"],
-    [10, "#34d399"],
+    [0, "#2f7d52"],
+    [10, "#4fae60"],
     [15, "#fde047"],
     [20, "#fb923c"],
     [25, "#ef4444"],

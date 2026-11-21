@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="90 16 430 224" width="430" height="224" role="img" aria-label="ZrakVizija">
+<defs>
+  <linearGradient id="leaf" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EEF6FA"/><stop offset="0.45" stop-color="#B8DCEA"/><stop offset="1" stop-color="#7FC98A"/></linearGradient>
+  <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9DCA0"/><stop offset="1" stop-color="#4FAE60"/></linearGradient>
+  <linearGradient id="hill2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D6EED0"/><stop offset="1" stop-color="#93D193"/></linearGradient>
+</defs>
+<path d="M110 232 C 190 165, 290 150, 360 168 C 420 184, 470 212, 510 232 Z" fill="url(#hill2)" opacity="0.9"/>
+<g fill="#2F7D52">
+  <rect x="296" y="128" width="22" height="40"/><rect x="322" y="116" width="18" height="48"/><rect x="344" y="104" width="28" height="56"/><rect x="376" y="118" width="12" height="40"/>
+  <rect x="392" y="74" width="16" height="84"/><rect x="388" y="68" width="24" height="8" rx="2"/><path d="M400 38 L393 70 H407 Z"/><rect x="399" y="22" width="2" height="18"/>
+  <rect x="412" y="112" width="20" height="50"/><rect x="436" y="130" width="14" height="34"/>
+</g>
+<path d="M150 232 C 230 178, 330 122, 420 160 C 462 178, 492 210, 512 232 Z" fill="url(#hill)" opacity="0.88"/>
+<path d="M150 206 C 140 152, 190 92, 302 76 C 302 150, 252 206, 150 206 Z" fill="#A9D8E6" opacity="0.45"/>
+<path d="M118 216 C 95 140, 150 60, 276 42 C 286 120, 236 200, 118 216 Z" fill="url(#leaf)" opacity="0.94"/>
+<path d="M126 210 C 170 152, 216 104, 268 52" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
+</svg>

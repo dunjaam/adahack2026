@@ -17,7 +17,7 @@ export function exportSummary(r: SimResult, district: string | null) {
     .join("");
 
   const html = `<!doctype html><html lang="sl"><head><meta charset="utf-8">
-  <title>AirShift povzetek scenarija</title>
+  <title>ZrakVizija povzetek scenarija</title>
   <style>
     body{font-family:system-ui,sans-serif;max-width:860px;margin:2rem auto;color:#0f172a;padding:0 1rem}
     h1{color:#047857;margin-bottom:.2rem} .muted{color:#64748b;font-size:.85rem}
@@ -28,7 +28,7 @@ export function exportSummary(r: SimResult, district: string | null) {
     th,td{border-bottom:1px solid #e2e8f0;padding:.45rem .5rem;text-align:left}
     th{color:#64748b;font-weight:600} .note{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:.8rem;font-size:.8rem;margin-top:1.5rem}
   </style></head><body>
-  <h1>AirShift — povzetek scenarija</h1>
+  <h1>ZrakVizija — povzetek scenarija</h1>
   <div class="muted">${r.municipality}${district ? " · " + district : ""} · izdelano ${d}</div>
   <div class="grid">
     <div class="kpi"><div class="v">${num(r.municipality_pm25_before)} → ${num(r.municipality_pm25_after)}</div><div class="l">PM2.5 µg/m³ (prej → potem)</div></div>
@@ -48,7 +48,7 @@ export function exportSummary(r: SimResult, district: string | null) {
   <tbody>${rows}</tbody></table>
   <div class="note">📍 = meritev (ARSO postaja) · 〜 = modelska ocena (umerjen senzor).
   PM2.5 zimsko izhodišče (2025/26) je sidro iz podatkovnega paketa; vplivi ukrepov so <b>modelske ocene</b>
-  simulacijskega modela AirShift in ne dejanske meritve.</div>
+  simulacijskega modela ZrakVizija in ne dejanske meritve.</div>
   </body></html>`;
 
   const blob = new Blob([html], { type: "text/html" });

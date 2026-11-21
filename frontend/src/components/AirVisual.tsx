@@ -181,7 +181,7 @@ export function AirVisual() {
         <div className="relative">
           <div
             className="h-2.5 w-full rounded-full"
-            style={{ background: "linear-gradient(90deg,#10b981 0%,#fde047 38%,#fb923c 62%,#ef4444 82%,#b91c1c 100%)" }}
+            style={{ background: "linear-gradient(90deg,#2f7d52 0%,#4fae60 18%,#fde047 42%,#fb923c 64%,#ef4444 83%,#b91c1c 100%)" }}
           />
           <div
             ref={markerRef}

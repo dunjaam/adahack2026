@@ -17,7 +17,7 @@ import {
 import type { ReactNode } from "react";
 
 const SECTIONS = [
-  { id: "uvod", label: "Kaj je AirShift" },
+  { id: "uvod", label: "Kaj je ZrakVizija" },
   { id: "pot", label: "Uporabniška pot" },
   { id: "izbira", label: "Izbira občine / območja" },
   { id: "zemljevid", label: "Zemljevid in sloji" },
@@ -37,12 +37,12 @@ export function DocsPage() {
       {/* header */}
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-5 py-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-teal-600 text-white shadow-card">
-            <Wind className="h-5 w-5" />
-          </div>
+          <span className="inline-flex items-center rounded-xl border border-brand-100 bg-gradient-to-br from-brand-50 to-white px-2 py-1.5 shadow-card">
+            <img src="/zrakvizija-mark.svg" alt="" className="h-7 w-auto" />
+          </span>
           <div className="leading-tight">
-            <div className="text-[15px] font-bold tracking-tight text-slate-800">
-              AirShift · Dokumentacija
+            <div className="text-[15px] font-bold tracking-tight text-ink">
+              ZrakVizija · Dokumentacija
             </div>
             <div className="text-[11px] text-slate-400">Kako uporabljati nadzorno ploščo</div>
           </div>
@@ -77,9 +77,9 @@ export function DocsPage() {
 
         {/* content */}
         <main className="min-w-0 flex-1 space-y-10">
-          <Section id="uvod" icon={<Wind className="h-5 w-5" />} title="Kaj je AirShift">
+          <Section id="uvod" icon={<Wind className="h-5 w-5" />} title="Kaj je ZrakVizija">
             <p>
-              AirShift je <b>okoljski digitalni dvojček</b> za slovenske občine in
+              ZrakVizija je <b>okoljski digitalni dvojček</b> za slovenske občine in
               odločevalce. Omogoča, da <b>pred</b> porabo javnega denarja preizkusite
               okoljske ukrepe in v živo vidite, kako bi vplivali na onesnaženost zraka
               (PM2.5 / PM10) in koliko bi stali.
