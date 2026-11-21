@@ -1,0 +1,9 @@
+feature,mean_abs_shap,rf_importance
+pct_solid,0.323029,0.200970
+delez_pred_1980,0.281622,0.223944
+kurisca_na_km2,0.231243,0.178401
+inv_exposure,0.183347,0.121932
+pct_district,0.180822,0.119611
+delez_pod_30m,0.122030,0.078447
+delez_ob_plinovodu,0.049776,0.063747
+stavbe_brez_omrezij_km2,0.012995,0.012948

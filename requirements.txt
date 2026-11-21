@@ -23,3 +23,11 @@ scikit-learn>=1.4
 # polja CAMx v NetCDF (02_modeli/camx/*.nc); CSV s točkami deluje brez tega
 xarray>=2024.1
 netCDF4>=1.6
+
+# interaktivni model (api.py + shranjen RandomForest)
+fastapi>=0.110
+uvicorn[standard]>=0.27
+joblib>=1.3
+pydantic>=2.0
+shap>=0.44
+seaborn>=0.13
