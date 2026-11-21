@@ -14,6 +14,8 @@ export interface District {
   lon: number;
   measured: boolean;
   source: string;
+  pct_pre_1980?: number;
+  pre_1980_buildings?: number;
 }
 
 export interface Municipality {
@@ -27,6 +29,7 @@ export interface Municipality {
   n_districts: number;
   total_wood_systems: number;
   total_dwellings: number;
+  total_pre_1980_buildings?: number;
   districts: District[];
 }
 
@@ -34,6 +37,7 @@ export interface SimParams {
   electric_bus_pct: number;
   wood_systems_replaced: number;
   traffic_reduction_pct: number;
+  pre1980_retrofit_pct: number;
   budget_eur: number;
 }
 
@@ -51,6 +55,8 @@ export interface DistrictResult {
   traffic_after: number;
   background: number;
   wood_replaced: number;
+  pct_pre_1980?: number;
+  pre_1980_retrofitted?: number;
   used_ml: boolean;
   measured: boolean;
 }
@@ -60,6 +66,8 @@ export interface Cost {
   bus_cost: number;
   n_buses: number;
   traffic_cost: number;
+  retrofit_cost: number;
+  n_retrofits: number;
   total_cost: number;
 }
 
@@ -92,6 +100,7 @@ export interface OptimizeResult {
   alternatives: OptimizeResult["best"][];
   single_levers: { label: string; cost: number; delta_pm25: number; eur_per_ug_m3: number | null }[];
   total_wood_systems: number;
+  total_pre_1980_buildings?: number;
 }
 
 export interface HistoryResult {

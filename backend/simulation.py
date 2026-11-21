@@ -33,6 +33,8 @@ TRAFFIC_COST_PER_PCT = 60_000   # LEZ / park&ride / cycling per 1% traffic-PM cu
 N_CITY_BUSES = 220              # LPP diesel city fleet (demo)
 BUS_TRAFFIC_FRACTION = 0.08     # share of traffic PM attributable to city buses
 SOLID_EFFECTIVENESS = 0.9       # share of heating PM driven by solid fuel
+RETROFIT_COST_PER_BUILDING = 25_000  # deep energy retrofit of one pre-1980 building
+RETROFIT_HEATING_SAVING = 0.5   # heating-PM drop per fully retrofitted old building
 
 # Share of winter PM2.5 that is regional / secondary background and CANNOT be
 # changed by municipal levers (long-range transport, secondary aerosol). The
@@ -48,8 +50,21 @@ _ENRICHED = json.loads((MODEL_DIR / "districts_enriched.json").read_text("utf-8"
 RATIO = _ENRICHED["ratio_pm25_pm10"]
 DISTRICTS: Dict[str, Dict[str, Any]] = {d["cs_ime"]: d for d in _ENRICHED["districts"]}
 MUNICIPALITY = _ENRICHED["municipality"]
+
+# Merge building-age share (pre-1980) per district from the ML defaults so the
+# retrofit lever can target the fraction of old, poorly-insulated stock.
+try:
+    _CS_DEFAULTS = json.loads((MODEL_DIR / "cs_defaults.json").read_text("utf-8"))
+except FileNotFoundError:
+    _CS_DEFAULTS = {}
+for _cs, _d in DISTRICTS.items():
+    _share = float(_CS_DEFAULTS.get(_cs, {}).get("features", {}).get("delez_pred_1980", 0.0))
+    _d["pct_pre_1980"] = round(max(0.0, min(1.0, _share)), 4)
+    _d["pre_1980_buildings"] = int(round(_d.get("buildings", 0) * _d["pct_pre_1980"]))
+
 TOTAL_WOOD = sum(d["wood_systems"] for d in DISTRICTS.values())
 TOTAL_DWELLINGS = sum(d["dwellings"] for d in DISTRICTS.values())
+TOTAL_PRE_1980 = sum(d["pre_1980_buildings"] for d in DISTRICTS.values())
 
 # Optional ML prediction model ------------------------------------------------
 _ML: Dict[str, Any] = {}
@@ -100,7 +115,8 @@ def _heating_ratio_ml(cs: str, frac_replaced: float) -> Optional[float]:
 # Core simulation                                                             #
 # --------------------------------------------------------------------------- #
 def _simulate_district(d: Dict[str, Any], wood_replaced: float,
-                       ebus_pct: float, traffic_pct: float) -> Dict[str, Any]:
+                       ebus_pct: float, traffic_pct: float,
+                       retrofit_pct: float = 0.0) -> Dict[str, Any]:
     base_pm25 = d["pm25_winter"]
     local = base_pm25 * (1 - BACKGROUND_FRAC)
     background = base_pm25 * BACKGROUND_FRAC
@@ -116,7 +132,14 @@ def _simulate_district(d: Dict[str, Any], wood_replaced: float,
     ml_ratio = _heating_ratio_ml(d["cs_ime"], frac)
     heat_ratio = analytic_ratio if ml_ratio is None else min(analytic_ratio, ml_ratio)
     heat_ratio = max(0.0, min(1.0, heat_ratio))
-    heating_new = heating * heat_ratio
+
+    # Pre-1980 retrofit lever: deep insulation on the share of older stock
+    # multiplicatively lowers heating demand for that fraction of the district.
+    retrofit_frac = max(0.0, min(1.0, retrofit_pct / 100.0))
+    pct_old = float(d.get("pct_pre_1980", 0.0))
+    retrofit_ratio = 1 - pct_old * retrofit_frac * RETROFIT_HEATING_SAVING
+    retrofit_ratio = max(0.0, min(1.0, retrofit_ratio))
+    heating_new = heating * heat_ratio * retrofit_ratio
 
     # Traffic levers ----------------------------------------------------------
     traffic_new = (traffic
@@ -138,6 +161,8 @@ def _simulate_district(d: Dict[str, Any], wood_replaced: float,
         "traffic_after": round(traffic_new, 2),
         "background": round(background, 2),
         "wood_replaced": round(wood_replaced),
+        "pct_pre_1980": pct_old,
+        "pre_1980_retrofitted": int(round(d.get("pre_1980_buildings", 0) * retrofit_frac)),
         "used_ml": ml_ratio is not None,
         "measured": d["measured"],
     }
@@ -147,16 +172,21 @@ def scenario_cost(params: Dict[str, float]) -> Dict[str, Any]:
     wood = params.get("wood_systems_replaced", 0)
     ebus = params.get("electric_bus_pct", 0)
     traffic = params.get("traffic_reduction_pct", 0)
+    retrofit = max(0.0, min(100.0, float(params.get("pre1980_retrofit_pct", 0))))
     wood_cost = wood * WOOD_SWAP_COST
     n_buses = round(N_CITY_BUSES * ebus / 100.0)
     bus_cost = n_buses * EBUS_COST
     traffic_cost = TRAFFIC_COST_PER_PCT * traffic * (1 + 0.01 * traffic)
-    total = wood_cost + bus_cost + traffic_cost
+    n_retrofits = round(TOTAL_PRE_1980 * retrofit / 100.0)
+    retrofit_cost = n_retrofits * RETROFIT_COST_PER_BUILDING
+    total = wood_cost + bus_cost + traffic_cost + retrofit_cost
     return {
         "wood_cost": round(wood_cost),
         "bus_cost": round(bus_cost),
         "n_buses": n_buses,
         "traffic_cost": round(traffic_cost),
+        "retrofit_cost": round(retrofit_cost),
+        "n_retrofits": n_retrofits,
         "total_cost": round(total),
     }
 
@@ -166,13 +196,14 @@ def simulate(params: Dict[str, float], focus: Optional[str] = None) -> Dict[str,
     wood = max(0.0, float(params.get("wood_systems_replaced", 0)))
     ebus = max(0.0, min(100.0, float(params.get("electric_bus_pct", 0))))
     traffic = max(0.0, min(100.0, float(params.get("traffic_reduction_pct", 0))))
+    retrofit = max(0.0, min(100.0, float(params.get("pre1980_retrofit_pct", 0))))
 
     # Distribute wood swaps proportionally to where solid-fuel systems are.
     wood = min(wood, TOTAL_WOOD)
     per_district = []
     for cs, d in DISTRICTS.items():
         share = d["wood_systems"] / TOTAL_WOOD if TOTAL_WOOD else 0
-        per_district.append(_simulate_district(d, wood * share, ebus, traffic))
+        per_district.append(_simulate_district(d, wood * share, ebus, traffic, retrofit))
 
     # Population-weighted municipality aggregate.
     wsum = sum(DISTRICTS[r["cs_ime"]]["dwellings"] for r in per_district) or 1
@@ -194,6 +225,7 @@ def simulate(params: Dict[str, float], focus: Optional[str] = None) -> Dict[str,
         "municipality": MUNICIPALITY,
         "params": {"electric_bus_pct": ebus, "wood_systems_replaced": round(wood),
                    "traffic_reduction_pct": traffic,
+                   "pre1980_retrofit_pct": retrofit,
                    "budget_eur": params.get("budget_eur", 0)},
         "municipality_pm25_before": pm25_b,
         "municipality_pm25_after": pm25_a,
@@ -215,37 +247,83 @@ def simulate(params: Dict[str, float], focus: Optional[str] = None) -> Dict[str,
 
 
 # --------------------------------------------------------------------------- #
+# Policy-lever sensitivity                                                    #
+# --------------------------------------------------------------------------- #
+# Why this exists: the SHAP feature importance in output/cs_ml_feature_importance.csv
+# ranks drivers of the GRAL *heating-only* PM10 increment (model target
+# gral_pm10_kurilna), where pct_solid is #1. Users reading that chart expect the
+# wood-swap slider to dominate the simulator — but the simulator reports *total*
+# PM2.5 (heating + traffic + background), so in dense districts the top ML
+# feature barely moves the needle. This function answers the complementary
+# question "which lever cuts total PM2.5 the most" so the two rankings don't
+# tell contradictory stories.
+def sensitivity() -> Dict[str, Any]:
+    """Per-lever Δ municipality PM2.5 when each lever is pushed to its max."""
+    baseline = simulate({})["municipality_pm25_after"]
+    rows: List[Dict[str, Any]] = []
+    for key, step, label in [
+        ("electric_bus_pct",      100,        "100% e-busi"),
+        ("wood_systems_replaced", TOTAL_WOOD, "Zamenjava vseh kurišč"),
+        ("traffic_reduction_pct", 50,         "−50% promet"),
+        ("pre1980_retrofit_pct",  100,        "Obnova vseh stavb pred 1980"),
+    ]:
+        s = simulate({key: step})
+        rows.append({
+            "lever": key,
+            "label": label,
+            "delta_pm25": round(s["delta_pm25"], 3),
+            "pm25_after": s["municipality_pm25_after"],
+            "cost": s["cost"]["total_cost"],
+        })
+    rmax = max((abs(r["delta_pm25"]) for r in rows), default=0) or 1.0
+    for r in rows:
+        r["share_of_max"] = round(abs(r["delta_pm25"]) / rmax, 3)
+    rows.sort(key=lambda r: r["delta_pm25"])
+    return {
+        "baseline_pm25": baseline,
+        "note": "Občutljivost simulatorja na posamezne ukrepe (Δ celotnega "
+                "PM2.5). Dopolnjuje SHAP razvrstitev, ki rangira dejavnike "
+                "ogrevalnega prispevka k PM10, ne skupnega PM.",
+        "levers": rows,
+    }
+
+
+# --------------------------------------------------------------------------- #
 # Investment optimisation                                                     #
 # --------------------------------------------------------------------------- #
 def optimize(budget_eur: float) -> Dict[str, Any]:
     """Grid-search the lever space for the biggest PM2.5 cut within budget."""
     best = None
     candidates: List[Dict[str, Any]] = []
-    ebus_opts = [0, 20, 40, 60, 80, 100]
-    traffic_opts = [0, 10, 20, 30, 40, 50]
-    wood_opts = [0, 0.1, 0.25, 0.5, 0.75, 1.0]  # fraction of all wood systems
+    ebus_opts = [0, 40, 80]
+    traffic_opts = [0, 20, 40]
+    wood_opts = [0, 0.25, 0.5, 1.0]        # fraction of all wood systems
+    retrofit_opts = [0, 25, 50, 100]       # % of pre-1980 buildings retrofitted
 
     for e in ebus_opts:
         for t in traffic_opts:
             for wf in wood_opts:
-                wood = round(TOTAL_WOOD * wf)
-                params = {"electric_bus_pct": e, "traffic_reduction_pct": t,
-                          "wood_systems_replaced": wood}
-                cost = scenario_cost(params)["total_cost"]
-                if cost > budget_eur:
-                    continue
-                sim = simulate(params)
-                cand = {
-                    "params": {"electric_bus_pct": e, "traffic_reduction_pct": t,
-                               "wood_systems_replaced": wood},
-                    "cost": cost,
-                    "delta_pm25": sim["delta_pm25"],
-                    "pm25_after": sim["municipality_pm25_after"],
-                    "eur_per_ug_m3": sim["eur_per_ug_m3"],
-                }
-                candidates.append(cand)
-                if best is None or cand["delta_pm25"] < best["delta_pm25"]:
-                    best = cand
+                for r in retrofit_opts:
+                    wood = round(TOTAL_WOOD * wf)
+                    params = {"electric_bus_pct": e, "traffic_reduction_pct": t,
+                              "wood_systems_replaced": wood,
+                              "pre1980_retrofit_pct": r}
+                    cost = scenario_cost(params)["total_cost"]
+                    if cost > budget_eur:
+                        continue
+                    sim = simulate(params)
+                    cand = {
+                        "params": {"electric_bus_pct": e, "traffic_reduction_pct": t,
+                                   "wood_systems_replaced": wood,
+                                   "pre1980_retrofit_pct": r},
+                        "cost": cost,
+                        "delta_pm25": sim["delta_pm25"],
+                        "pm25_after": sim["municipality_pm25_after"],
+                        "eur_per_ug_m3": sim["eur_per_ug_m3"],
+                    }
+                    candidates.append(cand)
+                    if best is None or cand["delta_pm25"] < best["delta_pm25"]:
+                        best = cand
 
     candidates.sort(key=lambda c: c["delta_pm25"])
     # Cost-effectiveness of single levers for the explainer panel.
@@ -254,6 +332,7 @@ def optimize(budget_eur: float) -> Dict[str, Any]:
         ("100% e-busi", {"electric_bus_pct": 100}),
         ("Zamenjava polovice kurišč", {"wood_systems_replaced": round(TOTAL_WOOD * 0.5)}),
         ("−30% promet", {"traffic_reduction_pct": 30}),
+        ("Obnova 50% stavb pred 1980", {"pre1980_retrofit_pct": 50}),
     ]:
         s = simulate(p)
         single.append({"label": label, "cost": s["cost"]["total_cost"],
@@ -266,6 +345,7 @@ def optimize(budget_eur: float) -> Dict[str, Any]:
         "alternatives": candidates[:8],
         "single_levers": single,
         "total_wood_systems": TOTAL_WOOD,
+        "total_pre_1980_buildings": TOTAL_PRE_1980,
     }
 
 

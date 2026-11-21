@@ -49,10 +49,11 @@ export function Optimizer() {
           <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-brand-700">
             <Sparkles className="h-4 w-4" /> Priporočeni scenarij
           </div>
-          <div className="grid grid-cols-3 gap-2 text-center">
+          <div className="grid grid-cols-4 gap-2 text-center">
             <Mini label="e-busi" v={`${res.best.params.electric_bus_pct ?? 0}%`} />
             <Mini label="kurišč" v={num(res.best.params.wood_systems_replaced ?? 0, 0)} />
             <Mini label="promet" v={`-${res.best.params.traffic_reduction_pct ?? 0}%`} />
+            <Mini label="pred 1980" v={`${res.best.params.pre1980_retrofit_pct ?? 0}%`} />
           </div>
           <div className="mt-3 flex items-center justify-between text-sm">
             <span className="font-semibold text-brand-700">

@@ -15,6 +15,7 @@ const DEFAULT_PARAMS: SimParams = {
   electric_bus_pct: 0,
   wood_systems_replaced: 0,
   traffic_reduction_pct: 0,
+  pre1980_retrofit_pct: 0,
   budget_eur: 1_000_000,
 };
 

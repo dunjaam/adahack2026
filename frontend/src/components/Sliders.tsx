@@ -1,4 +1,4 @@
-import { Bus, Flame, Car } from "lucide-react";
+import { Bus, Flame, Car, Building2 } from "lucide-react";
 import { useStore } from "../store";
 import type { SimParams } from "../types";
 import { eur, int } from "../lib";
@@ -57,6 +57,9 @@ function Slider({ d }: { d: SliderDef }) {
 export function Sliders() {
   const muni = useStore((s) => s.municipality);
   const cost = useStore((s) => s.result?.cost);
+  const retrofitPct = useStore((s) => s.params.pre1980_retrofit_pct);
+  const totalOld = muni?.total_pre_1980_buildings ?? 0;
+  const retrofittedNow = Math.round((totalOld * retrofitPct) / 100);
 
   const defs: SliderDef[] = [
     {
@@ -82,6 +85,18 @@ export function Sliders() {
       min: 0, max: 80, step: 5,
       fmt: (v) => `${v}%`,
       hint: cost ? `cona, P+R, kolesarjenje · ${eur(cost.traffic_cost)}` : "",
+    },
+    {
+      key: "pre1980_retrofit_pct",
+      label: "Energetska obnova stavb pred 1980",
+      icon: <Building2 className="h-4 w-4 text-amber-600" />,
+      min: 0, max: 100, step: 5,
+      fmt: (v) => `${v}%`,
+      hint: cost
+        ? `${int(retrofittedNow)} stavb · ${eur(cost.retrofit_cost)}`
+        : totalOld
+        ? `${int(totalOld)} starih stavb skupno`
+        : "izolacija starejšega sklada",
     },
   ];
 
