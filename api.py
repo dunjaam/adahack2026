@@ -29,7 +29,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from backend import simulation as sim
-from backend.vehicle_replacement import DIESEL_FLEET_LIMIT, DIESEL_SUBSIDY_EUR
 
 BASE = Path(__file__).parent
 MODEL_DIR = BASE / "output" / "model"
@@ -47,8 +46,7 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True,
 class SimParams(BaseModel):
     electric_bus_pct: float = Field(0, ge=0, le=100)
     wood_systems_replaced: float = Field(0, ge=0)
-    diesel_cars_replaced: int = Field(0, ge=0, le=DIESEL_FLEET_LIMIT)
-    pre1980_retrofit_pct: float = Field(0, ge=0, le=100)
+    traffic_reduction_pct: float = Field(0, ge=0, le=100)
     budget_eur: float = Field(0, ge=0)
 
 
@@ -59,7 +57,6 @@ class SimRequest(BaseModel):
 
 class OptimizeRequest(BaseModel):
     budget_eur: float = Field(1_000_000, ge=0)
-    diesel_cars_replaced: int = Field(0, ge=0, le=DIESEL_FLEET_LIMIT)
 
 
 # --------------------------------------------------------------------------- #
@@ -99,8 +96,6 @@ def municipalities():
         "measured": d["measured"], "dwellings": d["dwellings"],
         "area_km2": d["area_km2"], "wood_systems": d["wood_systems"],
         "heating_share": d["heating_share"], "traffic_share": d["traffic_share"],
-        "pct_pre_1980": d.get("pct_pre_1980", 0.0),
-        "pre_1980_buildings": d.get("pre_1980_buildings", 0),
     } for d in sim.DISTRICTS.values()]
     pm25 = round(sum(d["pm25_winter"] * d["dwellings"] for d in sim.DISTRICTS.values())
                  / (sim.TOTAL_DWELLINGS or 1), 2)
@@ -109,9 +104,6 @@ def municipalities():
         "lat": 46.0569, "lon": 14.5058, "zoom": 12,
         "pm25_winter": pm25, "n_districts": len(districts),
         "total_wood_systems": sim.TOTAL_WOOD, "total_dwellings": sim.TOTAL_DWELLINGS,
-        "total_pre_1980_buildings": sim.TOTAL_PRE_1980,
-        "diesel_fleet_limit": DIESEL_FLEET_LIMIT,
-        "diesel_subsidy_eur": DIESEL_SUBSIDY_EUR,
         "districts": districts,
     }]}
 
@@ -141,8 +133,6 @@ def geojson():
                 "dwellings": d["dwellings"], "source": d["source"],
                 "heating_emis_kg": d["heating_emis_kg"],
                 "traffic_emis_kg": d["traffic_emis_kg"],
-                "pct_pre_1980": d.get("pct_pre_1980", 0.0),
-                "pre_1980_buildings": d.get("pre_1980_buildings", 0),
             })
     return gj
 
@@ -154,15 +144,7 @@ def simulate(req: SimRequest):
 
 @app.post("/api/optimize")
 def optimize(req: OptimizeRequest):
-    return sim.optimize(req.budget_eur, req.diesel_cars_replaced)
-
-
-@app.get("/api/sensitivity")
-def sensitivity():
-    """Per-lever Δ PM2.5 from the simulator — the policy-oriented counterpart
-    to the SHAP feature importance (which ranks drivers of the heating-only
-    PM10 increment, not total PM)."""
-    return sim.sensitivity()
+    return sim.optimize(req.budget_eur)
 
 
 @app.get("/api/history")
