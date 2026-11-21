@@ -1,239 +1,188 @@
 """
-FastAPI service exposing the per-CS pollution model.
+AirShift — FastAPI backend.
 
-Run:  uvicorn api:app --reload --port 8000
+Run:  .venv/bin/uvicorn api:app --reload --port 8000
 Docs: http://localhost:8000/docs
 
+Connects two models:
+  * Prediction model — pre-trained RandomForest for the heating PM10 increment.
+  * Simulation model — policy levers -> before/after PM2.5/PM10, cost, impact.
+
 Endpoints:
-  GET  /api/features           — slider metadata (min/max/labels)
-  GET  /api/cs                 — list of 17 CS with baseline PM10
-  GET  /api/cs/{cs_name}       — one CS: features + baseline + SHAP
-  POST /api/predict            — predict with user parameter overrides
-  GET  /api/geojson            — CS polygons for map rendering
+  GET  /api/municipalities        — covered municipality + its districts (zones)
+  GET  /api/districts             — per-district baseline (PM2.5/PM10, shares, flags)
+  GET  /api/geojson               — district polygons + baseline props for the map
+  POST /api/simulate              — run a scenario (all policy levers)
+  POST /api/optimize              — best intervention mix for a budget
+  GET  /api/history               — seasonal PM2.5 trend (labelled estimate)
+  GET  /api/features, /api/cs, ...— legacy ML-attribution endpoints
 """
+from __future__ import annotations
 
 import json
 import unicodedata
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
-import joblib
-import numpy as np
-import shap
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+from backend import simulation as sim
+
 BASE = Path(__file__).parent
 MODEL_DIR = BASE / "output" / "model"
 
-if not (MODEL_DIR / "model.joblib").exists():
-    raise RuntimeError(
-        f"Model artifacts not found in {MODEL_DIR}. "
-        "Run `python model_faktorji_onesnazenosti_cs.py` first."
-    )
-
-# ---------------------------------------------------------------------------
-# Load artifacts once at startup
-# ---------------------------------------------------------------------------
-_artifact = joblib.load(MODEL_DIR / "model.joblib")
-MODEL = _artifact["model"]
-FEATURE_ORDER = _artifact["feature_order"]
-CV_RMSE = _artifact.get("cv_rmse")
-
-EXPLAINER = shap.TreeExplainer(MODEL)
-EXPECTED_VALUE = float(np.asarray(EXPLAINER.expected_value).item())
-
-CS_DEFAULTS: Dict[str, Dict[str, Any]] = json.loads(
-    (MODEL_DIR / "cs_defaults.json").read_text(encoding="utf-8")
-)
-FEATURE_META = json.loads(
-    (MODEL_DIR / "feature_metadata.json").read_text(encoding="utf-8")
-)
-FEATURE_META_IDX = {f["name"]: f for f in FEATURE_META}
-
-# ---------------------------------------------------------------------------
-# FastAPI app
-# ---------------------------------------------------------------------------
-app = FastAPI(
-    title="Ljubljana PM10 Attribution API",
-    description=(
-        "Interaktivni model za ocenjevanje vpliva dejavnikov onesnaženosti "
-        "zraka po četrtnih skupnostih Mestne občine Ljubljana."
-    ),
-    version="1.0.0",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app = FastAPI(title="AirShift API", version="2.0.0",
+              description="Okoljski digitalni dvojček za simulacijo ukrepov "
+                          "za kakovost zraka (MO Ljubljana).")
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True,
+                   allow_methods=["*"], allow_headers=["*"])
 
 
-# ---------------------------------------------------------------------------
-# Models
-# ---------------------------------------------------------------------------
-class PredictRequest(BaseModel):
-    cs_name: str = Field(..., description="Ime četrtne skupnosti (npr. 'Center', 'Sostro').")
-    overrides: Dict[str, float] = Field(
-        default_factory=dict,
-        description="Map feature_name → new_value. Unknown features are ignored.",
-    )
+# --------------------------------------------------------------------------- #
+# Request models                                                              #
+# --------------------------------------------------------------------------- #
+class SimParams(BaseModel):
+    electric_bus_pct: float = Field(0, ge=0, le=100)
+    wood_systems_replaced: float = Field(0, ge=0)
+    traffic_reduction_pct: float = Field(0, ge=0, le=100)
+    budget_eur: float = Field(0, ge=0)
 
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-def _clamp(name: str, val: float) -> float:
-    meta = FEATURE_META_IDX.get(name)
-    if meta is None:
-        return float(val)
-    return max(meta["min"], min(meta["max"], float(val)))
+class SimRequest(BaseModel):
+    params: SimParams
+    focus: Optional[str] = None
 
 
-def _predict_vector(features: Dict[str, float]):
-    x = np.array([[features[f] for f in FEATURE_ORDER]], dtype=float)
-    pm10 = float(MODEL.predict(x)[0])
-    shap_vals = EXPLAINER.shap_values(x)[0]
-    return pm10, {f: float(v) for f, v in zip(FEATURE_ORDER, shap_vals)}
+class OptimizeRequest(BaseModel):
+    budget_eur: float = Field(1_000_000, ge=0)
 
 
-def _strip_diacritics(s: str) -> str:
-    return "".join(
-        c for c in unicodedata.normalize("NFKD", s) if not unicodedata.combining(c)
-    )
+# --------------------------------------------------------------------------- #
+# Helpers                                                                     #
+# --------------------------------------------------------------------------- #
+def _strip(s: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFKD", s)
+                   if not unicodedata.combining(c))
 
 
-def _resolve_cs(cs_name: str) -> str:
-    """Case-insensitive, diacritic-tolerant CS lookup."""
-    if cs_name in CS_DEFAULTS:
-        return cs_name
-    want = cs_name.strip().title()
-    if want in CS_DEFAULTS:
-        return want
-    target = _strip_diacritics(cs_name).lower()
-    for key in CS_DEFAULTS:
-        if _strip_diacritics(key).lower() == target:
-            return key
-    raise HTTPException(404, f"CS '{cs_name}' not found.")
+def _resolve(name: str) -> Optional[str]:
+    if name in sim.DISTRICTS:
+        return name
+    t = _strip(name).lower()
+    for k in sim.DISTRICTS:
+        if _strip(k).lower() == t:
+            return k
+    return None
 
 
-# ---------------------------------------------------------------------------
-# Endpoints
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------- #
+# Core endpoints                                                              #
+# --------------------------------------------------------------------------- #
 @app.get("/")
 def root():
-    return {
-        "name": "Ljubljana PM10 Attribution API",
-        "version": "1.0.0",
-        "endpoints": ["/api/features", "/api/cs", "/api/cs/{cs_name}", "/api/predict", "/api/geojson"],
-        "docs": "/docs",
-        "n_cs": len(CS_DEFAULTS),
-        "n_features": len(FEATURE_ORDER),
-        "cv_rmse": CV_RMSE,
-    }
+    return {"name": "AirShift API", "version": "2.0.0",
+            "municipality": sim.MUNICIPALITY, "n_districts": len(sim.DISTRICTS),
+            "docs": "/docs"}
 
 
-@app.get("/api/features")
-def features():
-    """Return slider metadata (feature name, Slovenian label, min/max/step, unit)."""
-    return FEATURE_META
+@app.get("/api/municipalities")
+def municipalities():
+    """Covered municipalities. Full data exists for MO Ljubljana (17 districts)."""
+    districts = [{
+        "cs_ime": d["cs_ime"], "lat": d["lat"], "lon": d["lon"],
+        "pm25_winter": d["pm25_winter"], "pm10_winter": d["pm10_winter"],
+        "measured": d["measured"], "dwellings": d["dwellings"],
+        "area_km2": d["area_km2"], "wood_systems": d["wood_systems"],
+        "heating_share": d["heating_share"], "traffic_share": d["traffic_share"],
+    } for d in sim.DISTRICTS.values()]
+    pm25 = round(sum(d["pm25_winter"] * d["dwellings"] for d in sim.DISTRICTS.values())
+                 / (sim.TOTAL_DWELLINGS or 1), 2)
+    return {"municipalities": [{
+        "id": "mol", "name": sim.MUNICIPALITY, "covered": True,
+        "lat": 46.0569, "lon": 14.5058, "zoom": 12,
+        "pm25_winter": pm25, "n_districts": len(districts),
+        "total_wood_systems": sim.TOTAL_WOOD, "total_dwellings": sim.TOTAL_DWELLINGS,
+        "districts": districts,
+    }]}
 
 
-@app.get("/api/cs")
-def cs_list():
-    """Return list of all CS with their baseline PM10 and summary info."""
-    result = []
-    for name, d in CS_DEFAULTS.items():
-        result.append({
-            "cs_ime": name,
-            "baseline_pm10": d["baseline_pm10"],
-            "heating_share": d["heating_share"],
-            "traffic_share": d["traffic_share"],
-            "pct_district": d["pct_district"],
-            "pct_gas": d["pct_gas"],
-            "pct_solid": d["pct_solid"],
-            "pct_other": d["pct_other"],
-            "lat": d.get("lat"),
-            "lon": d.get("lon"),
-            "povrsina_km2": d["povrsina_km2"],
-            "gral_quality_flag": d["gral_quality_flag"],
-        })
-    result.sort(key=lambda r: -r["heating_share"])
-    return result
-
-
-@app.get("/api/cs/{cs_name}")
-def cs_detail(cs_name: str):
-    """Return full details + baseline SHAP breakdown for one CS."""
-    key = _resolve_cs(cs_name)
-    d = CS_DEFAULTS[key]
-    pm10, shap_b = _predict_vector(d["features"])
-    return {
-        "cs_ime": key,
-        "features": d["features"],
-        "baseline_pm10": pm10,
-        "expected_value": EXPECTED_VALUE,
-        "shap_baseline": shap_b,
-        "heating_share": d["heating_share"],
-        "traffic_share": d["traffic_share"],
-        "pct_district": d["pct_district"],
-        "pct_gas": d["pct_gas"],
-        "pct_solid": d["pct_solid"],
-        "pct_other": d["pct_other"],
-        "lat": d.get("lat"),
-        "lon": d.get("lon"),
-        "povrsina_km2": d["povrsina_km2"],
-        "gral_quality_flag": d["gral_quality_flag"],
-    }
-
-
-@app.post("/api/predict")
-def predict(req: PredictRequest):
-    """
-    Predict PM10 for a CS with user-supplied parameter overrides.
-
-    Body example:
-      {"cs_name": "Sostro", "overrides": {"pct_solid": 0.0, "delez_pred_1980": 0.2}}
-    """
-    key = _resolve_cs(req.cs_name)
-    baseline_features = CS_DEFAULTS[key]["features"]
-    overrides = {
-        name: _clamp(name, val)
-        for name, val in req.overrides.items()
-        if name in FEATURE_META_IDX
-    }
-    new_features = {**baseline_features, **overrides}
-
-    baseline_pm10, shap_b = _predict_vector(baseline_features)
-    new_pm10, shap_n = _predict_vector(new_features)
-
-    per_feature_delta = {
-        f: shap_n[f] - shap_b[f] for f in FEATURE_ORDER
-    }
-
-    return {
-        "cs_name": key,
-        "baseline_pm10": baseline_pm10,
-        "new_pm10": new_pm10,
-        "delta_pm10": new_pm10 - baseline_pm10,
-        "delta_pct": (new_pm10 - baseline_pm10) / baseline_pm10 if baseline_pm10 else 0.0,
-        "features_used": new_features,
-        "overrides_applied": overrides,
-        "expected_value": EXPECTED_VALUE,
-        "shap_baseline": shap_b,
-        "shap_new": shap_n,
-        "per_feature_delta": per_feature_delta,
-    }
+@app.get("/api/districts")
+def districts():
+    return {"municipality": sim.MUNICIPALITY, "ratio_pm25_pm10": sim.RATIO,
+            "districts": list(sim.DISTRICTS.values())}
 
 
 @app.get("/api/geojson")
 def geojson():
-    """CS boundary polygons (simplified) for frontend map."""
+    """District polygons enriched with baseline PM + source flags for the map."""
     path = MODEL_DIR / "cs_geojson.json"
     if not path.exists():
-        raise HTTPException(503, "GeoJSON artifact not available yet.")
-    return json.loads(path.read_text(encoding="utf-8"))
+        raise HTTPException(503, "GeoJSON artifact not available.")
+    gj = json.loads(path.read_text("utf-8"))
+    for f in gj.get("features", []):
+        name = _resolve(f["properties"].get("cs_ime", ""))
+        if name:
+            d = sim.DISTRICTS[name]
+            f["properties"].update({
+                "cs_ime": name,
+                "pm25_winter": d["pm25_winter"], "pm10_winter": d["pm10_winter"],
+                "heating_share": d["heating_share"], "traffic_share": d["traffic_share"],
+                "measured": d["measured"], "wood_systems": d["wood_systems"],
+                "dwellings": d["dwellings"], "source": d["source"],
+                "heating_emis_kg": d["heating_emis_kg"],
+                "traffic_emis_kg": d["traffic_emis_kg"],
+            })
+    return gj
+
+
+@app.post("/api/simulate")
+def simulate(req: SimRequest):
+    return sim.simulate(req.params.model_dump(), focus=req.focus)
+
+
+@app.post("/api/optimize")
+def optimize(req: OptimizeRequest):
+    return sim.optimize(req.budget_eur)
+
+
+@app.get("/api/history")
+def history(cs: Optional[str] = None):
+    return sim.history(_resolve(cs) if cs else None)
+
+
+@app.get("/api/sensitive-locations")
+def sensitive_locations():
+    """Schools / kindergartens / hospitals near heating hotspots (if present)."""
+    path = BASE / "data" / "02_modeli" / "gral" / "gral_kurisca_obcutljive_lokacije.csv"
+    out = []
+    if path.exists():
+        import csv
+        with path.open(encoding="utf-8") as fh:
+            for row in csv.DictReader(fh):
+                lat = row.get("lat") or row.get("y") or row.get("latitude")
+                lon = row.get("lon") or row.get("x") or row.get("longitude")
+                try:
+                    out.append({"name": row.get("ime") or row.get("name") or "Lokacija",
+                                "type": row.get("tip") or row.get("type") or "",
+                                "lat": float(lat), "lon": float(lon)})
+                except (TypeError, ValueError):
+                    continue
+    return {"locations": out[:400], "source": "GRAL občutljive lokacije"}
+
+
+# --------------------------------------------------------------------------- #
+# Legacy ML-attribution endpoints (kept for transparency / SHAP)              #
+# --------------------------------------------------------------------------- #
+@app.get("/api/features")
+def features():
+    p = MODEL_DIR / "feature_metadata.json"
+    return json.loads(p.read_text("utf-8")) if p.exists() else []
+
+
+@app.get("/api/cs")
+def cs_list():
+    return [{"cs_ime": d["cs_ime"], "baseline_pm25": d["pm25_winter"],
+             "heating_share": d["heating_share"], "traffic_share": d["traffic_share"],
+             "lat": d["lat"], "lon": d["lon"]} for d in sim.DISTRICTS.values()]
