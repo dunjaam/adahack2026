@@ -1,0 +1,65 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.379991,
+     45.950172
+    ]
+   },
+   "properties": {
+    "sensor_index": 298869,
+    "name": "Goričica",
+    "model": "PA-II-FLEX",
+    "alt_m": 299,
+    "date_created": "2025-10-16",
+    "last_seen": "2026-11-17T08:30:32+00:00",
+    "confidence": 100,
+    "n_hours": 6548
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.584391,
+     46.05759
+    ]
+   },
+   "properties": {
+    "sensor_index": 96479,
+    "name": "OBELISK",
+    "model": "PA-II",
+    "alt_m": 281,
+    "date_created": "2020-12-28",
+    "last_seen": "2026-11-17T08:30:54+00:00",
+    "confidence": 100,
+    "n_hours": 32915
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.46656,
+     46.044014
+    ]
+   },
+   "properties": {
+    "sensor_index": 126385,
+    "name": "Ljubljana Vič",
+    "model": "PA-II",
+    "alt_m": 314,
+    "date_created": "2021-09-08",
+    "last_seen": "2026-11-17T08:31:06+00:00",
+    "confidence": 71,
+    "n_hours": 35306
+   }
+  }
+ ]
+}

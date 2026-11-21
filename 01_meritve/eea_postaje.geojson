@@ -1,0 +1,614 @@
+{
+ "type": "FeatureCollection",
+ "name": "eea_postaje",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.512720323500002,
+     46.06554494736358
+    ]
+   },
+   "properties": {
+    "station_code": "SI0003A",
+    "station_name": "LJ Bežigrad",
+    "arso_code": "E403",
+    "station_type": "background",
+    "station_area": "urban",
+    "alt_m": 299.0,
+    "lat": 46.06554494736358,
+    "lon": 14.512720323500002,
+    "coverage": [
+     {
+      "pollutant": "NO2",
+      "aggregation": "hour",
+      "from": "2013-01-01",
+      "to": "2026-11-13",
+      "n": 114687
+     },
+     {
+      "pollutant": "O3",
+      "aggregation": "hour",
+      "from": "2013-01-01",
+      "to": "2026-11-13",
+      "n": 112918
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2013-01-01",
+      "to": "2025-12-31",
+      "n": 4573
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "hour",
+      "from": "2026-01-01",
+      "to": "2026-11-13",
+      "n": 7572
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "day",
+      "from": "2018-01-01",
+      "to": "2025-12-31",
+      "n": 2883
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "hour",
+      "from": "2026-01-01",
+      "to": "2026-11-13",
+      "n": 7577
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.858067454800002,
+     45.56109979286329
+    ]
+   },
+   "properties": {
+    "station_code": "SI0008R",
+    "station_name": "Iskrba",
+    "arso_code": "E420",
+    "station_type": "background",
+    "station_area": "rural",
+    "alt_m": 540.0,
+    "lat": 45.56109979286329,
+    "lon": 14.858067454800002,
+    "coverage": [
+     {
+      "pollutant": "NO2",
+      "aggregation": "day",
+      "from": "2013-01-01",
+      "to": "2014-12-31",
+      "n": 704
+     },
+     {
+      "pollutant": "NO2",
+      "aggregation": "hour",
+      "from": "2015-01-01",
+      "to": "2026-11-13",
+      "n": 92008
+     },
+     {
+      "pollutant": "O3",
+      "aggregation": "hour",
+      "from": "2013-01-01",
+      "to": "2026-11-13",
+      "n": 109861
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2013-01-01",
+      "to": "2025-12-31",
+      "n": 4466
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "hour",
+      "from": "2026-01-01",
+      "to": "2026-11-13",
+      "n": 7572
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "day",
+      "from": "2013-01-01",
+      "to": "2025-12-31",
+      "n": 4398
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "hour",
+      "from": "2026-01-01",
+      "to": "2026-11-13",
+      "n": 7574
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.533314818600005,
+     46.29735156256376
+    ]
+   },
+   "properties": {
+    "station_code": "SI0032R",
+    "station_name": "Krvavec",
+    "arso_code": "E419",
+    "station_type": "background",
+    "station_area": "rural",
+    "alt_m": 1740.0,
+    "lat": 46.29735156256376,
+    "lon": 14.533314818600005,
+    "coverage": [
+     {
+      "pollutant": "O3",
+      "aggregation": "hour",
+      "from": "2013-01-01",
+      "to": "2026-11-13",
+      "n": 105083
+     },
+     {
+      "pollutant": "O3",
+      "aggregation": "var",
+      "from": "2020-10-30",
+      "to": "2020-12-31",
+      "n": 1451
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.996115171699998,
+     46.13111418206363
+    ]
+   },
+   "properties": {
+    "station_code": "SI0036A",
+    "station_name": "Zagorje",
+    "arso_code": "E415",
+    "station_type": "traffic",
+    "station_area": "urban",
+    "alt_m": 241.0,
+    "lat": 46.13111418206363,
+    "lon": 14.996115171699998,
+    "coverage": [
+     {
+      "pollutant": "NO2",
+      "aggregation": "hour",
+      "from": "2013-01-01",
+      "to": "2026-11-13",
+      "n": 110557
+     },
+     {
+      "pollutant": "NO2",
+      "aggregation": "var",
+      "from": "2020-07-06",
+      "to": "2020-12-31",
+      "n": 4111
+     },
+     {
+      "pollutant": "O3",
+      "aggregation": "hour",
+      "from": "2013-01-01",
+      "to": "2026-11-13",
+      "n": 111286
+     },
+     {
+      "pollutant": "O3",
+      "aggregation": "var",
+      "from": "2020-07-06",
+      "to": "2020-12-31",
+      "n": 4118
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2013-01-01",
+      "to": "2025-12-31",
+      "n": 4720
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "hour",
+      "from": "2026-01-01",
+      "to": "2026-11-13",
+      "n": 7571
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "hour",
+      "from": "2022-01-01",
+      "to": "2026-11-13",
+      "n": 42595
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     15.083294439199998,
+     46.14391306256365
+    ]
+   },
+   "properties": {
+    "station_code": "SI0037A",
+    "station_name": "Hrastnik",
+    "arso_code": "E414",
+    "station_type": "background",
+    "station_area": "urban",
+    "alt_m": 290.0,
+    "lat": 46.14391306256365,
+    "lon": 15.083294439199998,
+    "coverage": [
+     {
+      "pollutant": "O3",
+      "aggregation": "hour",
+      "from": "2013-01-01",
+      "to": "2019-09-30",
+      "n": 56186
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2013-01-01",
+      "to": "2025-12-31",
+      "n": 4682
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "hour",
+      "from": "2026-01-01",
+      "to": "2026-11-13",
+      "n": 7520
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "hour",
+      "from": "2022-01-01",
+      "to": "2026-11-13",
+      "n": 42551
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     15.035228721999998,
+     46.13878317826364
+    ]
+   },
+   "properties": {
+    "station_code": "SI0054A",
+    "station_name": "Trbovlje (do 2021)",
+    "arso_code": "",
+    "station_type": "background",
+    "station_area": "suburban",
+    "alt_m": 250.0,
+    "lat": 46.13878317826364,
+    "lon": 15.035228721999998,
+    "coverage": [
+     {
+      "pollutant": "NO2",
+      "aggregation": "hour",
+      "from": "2013-01-01",
+      "to": "2021-05-31",
+      "n": 69330
+     },
+     {
+      "pollutant": "O3",
+      "aggregation": "hour",
+      "from": "2013-01-01",
+      "to": "2021-05-31",
+      "n": 68084
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2013-01-01",
+      "to": "2021-05-12",
+      "n": 2941
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.4713146325,
+     46.04827490216357
+    ]
+   },
+   "properties": {
+    "station_code": "SI0058A",
+    "station_name": "LJ Biotehniška (zaprta 2021)",
+    "arso_code": "",
+    "station_type": "background",
+    "station_area": "urban",
+    "alt_m": 297.0,
+    "lat": 46.04827490216357,
+    "lon": 14.4713146325,
+    "coverage": [
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2013-01-01",
+      "to": "2020-12-31",
+      "n": 2855
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "day",
+      "from": "2013-01-01",
+      "to": "2017-12-31",
+      "n": 1746
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.3644,
+     46.24759999946372
+    ]
+   },
+   "properties": {
+    "station_code": "SI0060A",
+    "station_name": "Kranj (do 2021)",
+    "arso_code": "",
+    "station_type": "background",
+    "station_area": "urban",
+    "alt_m": 391.0,
+    "lat": 46.24759999946372,
+    "lon": 14.3644,
+    "coverage": [
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2013-01-01",
+      "to": "2021-01-19",
+      "n": 2781
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.507567642299998,
+     46.06061919576358
+    ]
+   },
+   "properties": {
+    "station_code": "SI0062A",
+    "station_name": "LJ Center (MOL/EIMV, 2017–2020)",
+    "arso_code": "",
+    "station_type": "traffic",
+    "station_area": "urban",
+    "alt_m": 299.0,
+    "lat": 46.06061919576358,
+    "lon": 14.507567642299998,
+    "coverage": [
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2017-01-01",
+      "to": "2020-01-29",
+      "n": 1078
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.4871183347,
+     46.07209156736359
+    ]
+   },
+   "properties": {
+    "station_code": "SI0072A",
+    "station_name": "LJ Celovška",
+    "arso_code": "E405",
+    "station_type": "traffic",
+    "station_area": "urban",
+    "alt_m": 305.0,
+    "lat": 46.07209156736359,
+    "lon": 14.4871183347,
+    "coverage": [
+     {
+      "pollutant": "NO2",
+      "aggregation": "hour",
+      "from": "2021-01-01",
+      "to": "2026-11-13",
+      "n": 48356
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2020-01-31",
+      "to": "2025-12-31",
+      "n": 2138
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "hour",
+      "from": "2026-01-01",
+      "to": "2026-11-13",
+      "n": 7578
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "hour",
+      "from": "2022-01-01",
+      "to": "2026-11-13",
+      "n": 42604
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.3622383364,
+     46.24178833016372
+    ]
+   },
+   "properties": {
+    "station_code": "SI0073A",
+    "station_name": "Kranj",
+    "arso_code": "E417",
+    "station_type": "background",
+    "station_area": "urban",
+    "alt_m": 388.0,
+    "lat": 46.24178833016372,
+    "lon": 14.3622383364,
+    "coverage": [
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2021-01-21",
+      "to": "2025-12-31",
+      "n": 1800
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "hour",
+      "from": "2026-01-01",
+      "to": "2026-11-13",
+      "n": 7569
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "hour",
+      "from": "2022-01-01",
+      "to": "2026-11-13",
+      "n": 42482
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     15.053950465099998,
+     46.15750839326365
+    ]
+   },
+   "properties": {
+    "station_code": "SI0074A",
+    "station_name": "Trbovlje",
+    "arso_code": "E413",
+    "station_type": "background",
+    "station_area": "suburban",
+    "alt_m": 284.0,
+    "lat": 46.15750839326365,
+    "lon": 15.053950465099998,
+    "coverage": [
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2021-05-14",
+      "to": "2024-12-30",
+      "n": 1318
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "hour",
+      "from": "2024-01-01",
+      "to": "2026-11-13",
+      "n": 25066
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "hour",
+      "from": "2022-01-01",
+      "to": "2026-11-13",
+      "n": 42579
+     }
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.48927172,
+     46.03748701946356
+    ]
+   },
+   "properties": {
+    "station_code": "SI0075A",
+    "station_name": "LJ Vič",
+    "arso_code": "E404",
+    "station_type": "background",
+    "station_area": "urban",
+    "alt_m": 293.0,
+    "lat": 46.03748701946356,
+    "lon": 14.48927172,
+    "coverage": [
+     {
+      "pollutant": "PM10",
+      "aggregation": "day",
+      "from": "2021-03-20",
+      "to": "2023-12-18",
+      "n": 998
+     },
+     {
+      "pollutant": "PM10",
+      "aggregation": "hour",
+      "from": "2023-12-19",
+      "to": "2026-11-13",
+      "n": 25228
+     },
+     {
+      "pollutant": "PM2.5",
+      "aggregation": "hour",
+      "from": "2022-01-01",
+      "to": "2026-11-13",
+      "n": 42439
+     }
+    ]
+   }
+  }
+ ]
+}

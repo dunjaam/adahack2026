@@ -1,0 +1,256 @@
+vrsta_goriva,obmocje_moci,stevilo_naprav
+Briketi - naprava z visokim izkoristkom,1KW - 25KW,105
+Briketi - naprava z visokim izkoristkom,26KW - 50KW,60
+Briketi - naprava z visokim izkoristkom,51KW - 150KW,6
+Briketi - naprava z visokim izkoristkom,151KW - 300KW,4
+Briketi - naprava z visokim izkoristkom,301KW - 500KW,1
+Briketi - naprava z visokim izkoristkom,501KW - 700KW,1
+Briketi - naprava z visokim izkoristkom,701KW - 1000KW,2
+Briketi - naprava z visokim izkoristkom,1001KW - 1500KW,0
+Briketi - naprava z visokim izkoristkom,1501KW - 3000KW,0
+Briketi - naprava z visokim izkoristkom,3001KW - 5000KW,0
+Briketi - naprava z visokim izkoristkom,5001KW - 7500KW,0
+Briketi - naprava z visokim izkoristkom,7501KW - 10000KW,0
+Briketi - naprava z visokim izkoristkom,> 10000KW,0
+Briketi - naprava z visokim izkoristkom,< 1KW,3
+Briketi - naprava z visokim izkoristkom,SKUPAJ,182
+Druga tekoča goriva,1KW - 25KW,302
+Druga tekoča goriva,26KW - 50KW,1210
+Druga tekoča goriva,51KW - 150KW,19
+Druga tekoča goriva,151KW - 300KW,10
+Druga tekoča goriva,301KW - 500KW,8
+Druga tekoča goriva,501KW - 700KW,1
+Druga tekoča goriva,701KW - 1000KW,1
+Druga tekoča goriva,1001KW - 1500KW,3
+Druga tekoča goriva,1501KW - 3000KW,15
+Druga tekoča goriva,3001KW - 5000KW,0
+Druga tekoča goriva,5001KW - 7500KW,0
+Druga tekoča goriva,7501KW - 10000KW,0
+Druga tekoča goriva,> 10000KW,0
+Druga tekoča goriva,< 1KW,13
+Druga tekoča goriva,SKUPAJ,1582
+Drugo plinasto gorivo,1KW - 25KW,256
+Drugo plinasto gorivo,26KW - 50KW,21
+Drugo plinasto gorivo,51KW - 150KW,10
+Drugo plinasto gorivo,151KW - 300KW,4
+Drugo plinasto gorivo,301KW - 500KW,2
+Drugo plinasto gorivo,501KW - 700KW,1
+Drugo plinasto gorivo,701KW - 1000KW,1
+Drugo plinasto gorivo,1001KW - 1500KW,0
+Drugo plinasto gorivo,1501KW - 3000KW,5
+Drugo plinasto gorivo,3001KW - 5000KW,1
+Drugo plinasto gorivo,5001KW - 7500KW,0
+Drugo plinasto gorivo,7501KW - 10000KW,0
+Drugo plinasto gorivo,> 10000KW,0
+Drugo plinasto gorivo,< 1KW,7
+Drugo plinasto gorivo,SKUPAJ,308
+Koks,1KW - 25KW,3
+Koks,26KW - 50KW,0
+Koks,51KW - 150KW,0
+Koks,151KW - 300KW,0
+Koks,301KW - 500KW,0
+Koks,501KW - 700KW,0
+Koks,701KW - 1000KW,0
+Koks,1001KW - 1500KW,0
+Koks,1501KW - 3000KW,1
+Koks,3001KW - 5000KW,0
+Koks,5001KW - 7500KW,0
+Koks,7501KW - 10000KW,0
+Koks,> 10000KW,0
+Koks,< 1KW,0
+Koks,SKUPAJ,4
+Lahko kurilno olje - ELKO,1KW - 25KW,48912
+Lahko kurilno olje - ELKO,26KW - 50KW,115833
+Lahko kurilno olje - ELKO,51KW - 150KW,4531
+Lahko kurilno olje - ELKO,151KW - 300KW,1587
+Lahko kurilno olje - ELKO,301KW - 500KW,840
+Lahko kurilno olje - ELKO,501KW - 700KW,347
+Lahko kurilno olje - ELKO,701KW - 1000KW,189
+Lahko kurilno olje - ELKO,1001KW - 1500KW,146
+Lahko kurilno olje - ELKO,1501KW - 3000KW,211
+Lahko kurilno olje - ELKO,3001KW - 5000KW,29
+Lahko kurilno olje - ELKO,5001KW - 7500KW,4
+Lahko kurilno olje - ELKO,7501KW - 10000KW,0
+Lahko kurilno olje - ELKO,> 10000KW,5
+Lahko kurilno olje - ELKO,< 1KW,16024
+Lahko kurilno olje - ELKO,SKUPAJ,188658
+Lesni ostanki,1KW - 25KW,393
+Lesni ostanki,26KW - 50KW,469
+Lesni ostanki,51KW - 150KW,16
+Lesni ostanki,151KW - 300KW,8
+Lesni ostanki,301KW - 500KW,5
+Lesni ostanki,501KW - 700KW,0
+Lesni ostanki,701KW - 1000KW,2
+Lesni ostanki,1001KW - 1500KW,0
+Lesni ostanki,1501KW - 3000KW,3
+Lesni ostanki,3001KW - 5000KW,0
+Lesni ostanki,5001KW - 7500KW,0
+Lesni ostanki,7501KW - 10000KW,0
+Lesni ostanki,> 10000KW,0
+Lesni ostanki,< 1KW,7
+Lesni ostanki,SKUPAJ,903
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",1KW - 25KW,273626
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",26KW - 50KW,134193
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",51KW - 150KW,1095
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",151KW - 300KW,263
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",301KW - 500KW,146
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",501KW - 700KW,35
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",701KW - 1000KW,37
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",1001KW - 1500KW,15
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",1501KW - 3000KW,181
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",3001KW - 5000KW,7
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",5001KW - 7500KW,1
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",7501KW - 10000KW,2
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",> 10000KW,16
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",< 1KW,41876
+"Naravni les v vseh oblikah (drva, žagovina, kosi, odrezki, lubje, storži)",SKUPAJ,451493
+Obdelan neonesnažen les I. kategorije,1KW - 25KW,640
+Obdelan neonesnažen les I. kategorije,26KW - 50KW,117
+Obdelan neonesnažen les I. kategorije,51KW - 150KW,5
+Obdelan neonesnažen les I. kategorije,151KW - 300KW,0
+Obdelan neonesnažen les I. kategorije,301KW - 500KW,0
+Obdelan neonesnažen les I. kategorije,501KW - 700KW,0
+Obdelan neonesnažen les I. kategorije,701KW - 1000KW,0
+Obdelan neonesnažen les I. kategorije,1001KW - 1500KW,0
+Obdelan neonesnažen les I. kategorije,1501KW - 3000KW,0
+Obdelan neonesnažen les I. kategorije,3001KW - 5000KW,0
+Obdelan neonesnažen les I. kategorije,5001KW - 7500KW,0
+Obdelan neonesnažen les I. kategorije,7501KW - 10000KW,0
+Obdelan neonesnažen les I. kategorije,> 10000KW,1
+Obdelan neonesnažen les I. kategorije,< 1KW,1
+Obdelan neonesnažen les I. kategorije,SKUPAJ,764
+Peleti - naprava z visokim izkoristkom,1KW - 25KW,17663
+Peleti - naprava z visokim izkoristkom,26KW - 50KW,12580
+Peleti - naprava z visokim izkoristkom,51KW - 150KW,427
+Peleti - naprava z visokim izkoristkom,151KW - 300KW,106
+Peleti - naprava z visokim izkoristkom,301KW - 500KW,50
+Peleti - naprava z visokim izkoristkom,501KW - 700KW,6
+Peleti - naprava z visokim izkoristkom,701KW - 1000KW,14
+Peleti - naprava z visokim izkoristkom,1001KW - 1500KW,1
+Peleti - naprava z visokim izkoristkom,1501KW - 3000KW,12
+Peleti - naprava z visokim izkoristkom,3001KW - 5000KW,0
+Peleti - naprava z visokim izkoristkom,5001KW - 7500KW,0
+Peleti - naprava z visokim izkoristkom,7501KW - 10000KW,0
+Peleti - naprava z visokim izkoristkom,> 10000KW,3
+Peleti - naprava z visokim izkoristkom,< 1KW,475
+Peleti - naprava z visokim izkoristkom,SKUPAJ,31337
+Plin / tekoče,1KW - 25KW,201
+Plin / tekoče,26KW - 50KW,82
+Plin / tekoče,51KW - 150KW,8
+Plin / tekoče,151KW - 300KW,7
+Plin / tekoče,301KW - 500KW,6
+Plin / tekoče,501KW - 700KW,3
+Plin / tekoče,701KW - 1000KW,0
+Plin / tekoče,1001KW - 1500KW,0
+Plin / tekoče,1501KW - 3000KW,2
+Plin / tekoče,3001KW - 5000KW,0
+Plin / tekoče,5001KW - 7500KW,0
+Plin / tekoče,7501KW - 10000KW,0
+Plin / tekoče,> 10000KW,1
+Plin / tekoče,< 1KW,1
+Plin / tekoče,SKUPAJ,311
+Plin / trdno,1KW - 25KW,138
+Plin / trdno,26KW - 50KW,30
+Plin / trdno,51KW - 150KW,2
+Plin / trdno,151KW - 300KW,0
+Plin / trdno,301KW - 500KW,0
+Plin / trdno,501KW - 700KW,0
+Plin / trdno,701KW - 1000KW,0
+Plin / trdno,1001KW - 1500KW,0
+Plin / trdno,1501KW - 3000KW,0
+Plin / trdno,3001KW - 5000KW,0
+Plin / trdno,5001KW - 7500KW,0
+Plin / trdno,7501KW - 10000KW,0
+Plin / trdno,> 10000KW,0
+Plin / trdno,< 1KW,1
+Plin / trdno,SKUPAJ,171
+Polena - naprava z visokim izkoristkom,1KW - 25KW,9678
+Polena - naprava z visokim izkoristkom,26KW - 50KW,4205
+Polena - naprava z visokim izkoristkom,51KW - 150KW,101
+Polena - naprava z visokim izkoristkom,151KW - 300KW,11
+Polena - naprava z visokim izkoristkom,301KW - 500KW,8
+Polena - naprava z visokim izkoristkom,501KW - 700KW,0
+Polena - naprava z visokim izkoristkom,701KW - 1000KW,0
+Polena - naprava z visokim izkoristkom,1001KW - 1500KW,0
+Polena - naprava z visokim izkoristkom,1501KW - 3000KW,3
+Polena - naprava z visokim izkoristkom,3001KW - 5000KW,0
+Polena - naprava z visokim izkoristkom,5001KW - 7500KW,0
+Polena - naprava z visokim izkoristkom,7501KW - 10000KW,0
+Polena - naprava z visokim izkoristkom,> 10000KW,2
+Polena - naprava z visokim izkoristkom,< 1KW,150
+Polena - naprava z visokim izkoristkom,SKUPAJ,14158
+Premog,1KW - 25KW,15
+Premog,26KW - 50KW,8
+Premog,51KW - 150KW,1
+Premog,151KW - 300KW,0
+Premog,301KW - 500KW,0
+Premog,501KW - 700KW,0
+Premog,701KW - 1000KW,0
+Premog,1001KW - 1500KW,0
+Premog,1501KW - 3000KW,1
+Premog,3001KW - 5000KW,0
+Premog,5001KW - 7500KW,0
+Premog,7501KW - 10000KW,0
+Premog,> 10000KW,0
+Premog,< 1KW,1
+Premog,SKUPAJ,26
+Sekanci  - naprava z visokim izkoristkom,1KW - 25KW,523
+Sekanci  - naprava z visokim izkoristkom,26KW - 50KW,990
+Sekanci  - naprava z visokim izkoristkom,51KW - 150KW,483
+Sekanci  - naprava z visokim izkoristkom,151KW - 300KW,231
+Sekanci  - naprava z visokim izkoristkom,301KW - 500KW,148
+Sekanci  - naprava z visokim izkoristkom,501KW - 700KW,30
+Sekanci  - naprava z visokim izkoristkom,701KW - 1000KW,72
+Sekanci  - naprava z visokim izkoristkom,1001KW - 1500KW,8
+Sekanci  - naprava z visokim izkoristkom,1501KW - 3000KW,13
+Sekanci  - naprava z visokim izkoristkom,3001KW - 5000KW,3
+Sekanci  - naprava z visokim izkoristkom,5001KW - 7500KW,0
+Sekanci  - naprava z visokim izkoristkom,7501KW - 10000KW,0
+Sekanci  - naprava z visokim izkoristkom,> 10000KW,0
+Sekanci  - naprava z visokim izkoristkom,< 1KW,40
+Sekanci  - naprava z visokim izkoristkom,SKUPAJ,2541
+Tekoče / trdno,1KW - 25KW,2046
+Tekoče / trdno,26KW - 50KW,2623
+Tekoče / trdno,51KW - 150KW,14
+Tekoče / trdno,151KW - 300KW,5
+Tekoče / trdno,301KW - 500KW,2
+Tekoče / trdno,501KW - 700KW,0
+Tekoče / trdno,701KW - 1000KW,0
+Tekoče / trdno,1001KW - 1500KW,2
+Tekoče / trdno,1501KW - 3000KW,4
+Tekoče / trdno,3001KW - 5000KW,0
+Tekoče / trdno,5001KW - 7500KW,0
+Tekoče / trdno,7501KW - 10000KW,0
+Tekoče / trdno,> 10000KW,0
+Tekoče / trdno,< 1KW,51
+Tekoče / trdno,SKUPAJ,4747
+Utekočinjeni naftni plin - UNP,1KW - 25KW,11280
+Utekočinjeni naftni plin - UNP,26KW - 50KW,3098
+Utekočinjeni naftni plin - UNP,51KW - 150KW,837
+Utekočinjeni naftni plin - UNP,151KW - 300KW,201
+Utekočinjeni naftni plin - UNP,301KW - 500KW,119
+Utekočinjeni naftni plin - UNP,501KW - 700KW,57
+Utekočinjeni naftni plin - UNP,701KW - 1000KW,38
+Utekočinjeni naftni plin - UNP,1001KW - 1500KW,25
+Utekočinjeni naftni plin - UNP,1501KW - 3000KW,27
+Utekočinjeni naftni plin - UNP,3001KW - 5000KW,7
+Utekočinjeni naftni plin - UNP,5001KW - 7500KW,2
+Utekočinjeni naftni plin - UNP,7501KW - 10000KW,1
+Utekočinjeni naftni plin - UNP,> 10000KW,2
+Utekočinjeni naftni plin - UNP,< 1KW,552
+Utekočinjeni naftni plin - UNP,SKUPAJ,16246
+Zemeljski plin,1KW - 25KW,119079
+Zemeljski plin,26KW - 50KW,33838
+Zemeljski plin,51KW - 150KW,6506
+Zemeljski plin,151KW - 300KW,1593
+Zemeljski plin,301KW - 500KW,1068
+Zemeljski plin,501KW - 700KW,475
+Zemeljski plin,701KW - 1000KW,336
+Zemeljski plin,1001KW - 1500KW,258
+Zemeljski plin,1501KW - 3000KW,255
+Zemeljski plin,3001KW - 5000KW,84
+Zemeljski plin,5001KW - 7500KW,33
+Zemeljski plin,7501KW - 10000KW,14
+Zemeljski plin,> 10000KW,10
+Zemeljski plin,< 1KW,9392
+Zemeljski plin,SKUPAJ,172941

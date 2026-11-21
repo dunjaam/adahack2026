@@ -1,0 +1,26 @@
+{
+ "ncols": 1188,
+ "nrows": 1393,
+ "cellsize_m": 15.0,
+ "crs": "EPSG:32633",
+ "crs_opomba": "UTM 33N, izvorna mreža GRAL (potrdil ARSO 20. 11. 2026); ni D96/TM s premikom N",
+ "xllcorner": 453640.0,
+ "yllcorner": 5090000.0,
+ "xmax": 471460.0,
+ "ymax": 5110895.0,
+ "vrstica_0": "sever",
+ "nodata_v_izvoru": -9999.0,
+ "ur": 8760,
+ "mapa": "ceste_1A3bi_osebna_vozila",
+ "leto": 2021,
+ "cas": "ura_leta 1 = 1. 1. 2021 00:00 UTC (začetek intervala); leto potrdil ARSO",
+ "mreza_250m": {
+  "crs": "EPSG:3794",
+  "xllcorner": 453640.0,
+  "yllcorner": 90000.0,
+  "cellsize_m": 250.0,
+  "ncols": 72,
+  "nrows": 84,
+  "opomba": "emisijska mreža ARSO; celice 15 m prebinirane po središču"
+ }
+}

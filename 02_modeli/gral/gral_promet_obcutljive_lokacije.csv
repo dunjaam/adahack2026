@@ -1,0 +1,319 @@
+osm_id,kategorija,ime,lat,lon,naslov,naselje,operator,osm_amenity,osm_social_facility,osm_isced_level,row,col,povprecje_leto,povprecje_kurilna_sezona,povprecje_januar,povprecje_vecer_jan_feb,max_urna,ur_nad_25,ur_z_vrednostjo
+way/177401488,bolnisnica,,46.05,14.52,Šlajmerjeva ulica 3,Ljubljana,,hospital,,,715,635,55.72,58.36,48.53,41.57,432.3,5532,8760
+way/1092591433,bolnisnica,,46.05,14.53,,,,hospital,,,730,645,61.43,65.06,55.34,47.72,554.03,5205,8760
+node/4441882308,bolnisnica,Ambulanta Kus,46.04,14.51,Prijateljeva ulica 2,Ljubljana,"Primož Kus, dr. med., spec.",hospital,,,788,554,41.37,42.79,32.29,29.89,391.92,4727,8760
+way/23061342,bolnisnica,Bolnica Dr. Petra Držaja,46.07,14.49,Vodnikova cesta 62,Ljubljana,,hospital,,,613,446,49.9,51.68,38.91,33.96,454.56,4851,8760
+way/785625834,bolnisnica,Bolnica Dr. Petra Držaja,46.07,14.49,,,,hospital,,,612,446,50.65,52.6,40.23,34.54,423.26,4867,8760
+relation/14711023,bolnisnica,Center za klinično psihiatrijo,46.05,14.57,Chengdujska cesta 45,Ljubljana - Polje,Psihiatrična klinika Ljubljana,hospital,,,724,876,41.25,42.59,32.82,27.1,367.78,4241,8760
+node/3274384068,bolnisnica,Fizioterapija,46.1,14.53,,,,hospital,,,347,672,25.07,25.12,19.27,19.02,246.26,3090,8760
+way/320009354,bolnisnica,IATROS,46.06,14.5,Parmova ulica 51b,Ljubljana,dr. Košorok,hospital,,,637,525,59.59,61.7,46.25,40.01,457.63,5286,8760
+way/195459869,bolnisnica,Kirurški sanatorij,46.05,14.48,"Rožna dolina, cesta XV 6",Ljubljana,,hospital,,,772,414,41.72,42.19,29.6,26.33,436.83,4343,8760
+relation/20699690,bolnisnica,Klinika za infekcijske bolezni in vročinska stanja,46.06,14.52,Japljeva ulica 2,,UKC,hospital,,,700,627,63.64,67.13,57.1,49.15,658.47,5576,8760
+relation/20699691,bolnisnica,Klinični oddelek za gastroenterologijo,46.06,14.52,,,UKC,hospital,,,702,624,65.02,68.53,58.61,51.48,618.34,5723,8760
+way/24765163,bolnisnica,Leonišče - ginekološka klinika,46.05,14.52,Šlajmerjeva ulica 2,Ljubljana,,hospital,,,720,634,76.45,79.19,61.3,56.31,632.78,6276,8760
+way/177401591,bolnisnica,Negovalna bolnišnica,46.05,14.52,Vrazov trg 1,Ljubljana,,hospital,,,735,601,72.55,75.86,56.64,47.96,740.08,5632,8760
+way/177401495,bolnisnica,Ortopedska klinika,46.05,14.52,Zaloška cesta 9,Ljubljana,,hospital,,,721,626,74.48,77.43,61.52,54.15,678.07,6145,8760
+way/186908146,bolnisnica,Očesna klinika Ljubljana,46.05,14.53,Grablovičeva ulica 46,Ljubljana,,hospital,,,708,658,65.66,67.96,53.51,46.81,611.13,5882,8760
+relation/16172,bolnisnica,Porodnišnica Ljubljana,46.05,14.52,Šlajmerjeva ulica 4,Ljubljana,,hospital,,,718,637,70.88,73.21,58.35,54.36,605.63,6158,8760
+node/3273070254,bolnisnica,Studio ANK,46.09,14.47,,,,hospital,,,480,365,53.14,54.24,39.5,31.55,421.86,4830,8760
+way/24765159,bolnisnica,Univerzitetni klinični center Ljubljana,46.05,14.52,Zaloška cesta 7,Ljubljana,,hospital,,,715,621,60.48,63.45,53.47,46.74,619.79,5644,8760
+relation/2226607,bolnisnica,Univerzitetni rehabilitacijski inštitut Republike Slovenije - Soča,46.07,14.52,Linhartova cesta 51,Ljubljana,,hospital,,,613,640,62.68,64.24,50.07,44.83,458.56,5660,8760
+way/177401490,bolnisnica,Univerzitetno medicinsko središče Ljubljana,46.05,14.52,,,,hospital,,,736,621,58.12,60.98,50.97,44.61,432.82,5488,8760
+node/12976724483,bolnisnica,Urgenca,46.05,14.52,Zaloška cesta 7,Ljubljana,University Medical Centre Ljubljana,hospital,,,711,615,75.58,80.03,68.37,57.19,725.38,5890,8760
+way/197203105,bolnisnica,ZD Ljubljana - MOSTE-POLJE,46.06,14.53,Prvomajska ulica 5,Ljubljana,,hospital,,,701,674,58.85,60.95,49.17,44.41,645.07,5667,8760
+node/3275063474,bolnisnica,Zasebna ambulanta,46.04,14.5,Zeljarska ulica 2,Ljubljana,Helena Andrenšek,hospital,,,797,501,73.41,75.65,56.8,46.56,702.29,5396,8760
+way/184159337,bolnisnica,Zavod RS za transfuzijsko medicino,46.05,14.53,Šlajmerjeva ulica 6,Ljubljana,,hospital,,,713,642,56.65,58.85,47.29,43.29,482.81,5530,8760
+way/172085312,bolnisnica,Zdravstveni dom,46.06,14.51,Kržičeva ulica 10,Ljubljana,,hospital,,,637,569,70.91,73.0,56.92,52.79,648.97,6085,8760
+way/1548124996,bolnisnica,Zdravstveni dom Domžale,46.14,14.6,,,,hospital,,,84,1012,1.17,1.17,1.21,2.1,68.83,56,8760
+way/771509657,bolnisnica,Zdravstveni dom Ljubljana Vič-Rudnik pediatrics,46.05,14.49,,,,hospital,,,769,444,60.41,61.49,44.51,37.07,603.02,5259,8760
+way/331895039,bolnisnica,Zdravstveni dom Medvode,46.15,14.41,Ostrovrharjeva ulica 6,Medvode,Zdravstveni dom Medvode,hospital,,,33,29,1.04,0.78,0.35,0.52,53.22,44,8760
+way/186332705,bolnisnica,Zdravstveni dom Metelkova,46.06,14.52,Metelkova ulica 9,Ljubljana,,hospital,,,696,590,72.4,75.7,57.19,50.45,607.46,5783,8760
+way/197175576,bolnisnica,Zdravstveni dom Črnuče,46.1,14.53,Primožičeva ulica 2,Ljubljana - Črnuče,,hospital,,,350,678,31.52,31.37,23.13,21.84,272.11,3768,8760
+way/164683038,bolnisnica,Zdravstveni dom Škofljica,45.98,14.58,Kočevska cesta 25,Škofljica,,hospital,,,1260,905,1.16,1.33,1.35,1.5,93.85,73,8760
+node/2019803225,bolnisnica,Študentski zdravstveni dom,46.05,14.5,,,,hospital,,,767,507,81.46,84.66,67.63,58.69,684.76,6199,8760
+way/197399540,bolnisnica,Železniški zdravstveni dom,46.06,14.5,Pivovarniška ulica 1,Ljubljana,"Splošna ambulanta 5, Fizioterapija",hospital,,,665,516,56.26,57.95,45.0,40.55,609.06,5382,8760
+way/331742844,dom_za_starejse,Center starejših Notranje Gorice,46.0,14.41,Gmajna 7,Notranje Gorice,,social_facility,group_home,,1142,37,1.88,2.05,1.17,1.45,115.29,130,8760
+way/250766072,dom_za_starejse,DEOS Center starejših Trnovo,46.04,14.5,Devinska ulica 1,Ljubljana,,social_facility,group_home,,817,505,64.05,66.35,50.47,42.53,617.91,5198,8760
+relation/4671712,dom_za_starejse,DSO Vič,46.05,14.45,Cesta na Bokalce 51,Ljubljana,,social_facility,group_home,,736,245,34.8,34.16,20.28,15.95,329.63,3673,8760
+relation/9176991,dom_za_starejse,Dom starejših občanov Fužine,46.05,14.56,Nove Fužine 40,Ljubljana,,social_facility,assisted_living,,721,828,31.82,33.21,25.83,22.48,287.55,3672,8760
+way/99860242,dom_za_starejse,Dom starejših občanov Ljubljana - Šiška,46.08,14.47,Kunaverjeva ulica 15,Ljubljana,,social_facility,assisted_living,,526,384,68.63,69.63,51.25,43.21,603.7,5487,8760
+relation/16718825,dom_za_starejse,Dom starejših občanov Ljubljana-Moste-Polje,46.05,14.54,Ob sotočju 9,Ljubljana,DSO Ljubljana MOSTE –POLJE,social_facility,nursing_home,,722,724,44.48,47.16,39.74,35.25,507.08,4547,8760
+way/324003630,dom_za_starejse,Dom starejših občanov Črnuče,46.11,14.54,Cesta Ceneta Štuparja 141,Ljubljana - Črnuče,,social_facility,assisted_living,,318,696,9.0,8.8,6.74,7.67,162.87,910,8760
+relation/19804482,dom_za_starejse,Dom upokojencev,46.14,14.6,Karantanska cesta 5,Domžale,,social_facility,group_home,,94,1009,1.24,1.24,1.26,1.94,103.42,49,8760
+way/659021032,dom_za_starejse,MGC Bistrica,46.14,14.6,Cesta talcev 10,Domžale,,social_facility,group_home,,96,1042,1.17,1.15,1.03,1.95,66.34,45,8760
+way/23696156,dom_za_starejse,VDC Tončke Hočevar,46.07,14.49,Vodnikova cesta 56,Ljubljana,,social_facility,nursing_home,,617,451,52.23,53.74,39.81,35.42,438.4,4932,8760
+node/5682342721,sola,,46.1,14.53,Cesta 24. junija 92,Ljubljana - Črnuče,,school,,,409,647,21.15,21.75,16.57,17.2,173.53,2623,8760
+way/230977504,sola,,46.07,14.55,,,,school,,,575,746,73.43,75.18,60.42,49.97,603.88,5771,8760
+way/248789612,sola,,46.03,14.52,Galjevica 35,,,school,,,864,620,31.01,33.03,28.06,25.77,481.73,3595,8760
+way/318916483,sola,,46.04,14.45,Cesta na Bokalce 1,Ljubljana,,school,,,784,279,26.77,27.1,19.64,18.94,268.91,3353,8760
+way/338250592,sola,,46.14,14.43,,,,school,,,72,171,1.64,1.44,0.65,0.65,69.17,110,8760
+way/442005766,sola,,46.02,14.41,,,,school,,,984,56,4.8,5.02,2.39,1.97,199.29,527,8760
+way/1093422314,sola,,46.03,14.49,,,,school,,,858,459,32.56,33.95,26.3,24.76,369.09,3579,8760
+way/1178384219,sola,,46.06,14.41,,,,school,,,689,59,4.91,4.54,1.77,2.31,135.03,460,8760
+way/1391149456,sola,,46.15,14.6,,,,school,,,6,1023,0.72,0.69,0.65,1.18,64.94,23,8760
+node/9897649756,sola,B2,46.04,14.49,,,,school,,,782,435,88.59,89.32,62.99,52.77,732.76,6073,8760
+way/108201845,sola,Biotehnični izobraževalni center,46.04,14.51,Ižanska cesta 10,,,school,,,822,578,45.49,47.52,36.07,32.11,434.21,4573,8760
+way/231346832,sola,CDI Univerzum,46.07,14.48,Grošljeva ulica 4,Ljubljana,,school,,,562,424,84.56,87.19,64.1,49.72,766.41,5661,8760
+node/14208096623,sola,Center IRIS,46.05,14.49,Tobačna ulica 5,Ljubljana,Center IRIS,school,,,759,471,68.48,69.03,46.11,40.27,594.64,5425,8760
+way/653118273,sola,Center IRIS,46.04,14.49,,,,school,,,782,469,61.02,63.94,50.27,42.85,550.05,5183,8760
+way/978470927,sola,Center Janeza Levca,46.07,14.52,Dečkova ulica 1b,Ljubljana,Organizacijska enota OŠPP,school,,,588,626,49.85,50.85,39.67,38.32,469.1,5270,8760
+way/1013879679,sola,Center Janeza Levca,46.05,14.51,Levstikov trg 1,Ljubljana,,school,,,770,547,29.13,29.7,23.06,25.34,230.38,3839,8760
+relation/16062783,sola,Center Janeza Levca,46.07,14.53,Šmartinska cesta 96,Ljubljana,,school,,,620,690,105.25,109.61,89.5,81.19,876.53,6579,8760
+way/640041867,sola,Center montessori,46.08,14.45,,,,school,,,533,258,17.84,17.11,10.43,8.74,206.01,2156,8760
+way/1013875731,sola,Ekonomska šola Ljubljana,46.05,14.5,Prešernova cesta 6,Ljubljana,,school,,3,753,498,72.53,75.51,59.69,52.92,611.49,6010,8760
+way/1013880312,sola,Elektrotehniško-računalniška strokovna šola in gimnazija Ljubljana,46.05,14.5,Vegova ulica 4,Ljubljana,,school,,3,752,527,49.63,52.83,43.03,38.56,542.7,4934,8760
+way/744274900,sola,Erudio,46.08,14.49,,,,school,,,536,467,59.6,62.54,52.69,48.29,587.19,5464,8760
+way/1093418349,sola,Francoska Šola,46.03,14.5,,,,school,,,865,530,40.57,42.72,35.25,31.87,406.07,4328,8760
+node/13834032502,sola,GEA College,46.08,14.51,Dunajska cesta 156,,,school,,,506,585,109.65,115.82,93.79,75.34,951.35,6583,8760
+relation/14581253,sola,Gimnazija Bežigrad,46.06,14.51,Peričeva ulica 4,Ljubljana,,school,,,638,575,72.93,74.94,55.27,51.16,543.69,6142,8760
+relation/14984767,sola,Gimnazija Ledina,46.05,14.51,Resljeva cesta 12,Ljubljana,,school,,,717,569,70.92,74.16,58.46,52.35,859.11,6092,8760
+relation/16102272,sola,Gimnazija Moste,46.06,14.53,Zaloška cesta 49,Ljubljana,Gimnazija Moste,school,,,701,680,57.57,59.53,47.94,44.38,528.75,5702,8760
+way/653189821,sola,Gimnazija Poljane,46.05,14.51,Strossmayerjeva ulica 1,Ljubljana,,school,,,745,582,55.09,57.99,43.98,37.44,537.32,5086,8760
+way/652916446,sola,Gimnazija Vič,46.04,14.48,,,,school,,,791,407,72.97,73.63,51.36,44.39,570.92,5742,8760
+way/181294457,sola,Gimnazija in veterinarska šola,46.04,14.49,,,,school,,,851,476,35.1,36.77,27.69,25.82,397.86,3835,8760
+node/14136622813,sola,Gimnazija Šentvid,46.1,14.47,Prušnikova ulica 98,Ljubljana - Šentvid,,school,,,386,337,48.05,50.02,40.23,41.06,532.4,4738,8760
+relation/16016106,sola,Gimnazija Šiška,46.07,14.5,Aljaževa ulica 32,Ljubljana,,school,,,599,493,44.47,45.63,35.14,32.61,638.64,4911,8760
+way/300053842,sola,Glasbena Šola Franca Šturma,46.1,14.54,Dunajska cesta 398,Ljubljana - Črnuče,,school,,,352,694,28.63,29.27,23.14,21.86,201.2,3591,8760
+way/266367172,sola,Glasbena šola Franca Šturma,46.1,14.47,Prušnikova ulica 100,Ljubljana - Šentvid,,school,,,389,334,67.41,70.02,56.98,55.62,639.53,5385,8760
+node/12132234629,sola,"Glasbena šola Franca Šturma, p. Zgornja Šiška",46.07,14.5,,,,school,,,617,489,115.01,115.49,82.94,78.75,932.81,6687,8760
+relation/17894528,sola,Glasbena šola Ljubljana Moste-Polje,46.05,14.53,,,,school,,,713,681,57.18,60.23,50.04,45.67,606.52,5185,8760
+way/241874173,sola,Glasbeni center Edgar Willems,46.03,14.53,Ob dolenjski železnici 182,Ljubljana,,school,,,913,687,29.81,30.67,25.24,22.39,366.29,3627,8760
+node/7082640547,sola,Kid Genius,46.0,14.55,Dolenjska cesta 326,Škofljica,,school,,,1109,790,4.49,5.11,4.76,4.58,158.39,420,8760
+way/108200652,sola,Konservatorij za glasbo in balet,46.04,14.51,Ižanska cesta 12,Ljubljana,,school,,,827,575,42.63,44.51,34.11,31.7,496.52,4414,8760
+way/971649851,sola,Mladinski dom Malči Beličeve,46.04,14.49,,,,school,,,810,447,43.43,45.26,34.77,29.11,653.74,4349,8760
+way/112156967,sola,Osnovma šola Maksa Pečarja,46.1,14.53,Dunajska cesta 390,Ljubljana - Črnuče,,school,,,351,691,29.99,30.4,24.16,21.82,276.9,3712,8760
+relation/17650953,sola,Osnovna Šola Kolezija,46.04,14.49,Cesta v Mestni log 46,Ljubljana,,school,,,830,477,47.09,48.55,36.51,33.43,428.47,4932,8760
+way/234775059,sola,Osnovna Šola Livada,46.03,14.5,,,,school,,,863,529,42.03,44.31,36.94,34.25,521.42,4451,8760
+way/1049638985,sola,Osnovna Šola Oskarja Kovačiča,46.04,14.52,Dolenjska cesta 20,Ljubljana,,school,,,827,595,42.32,44.54,36.15,30.68,372.45,4540,8760
+relation/16650543,sola,Osnovna Šola Oskarja Kovačiča,46.03,14.52,Ob dolenjski železnici 48,Ljubljana,,school,,,868,623,29.01,30.77,26.43,24.84,317.69,3371,8760
+node/14353411501,sola,Osnovna Šola Valentina Vodnika,46.08,14.48,Adamičeva ulica,,,school,,,554,401,66.27,69.23,52.86,44.73,533.42,5253,8760
+way/1013885281,sola,Osnovna Šola Valentina vodnika,46.08,14.48,Adamičeva ulica 16,Ljubljana,,school,,,554,401,66.27,69.23,52.86,44.73,533.42,5253,8760
+relation/18318716,sola,Osnovna Šola Šmartno pod Šmarno Goro,46.13,14.48,,,,school,,,187,405,26.66,26.36,19.36,14.85,273.43,3156,8760
+way/652981931,sola,Osnovna šola Bežigrad,46.06,14.52,Črtomirova ulica 12,Ljubljana,Osnovna šola Bežigrad,school,,,656,609,79.34,82.08,63.29,53.17,706.0,6050,8760
+way/653114061,sola,Osnovna šola Bičevje,46.04,14.49,,,,school,,,816,437,39.27,41.01,30.88,28.49,460.01,4151,8760
+relation/16718710,sola,Osnovna šola Božidarja Jakca Ljubljana,46.05,14.55,Nusdorferjeva ulica 10,Ljubljana,Osnovna šola Božidarja Jakca Ljubljana,school,,,754,753,39.35,41.13,34.22,30.29,346.13,4441,8760
+way/1013867111,sola,Osnovna šola Danile Kumar,46.09,14.51,Gogalova ulica 15,Ljubljana,,school,,1,469,569,41.28,41.46,30.09,28.32,430.6,4241,8760
+way/377724638,sola,Osnovna šola Dob,46.15,14.62,Šolska ulica 7,Dob,,school,,,7,1151,0.61,0.58,0.5,0.95,51.02,12,8760
+way/1513219861,sola,Osnovna šola Domžale,46.14,14.6,,,,school,,,63,1036,1.01,1.01,0.98,1.78,57.83,39,8760
+way/1524324704,sola,Osnovna šola Dragomelj,46.11,14.59,,,,school,,,338,997,13.8,13.59,10.87,10.02,217.08,1573,8760
+way/81479675,sola,Osnovna šola Dravlje,46.08,14.48,Klopčičeva ulica 1,Ljubljana,,school,,,521,396,75.62,76.06,54.95,44.3,778.32,5605,8760
+way/1487599386,sola,Osnovna šola Franca Rozmana Staneta,46.1,14.47,,,,school,,,402,342,67.81,70.21,56.25,56.45,740.44,5317,8760
+relation/16869066,sola,Osnovna šola Franceta Bevka,46.08,14.51,Ulica Pohorskega bataljona 1,Ljubljana,,school,,,537,549,55.5,57.16,42.71,37.13,415.81,5262,8760
+relation/21123558,sola,Osnovna šola Hinka Smrekarja,46.07,14.49,,,,school,,,569,456,55.13,57.13,46.88,42.26,663.14,5367,8760
+way/310027215,sola,Osnovna šola Jožeta Moškriča,46.07,14.54,Jarška cesta 34,Ljubljana,Osnovna šola Jožeta Moškriča,school,,,582,709,52.23,53.86,41.87,36.21,417.86,5149,8760
+relation/16118946,sola,Osnovna šola Karla Destovnika - Kajuha,46.05,14.55,Jakčeva ulica 42,Ljubljana,Osnovna šola Karla Destovnika - Kajuha,school,,,713,748,50.36,53.3,45.09,38.91,565.05,4604,8760
+relation/16819741,sola,Osnovna šola Kašelj,46.05,14.59,Kašeljska cesta 119 A,Ljubljana - Polje,,school,,,726,988,25.35,26.92,23.34,20.68,331.93,2834,8760
+relation/16819853,sola,Osnovna šola Ketteja in Murna,46.05,14.53,Koširjeva ulica 2,Ljubljana,Osnovna šola Ketteja in Murna,school,,,734,676,43.15,45.58,38.7,35.28,377.6,4413,8760
+way/1494243129,sola,Osnovna šola Koseze,46.07,14.47,,,,school,,1;2,567,353,54.52,56.61,42.34,37.39,508.47,4943,8760
+way/1499316492,sola,Osnovna šola Ledina,46.05,14.51,,,,school,,,718,575,62.97,65.51,50.72,46.15,484.75,5759,8760
+way/1494682026,sola,Osnovna šola Livada,46.03,14.5,,,,school,,,861,529,43.29,45.59,38.28,36.01,440.7,4462,8760
+relation/14995853,sola,Osnovna šola Majde Vrhovnik,46.05,14.5,Gregorčičeva ulica 16,Ljubljana,,school,,,752,508,58.67,61.05,49.01,43.41,489.07,5516,8760
+way/1487595906,sola,Osnovna šola Maksa Pečarja,46.1,14.53,Črnuška cesta 9,Ljubljana - Črnuče,,school,,,338,686,20.41,20.11,14.82,14.0,200.98,2493,8760
+relation/17956036,sola,Osnovna šola Martina Krpana,46.05,14.56,Gašperšičeva ulica 10,Ljubljana,Osnovna šola Martina Krpana,school,,,732,802,28.21,29.8,24.48,22.83,362.77,3213,8760
+way/1493729668,sola,Osnovna šola Medvode,46.15,14.41,,,,school,,1;2,33,34,1.08,0.84,0.31,0.46,79.45,73,8760
+relation/19922211,sola,Osnovna šola Milana Šuštaršiča,46.08,14.52,Štembalova ulica,Ljubljana,,school,,,527,593,59.02,62.05,51.46,45.62,595.3,5421,8760
+relation/18449426,sola,Osnovna šola Mirana Jarca,46.07,14.51,Ipavčeva ulica 1,Ljubljana,,school,,,605,584,58.29,60.29,46.81,43.21,533.68,5574,8760
+relation/21710534,sola,Osnovna šola Miška Kranjca,46.08,14.47,Kamnogoriška cesta 35,Ljubljana,,school,,,539,342,45.26,45.67,32.65,29.31,383.83,4546,8760
+relation/17969862,sola,Osnovna šola Nove Fužine,46.05,14.56,Preglov trg 8,Ljubljana,Osnovna šola Nove Fužine,school,,,731,824,30.43,32.23,26.08,21.93,328.0,3375,8760
+way/865422385,sola,Osnovna šola Nove Jarše,46.07,14.55,Clevelandska ulica 11,Ljubljana,Osnovna šola Nove Jarše,school,,,574,747,78.24,80.05,64.27,51.04,711.37,5907,8760
+relation/16819860,sola,Osnovna šola Poljane,46.05,14.52,Zemljemerska ulica 7,Ljubljana,,school,,,765,601,62.43,65.09,48.48,40.45,640.67,5427,8760
+relation/16819835,sola,Osnovna šola Polje,46.06,14.59,Polje 358,Ljubljana - Polje,Osnovna šola Polje,school,,,708,962,26.67,27.51,24.61,23.94,323.54,3109,8760
+relation/15414146,sola,Osnovna šola Prežihovega Voranca,46.05,14.5,Štefanova ulica 8,Ljubljana,,school,,,714,518,86.4,90.45,70.27,62.68,707.56,6315,8760
+way/652920874,sola,Osnovna šola Prule,46.04,14.51,Prule 13,Ljubljana,,school,,,800,560,43.14,44.87,35.23,32.69,368.39,4789,8760
+way/251630746,sola,Osnovna šola Riharda Jakopiča,46.07,14.49,Derčeva ulica 1,Ljubljana,,school,,,612,455,56.38,57.8,42.03,36.47,475.99,4929,8760
+relation/16020651,sola,Osnovna šola Savsko naselje,46.06,14.52,Matjaževa ulica 4,Ljubljana,Osnovna šola Savsko naselje,school,,,643,618,60.63,62.84,50.17,47.03,514.44,5712,8760
+relation/21037286,sola,Osnovna šola Spodnja Šiška,46.07,14.5,,,,school,,,631,501,60.12,62.42,48.45,44.58,550.05,5370,8760
+way/1499318902,sola,Osnovna šola Toneta Čufarja,46.06,14.51,,,,school,,,705,566,67.88,70.94,54.17,48.39,619.73,5669,8760
+way/517779983,sola,Osnovna šola Trnovo,46.04,14.5,Karunova ulica 14a,Ljubljana,,school,,,806,515,54.99,58.46,47.04,43.02,677.82,5058,8760
+way/1013882893,sola,Osnovna šola Valentina Vodnika,46.07,14.48,Vodnikova cesta 162,Ljubljana,,school,,,566,394,51.78,53.63,40.52,35.19,450.93,4895,8760
+way/418965147,sola,Osnovna šola Venclja Perka,46.14,14.59,,,,school,,,88,987,1.2,1.18,1.02,1.83,114.26,51,8760
+relation/16140360,sola,Osnovna šola Vide Pregarc,46.06,14.53,Bazoviška ulica 1,Ljubljana,Osnovna šola Vide Pregarc,school,,,678,683,43.13,44.68,37.42,35.07,399.74,4775,8760
+relation/17577766,sola,Osnovna šola Vita Kraigherja,46.07,14.51,Trg 9. Maja 1,Ljubljana,,school,,,601,544,44.82,45.54,33.25,31.06,401.71,4755,8760
+way/652916445,sola,Osnovna šola Vič,46.04,14.48,,,,school,,,794,405,79.67,80.13,56.12,49.49,654.81,5917,8760
+way/652918287,sola,Osnovna šola Vič,46.04,14.47,,,,school,,,797,366,46.16,46.6,33.04,27.86,453.94,4541,8760
+way/255758008,sola,Osnovna šola Vižmarje Brod,46.11,14.47,,,,school,,,303,348,32.83,32.77,23.81,18.92,374.64,3628,8760
+relation/14929534,sola,Osnovna šola Vodmat,46.06,14.52,Potrčeva ulica 1,Ljubljana,,school,,,700,640,59.03,62.0,51.31,47.1,553.11,5412,8760
+way/1002412293,sola,Osnovna šola Vrhovci,46.04,14.45,Cesta na Bokalce 1,Ljubljana,,school,,,782,273,24.86,25.31,19.19,18.01,373.01,3086,8760
+way/865255517,sola,Osnovna šola Zadobrova,46.07,14.58,Zadobrovška cesta 35,Ljubljana-Polje,Osnovna šola Zadobrova,school,,,630,934,28.5,29.98,27.81,27.29,302.51,3209,8760
+way/1292014873,sola,Osnovna šola Zalog,46.06,14.62,Cerutova ulica 7,Ljubljana Zalog,Osnovna šola Zalog,school,,,656,1106,5.7,6.13,5.81,7.57,134.36,490,8760
+node/14136622812,sola,Osnovna šola Šentvid Ljubljana,46.1,14.47,Prušnikova ulica 98,Ljubljana - Šentvid,,school,,,385,336,51.4,53.52,43.54,41.96,476.41,4889,8760
+way/40237528,sola,OŠ Brezovica pri Ljubljani,46.02,14.41,Šolska ulica 15,Brezovica pri Ljubljani,,school,,,987,55,4.7,4.86,2.27,2.1,254.87,514,8760
+way/334763970,sola,"OŠ Louis Adamič, podružnica Šmarje Sap",45.98,14.61,,,,school,,,1296,1094,0.47,0.54,0.5,0.42,121.37,19,8760
+way/112156965,sola,OŠ Maksa Pečarja,46.11,14.53,Črnuška cesta 9,Ljubljana - Črnuče,,school,,,337,688,20.82,20.46,14.84,13.93,250.84,2608,8760
+way/1493729667,sola,OŠ Preska,46.13,14.41,,,,school,,,128,56,2.4,2.08,0.97,1.21,120.23,173,8760
+way/280206926,sola,OŠ Rodica,46.15,14.6,Kettejeva ulica 13,Domžale,,school,,,8,1021,0.74,0.71,0.65,1.17,63.85,30,8760
+way/1370340859,sola,OŠ Roje,46.15,14.6,Kettejeva ulica 15,Domžale,,school,,,8,1027,0.74,0.7,0.62,1.02,65.01,20,8760
+way/865241482,sola,OŠ Sostro,46.04,14.6,Cesta II. grupe odredov 47,Ljubljana - Dobrunje,Osnovna šola Sostro,school,,,854,1023,11.65,12.18,11.01,10.65,244.91,1219,8760
+way/332056103,sola,OŠ Tomišelj,45.96,14.48,Tomišelj 30,Ig,OSNOVNA ŠOLA IG PODRUŽNIČNA ŠOLA TOMIŠELJ,school,,,1388,413,0.42,0.5,0.45,0.85,52.31,18,8760
+way/119302340,sola,OŠ Trzin,46.13,14.56,Mengeška cesta 7b,Trzin,,school,,,125,836,1.8,1.82,1.6,2.28,80.99,98,8760
+relation/11809326,sola,OŠ Zalog,46.06,14.62,Cerutova ulica 7,Ljubljana,Osnovna šola Zalog,school,,,655,1105,5.78,6.22,6.4,7.42,146.89,524,8760
+way/164683286,sola,OŠ Škofljica,45.98,14.58,Klanec 5,Škofljica,,school,,,1269,907,1.04,1.23,1.14,0.86,198.71,63,8760
+way/423946047,sola,Podružnična osnova šola Lavrica,46.0,14.56,Kamnikarjeva ulica 6,Škofljica,Osnovna šola Škofljica,school,,,1111,801,4.13,4.7,4.34,4.08,207.1,365,8760
+relation/18318671,sola,Podružnična šola Hrušica,46.04,14.56,Pot do šole 1,Ljubljana,Osnovna šola Božidarja Jakca,school,,,783,823,40.36,42.8,34.22,28.52,398.83,3963,8760
+way/255758335,sola,Policijska akademija Tacen,46.12,14.45,,,,school,,,211,267,5.93,5.58,3.48,4.31,110.92,497,8760
+node/2610199814,sola,Poligon policijske akademije v Tacnu,46.12,14.45,,,,school,,,209,238,24.81,24.46,16.52,12.84,321.15,3081,8760
+way/442904686,sola,QSI ljubljana + Sportni center Dolgi Most,46.04,14.46,,,,school,,,830,292,55.42,56.4,43.65,37.57,595.39,5171,8760
+node/6039628348,sola,Srednja frizerska šola Ljubljana,46.08,14.49,,,,school,,,514,467,77.08,80.05,63.43,54.57,693.42,5938,8760
+way/1569487266,sola,"Srednja gradbena, geodetska in ekonomska šola Ljubljana",46.07,14.51,Dunajska cesta 102,Ljubljana,,school,,,572,587,52.33,54.54,43.99,40.02,521.95,5270,8760
+relation/21710537,sola,"Srednja gradbena, geodetska in ekonomska šola Ljubljana",46.07,14.51,Dunajska cesta 102,Ljubljana,,school,,,572,582,54.93,57.15,46.0,41.15,419.57,5448,8760
+relation/16906329,sola,Srednja medijska in grafična šola Ljubljana,46.06,14.53,Perčeva ulica 33,Ljubljana,,school,,,658,678,51.52,53.98,44.67,40.68,400.81,5117,8760
+way/1003283015,sola,Srednja trgovska in aranžerska šola Ljubljana,46.05,14.52,,,,school,,,756,604,64.75,67.47,50.61,41.89,560.99,5383,8760
+relation/15015089,sola,Srednja upravno administrativna šola Ljubljana,46.05,14.52,,,,school,,,752,600,59.16,61.94,47.56,39.44,482.77,5240,8760
+way/194663493,sola,Srednja vzgojiteljska šola in gimnazija,46.07,14.51,Kardeljeva ploščad 28a,Ljubljana,,school,,,580,582,58.68,60.76,47.8,43.47,467.69,5655,8760
+way/186326171,sola,Srednja zdravstvena šola Ljubljana,46.05,14.52,Poljanska cesta 61,Ljubljana,,school,,,750,627,59.83,61.93,50.16,46.55,860.79,5845,8760
+node/6039628347,sola,Srednja Šola Tehniških Strok Šiška,46.08,14.49,,,,school,,,513,464,77.44,80.38,64.26,53.92,887.77,5917,8760
+way/1493035544,sola,Srednja šola Domžale,46.14,14.6,,,,school,,,61,1021,1.03,1.03,1.04,1.6,59.87,37,8760
+way/1562576594,sola,Srednja šola Domžale,46.14,14.6,,,,school,,,93,1041,1.16,1.18,1.07,1.77,68.92,42,8760
+way/195338027,sola,Srednja šola tehniških strok Šiška,46.08,14.49,Litostrojska cesta 51,,,school,,,513,464,77.44,80.38,64.26,53.92,887.77,5917,8760
+way/1003283017,sola,"Srednja šola za farmacijo, kozmetiko in zdravstvo Ljubljana",46.05,14.52,,,,school,,,763,593,56.51,59.17,44.63,37.24,498.99,5123,8760
+relation/17968625,sola,Srednja šola za gastronomijo in turizem Ljubljana,46.05,14.56,Preglov trg 9,Ljubljana,Srednja šola za gastronomijo in turizem Ljubljana,school,,,730,815,28.87,30.39,25.05,21.99,281.72,3286,8760
+node/2429134990,sola,Srednja šola za oblikovanje in fotografijo Ljubljana,46.05,14.5,,,,school,,,770,528,65.4,68.45,56.3,50.73,669.41,5789,8760
+node/6383794924,sola,VIST Visoka šola za fotografijo,46.08,14.5,,,,school,,,535,489,42.31,43.95,34.78,31.73,381.41,4585,8760
+way/1223726047,sola,Vrtec France Prešeren,46.05,14.5,Prešernova cesta 29,Ljubljana,Vrtec France Prešeren,school,,,727,502,108.72,113.89,92.32,81.29,886.18,6652,8760
+way/1223732514,sola,Vrtec France Prešeren,46.05,14.5,,,Vrtec France Prešeren,school,,,709,516,108.88,114.03,91.24,79.68,979.64,6720,8760
+way/1494681300,sola,Waldorfska šola Ljubljana,46.05,14.51,Streliška ulica 12,Ljubljana,,school,,,755,574,51.28,53.05,38.63,32.18,599.31,4683,8760
+way/270555673,sola,Zavod sv. Stanislava,46.1,14.47,,,,school,,,391,368,25.32,26.32,20.67,20.87,320.24,2952,8760
+way/978470925,sola,Zavod za gluhe in naglušne,46.07,14.52,Vojkova cesta 74,Ljubljana,,school,ambulatory_care,,586,616,64.01,66.23,54.71,50.87,517.73,5882,8760
+way/262581505,sola,Šola,46.15,14.62,,,,school,,,6,1151,0.59,0.54,0.46,1.01,47.25,6,8760
+way/653186246,sola,Šolski center Ljubljana,46.05,14.5,,,,school,,,774,510,62.28,65.22,49.51,40.7,523.99,5312,8760
+node/1314393750,vrtec,,46.09,14.51,,,,kindergarten,,,460,572,36.76,36.77,27.51,24.91,356.22,4014,8760
+node/5859704965,vrtec,,46.04,14.53,,,,kindergarten,,,852,646,22.19,23.47,21.59,22.43,268.27,2684,8760
+way/174016803,vrtec,,46.06,14.52,Savska cesta 1,Ljubljana,,kindergarten,,,647,638,95.97,99.11,75.18,66.83,847.62,6367,8760
+way/181029756,vrtec,,46.04,14.49,,Ljubljana,,kindergarten,,,787,443,88.18,91.8,68.76,56.62,655.77,5753,8760
+way/190079648,vrtec,,46.04,14.47,,,,kindergarten,,,830,375,48.81,50.94,40.08,37.4,371.42,4847,8760
+way/257312869,vrtec,,46.04,14.52,,,,kindergarten,,,842,632,27.51,28.99,25.62,25.5,317.51,3314,8760
+way/1550830138,vrtec,,46.09,14.51,,,,kindergarten,,,461,576,37.86,37.89,27.85,25.69,496.21,4119,8760
+relation/16650542,vrtec,,46.03,14.52,,,,kindergarten,,,866,616,29.94,32.0,27.21,25.93,374.44,3433,8760
+way/267410968,vrtec,Hiša otrok Cinca Binca - Montessori vrtec,46.03,14.55,Spodnji Rudnik II 47,Ljubljana,,kindergarten,,,917,743,11.4,12.3,11.43,12.64,158.59,1143,8760
+node/13892068501,vrtec,Jarše,46.06,14.53,Pokopališka ulica 30,,,kindergarten,,,651,676,57.95,60.78,48.91,43.73,447.75,5342,8760
+node/12999937243,vrtec,Rahelin vrtec – hiša otrok Montessori,46.13,14.41,Preška cesta 33A,Medvode,,kindergarten,,,123,52,2.36,1.98,0.87,1.19,83.93,170,8760
+way/1093422315,vrtec,Sedež Vrtca - Enota Murgle,46.03,14.49,Pod bukvami 11,Ljubljana,,kindergarten,,,858,457,32.38,33.9,25.61,24.21,290.05,3641,8760
+relation/17287355,vrtec,"Viški vrtci, enota Bičevje",46.04,14.49,Vidmarjeva ulica 10,Ljubljana,Viški vrtci,kindergarten,,,787,443,88.18,91.8,68.76,56.62,655.77,5753,8760
+way/685872904,vrtec,"Viški vrtci, enota Hiša pri ladji",46.05,14.49,,,Viški vrtci,kindergarten,,,727,438,25.77,25.97,18.94,17.98,261.22,3194,8760
+relation/18443007,vrtec,"Viški vrtci, enota Jamova",46.04,14.49,Jamova cesta 23,Ljubljana,,kindergarten,,,792,464,53.19,55.84,43.91,39.12,503.45,4842,8760
+relation/16162845,vrtec,"Viški vrtci, enota Rožna dolina",46.05,14.48,Cesta 27. aprila 12,Ljubljana,,kindergarten,,,714,431,17.65,17.45,11.33,12.53,218.92,2202,8760
+way/685872900,vrtec,"Viški vrtci, enota Študentski domovi",46.05,14.49,,,Viški vrtci,kindergarten,,,728,453,27.7,27.77,17.6,16.64,260.73,3306,8760
+node/3298055038,vrtec,"Vrtec Andersen, enota Krtek",46.07,14.49,,,,kindergarten,,,571,436,100.45,103.17,78.32,61.22,835.76,5757,8760
+way/1061196829,vrtec,"Vrtec Andersen, enota Marjetica",46.07,14.48,,,,kindergarten,,,560,393,54.25,56.26,42.21,35.78,437.47,5029,8760
+node/5511410840,vrtec,Vrtec Brezovica,46.02,14.42,V Radno 9,Brezovica pri Ljubljani,,kindergarten,,,929,91,6.53,6.58,3.03,2.47,179.38,748,8760
+way/1210122991,vrtec,"Vrtec Brezovica, enota Podpeč",45.97,14.42,Jezero 113,Jezero,Vrtec Brezovica,kindergarten,,,1300,107,1.2,1.35,0.67,0.79,93.49,65,8760
+relation/17016865,vrtec,Vrtec Ciciban,46.08,14.51,Šarhova ulica 29,Ljubljana,,kindergarten,,,533,568,61.63,62.72,44.8,37.28,555.22,5177,8760
+way/481447636,vrtec,"Vrtec Ciciban, Enota Lenka",46.08,14.52,Baragova ulica 11,Ljubljana,,kindergarten,,,547,593,55.83,57.19,43.79,41.2,425.75,5540,8760
+way/315132457,vrtec,"Vrtec Ciciban, Enota Mehurčki",46.08,14.52,,,,kindergarten,,,504,596,88.82,93.68,77.11,64.42,756.08,6085,8760
+way/481447635,vrtec,"Vrtec Ciciban, Enota Žabice",46.08,14.52,Vojkova cesta 73,Ljubljana,,kindergarten,,,539,608,51.11,53.12,42.17,38.49,476.37,5075,8760
+way/1373309241,vrtec,Vrtec Dominik Savio Karitas Domžale,46.14,14.6,,,,kindergarten,,,113,1025,1.35,1.33,1.3,1.98,68.26,61,8760
+way/1391786640,vrtec,"Vrtec Domžale, enota Ostržek",46.15,14.6,,,,kindergarten,,,17,1006,0.78,0.75,0.68,1.1,55.69,25,8760
+way/1524324706,vrtec,"Vrtec Domžale, enota Racman",46.11,14.59,,,,kindergarten,,,335,1001,13.09,13.04,10.49,9.13,227.74,1491,8760
+node/3407593116,vrtec,Vrtec Enota Škratec,45.98,14.58,Ob potoku 32a,Škofljica,,kindergarten,,,1259,920,1.04,1.2,1.09,1.18,75.04,68,8760
+relation/15458919,vrtec,Vrtec France Prešeren - Enota Vrtača,46.05,14.5,Erjavčeva cesta 29,Ljubljana,Vrtec France Prešeren,kindergarten,,,743,486,139.11,145.1,114.37,92.14,1143.02,6918,8760
+way/1093355997,vrtec,Vrtec Galjevica - Enota Rudnik,46.03,14.52,Galjevica 52,Ljubljana,,kindergarten,,,863,603,36.59,38.45,31.88,29.78,369.67,4144,8760
+relation/14563514,vrtec,"Vrtec Galjevica, enota Orlova",46.04,14.52,Ob dolenjski železnici 10,,Vrtec Galjevica,kindergarten,,,843,600,36.43,38.32,30.87,28.44,365.37,4147,8760
+way/24763754,vrtec,Vrtec H.C.A - Enota Lastovica,46.07,14.48,Derčeva ulica 10,,Vrtec Hansa Christiana Andersena,kindergarten,,,581,428,54.34,55.75,42.5,36.07,520.22,5015,8760
+way/246526446,vrtec,Vrtec Hansa Christiana Andersena,46.07,14.48,Rašiška ulica 7,Ljubljana,,kindergarten,,,566,413,64.23,66.39,50.23,41.27,605.23,5224,8760
+way/865424035,vrtec,Vrtec Jarše - enota Mojca,46.07,14.54,Clevelandska ulica 13,Ljubljana,Vrtec Jarše,kindergarten,,,572,739,69.27,71.12,56.18,47.53,630.54,5658,8760
+relation/16906074,vrtec,Vrtec Jarše - enota Rožle,46.06,14.54,Rožičeva ulica 10,Ljubljana,Vrtec Jarše,kindergarten,,,637,696,68.49,70.92,56.58,51.7,490.1,5865,8760
+way/1064638850,vrtec,Vrtec Jarše enota Kekec,46.07,14.54,Ulica Hermana Potočnika 15,Ljubljana,Vrtec Jarše,kindergarten,,,576,720,53.07,54.29,44.8,37.92,401.91,5228,8760
+relation/16067069,vrtec,Vrtec Jelka,46.08,14.51,Glavarjeva ulica 18a,Ljubljana,,kindergarten,,,559,550,49.64,51.03,36.43,33.92,427.75,5101,8760
+way/117580474,vrtec,Vrtec Jelka (enota Storžek),46.06,14.52,,,,kindergarten,,,643,617,61.45,63.8,51.09,47.62,639.56,5771,8760
+relation/20712434,vrtec,"Vrtec Kolezija, enota Kolezija",46.04,14.49,Rezijanska ulica 22,,,kindergarten,,,825,476,42.39,44.06,32.52,28.58,443.9,4506,8760
+way/423946046,vrtec,"Vrtec Lavrica, enota Bisernik",46.0,14.56,Kamnikarjeva ulica 8,Škofljica,Vrtec Škofljica,kindergarten,,,1111,808,4.14,4.69,4.49,4.02,186.91,348,8760
+way/494867707,vrtec,"Vrtec Lavrica, enota Cekinček",46.0,14.56,Kamnikarjeva ulica 10,Škofljica,Vrtec Škofljica,kindergarten,,,1107,805,4.21,4.74,4.44,3.89,121.69,354,8760
+way/235158642,vrtec,Vrtec Livada,46.03,14.5,,,,kindergarten,,,861,530,42.77,45.14,36.23,33.59,437.07,4439,8760
+node/3488403176,vrtec,Vrtec Luna,46.07,14.49,,,,kindergarten,,,596,460,94.16,97.44,79.44,68.25,951.65,6276,8760
+way/1493729672,vrtec,Vrtec Medvode - Enota Ostržek,46.15,14.41,,,Vrtec Medvode,kindergarten,,0,32,40,1.0,0.8,0.32,0.4,60.04,48,8760
+node/13943038948,vrtec,"Vrtec Medvode, enota Preska",46.13,14.41,Kalanova ulica 3,Medvode,,kindergarten,,,124,63,2.44,2.14,1.04,1.15,98.59,192,8760
+way/865254036,vrtec,"Vrtec Miškolin, enota Novo Polje",46.06,14.58,"Novo Polje, cesta VI 1",Ljubljana-Polje,Vrtec Miškolin,kindergarten,,,639,932,28.23,29.81,27.44,25.66,327.17,3207,8760
+way/865253142,vrtec,"Vrtec Miškolin, enota Rjava cesta",46.06,14.58,Rjava cesta 1,Ljubljana,Vrtec Miškolin,kindergarten,,,697,906,53.16,55.46,49.47,43.82,511.87,5037,8760
+way/865256992,vrtec,"Vrtec Miškolin, enota Senberje",46.08,14.57,Šmartinska cesta 246 A,Ljubljana-Polje,Vrtec Miškolin,kindergarten,,,532,886,29.12,29.72,23.61,23.12,354.85,3624,8760
+way/865250153,vrtec,"Vrtec Miškolin, enota Zajčja dobrava",46.06,14.58,Zadobrovška cesta 28 A,Ljubljana-Polje,Vrtec Miškolin,kindergarten,,,661,947,24.65,26.48,24.91,24.6,486.61,2808,8760
+way/408028093,vrtec,"Vrtec Miškolin, enota Zajčja dobrava 2",46.06,14.58,Zadobrovška cesta 12,Ljubljana - Polje,Vrtec Miškolin,kindergarten,,,704,946,39.09,40.85,36.79,33.67,435.59,4092,8760
+node/8066739998,vrtec,Vrtec Mladi Rod - enota Stonoga,46.06,14.51,Linhartova cesta 19,Ljubljana,Vrtec Mladi Rod,kindergarten,,,636,589,80.79,83.88,65.45,60.06,776.37,6345,8760
+relation/14580872,vrtec,Vrtec Mladi rod - enota Kostanjčkov vrtec,46.06,14.51,Peričeva ulica 6,Ljubljana,Vrtec Mladi rod,kindergarten,,,634,576,67.87,69.31,51.42,46.84,622.33,6052,8760
+way/325005181,vrtec,Vrtec Mladi rod - enota Mavrica,46.06,14.52,Savska cesta 1,Ljubljana,Vrtec Mladi rod,kindergarten,,,648,638,100.95,103.99,78.63,68.04,740.62,6509,8760
+relation/16020633,vrtec,Vrtec Mladi rod - enota Vetrnica,46.06,14.52,Črtomirova ulica 14,Ljubljana,Vrtec Mladi rod,kindergarten,,,651,608,84.87,87.63,66.29,55.83,634.4,6246,8760
+relation/16020639,vrtec,Vrtec Mladi rod - enota Čira Čara,46.06,14.52,Belokranjska ulica 27,Ljubljana,Vrtec Mladi rod,kindergarten,,,649,623,62.54,64.59,50.75,47.35,604.22,5835,8760
+way/1494243117,vrtec,Vrtec Mojca,46.07,14.47,Levičnikova ulica 11,,,kindergarten,,,567,372,53.05,55.36,40.67,35.44,465.02,4685,8760
+way/115597230,vrtec,Vrtec Mojca - enota Muca,46.08,14.47,Zoletova ulica 6,Ljubljana,Vrtec Mojca,kindergarten,,,542,334,44.13,44.59,32.12,28.67,396.73,4500,8760
+way/434713643,vrtec,Vrtec Mojca enota Tinkara,46.08,14.47,Pečnikova ulica 11,Ljubljana,,kindergarten,,,485,359,43.75,44.63,33.13,28.38,343.42,4476,8760
+relation/21030587,vrtec,Vrtec Najdihojca - enota Čenča,46.06,14.5,,,Vrtec Najdihojca,kindergarten,,,648,493,67.68,70.6,56.91,53.63,696.45,5810,8760
+way/315130172,vrtec,Vrtec Najdihojca enota Biba,46.08,14.5,Alešovčeva ulica 82,Ljubljana,,kindergarten,,,537,500,44.69,46.27,35.97,32.07,407.39,4704,8760
+relation/21123628,vrtec,Vrtec Najdihojca enota Biba,46.07,14.49,Ljubeljska ulica 16,Ljubljana,,kindergarten,,,561,459,46.6,48.12,38.48,35.89,417.42,5071,8760
+relation/21140462,vrtec,Vrtec Najdihojca enota Palček,46.07,14.49,Gorazdova ulica 6,Ljubljana,,kindergarten,,,578,474,45.81,47.25,37.04,33.41,385.54,4878,8760
+relation/16118942,vrtec,Vrtec Otona Zupančiča Ljubljana - enota Mehurčki,46.05,14.54,Parmska cesta 41,Ljubljana,Vrtec Otona Zupančiča Ljubljana,kindergarten,,,713,737,53.96,57.06,48.67,40.66,459.25,4729,8760
+relation/20982863,vrtec,Vrtec Otona Župančiča - enota Čebelica,46.04,14.56,Hruševska cesta 81,Ljubljana,Vrtec Otona Župančiča,kindergarten,,,808,802,14.07,14.98,13.1,12.95,203.88,1565,8760
+relation/15649243,vrtec,Vrtec Otona Župančiča Ljubljana - enota Ringaraja,46.05,14.54,Na Peči 20 a,Ljubljana,Vrtec Otona Župančiča Ljubljana,kindergarten,,,725,704,53.84,56.02,43.18,37.36,460.56,5135,8760
+relation/16750847,vrtec,Vrtec Otona Župančiča Ljubljana - enota Čurimuri,46.05,14.54,Novosadska ulica 1,Ljubljana,Vrtec Otona Župančiča Ljubljana,kindergarten,,,744,739,38.11,40.3,34.32,31.16,431.03,4162,8760
+way/865286203,vrtec,Vrtec Otona Župančiča Ljubljana - enota ŽivŽav,46.05,14.54,Na Peči 20,Ljubljana,Vrtec Otona Župančiča Ljubljana,kindergarten,,,723,700,53.98,56.12,44.24,39.27,539.19,5116,8760
+way/332631128,vrtec,Vrtec Pastirčki,46.09,14.51,Glinškova ploščad 11a,Ljubljana,,kindergarten,,,432,557,23.54,23.17,15.75,15.11,245.23,2686,8760
+relation/16095198,vrtec,"Vrtec Pedenjped - enota Pedenjcarstvo, Kašelj",46.05,14.59,Kašeljska cesta 125,Ljubljana - Polje,Vrtec Pedenjped Ljubljana,kindergarten,,,722,984,34.91,36.92,31.92,27.13,483.0,3586,8760
+relation/16819518,vrtec,Vrtec Pedenjped - enota Radovednež (Kašelj),46.05,14.6,Ob studencu 11 A,Ljubljana - Polje,Vrtec Pedenjped Ljubljana,kindergarten,,,729,1012,19.24,20.5,18.18,17.6,256.5,2147,8760
+way/351622918,vrtec,Vrtec Pedenjped - enota Učenjak,46.04,14.6,Cesta II. grupe odredov 41,Ljubljana - Dobrunje,,kindergarten,,,846,1006,14.26,15.02,13.47,13.04,234.23,1573,8760
+way/865143990,vrtec,"Vrtec Pedenjped - enota Vrtnar, Zalog",46.06,14.61,Cerutova ulica 5,Ljubljana Zalog,Vrtec Pedenjped Ljubljana,kindergarten,,,662,1104,6.19,6.7,6.58,7.87,150.68,581,8760
+node/8064969964,vrtec,"Vrtec Pedenjped - enota Šlikšlak, Fužine",46.05,14.56,Preglov trg 8,Ljubljana,Vrtec Pedenjped,kindergarten,,,731,821,29.99,31.69,25.66,21.72,391.64,3310,8760
+way/865125856,vrtec,"Vrtec Pedenjped Ljubljana - enota Sladkosned, Zalog",46.06,14.62,Cerutova ulica 6,Ljubljana,Vrtec Pedenjped Ljubljana,kindergarten,,,660,1113,5.01,5.48,5.65,7.16,142.12,400,8760
+relation/16819861,vrtec,Vrtec Pod Gradom – enota Poljane,46.05,14.52,Zemljemerska ulica 9,Ljubljana,Vrtec Pod Gradom,kindergarten,,,768,603,69.88,72.54,54.46,44.78,553.86,5727,8760
+way/1039899281,vrtec,"Vrtec Pod Gradom, Oddelek Stara Ljubljana",46.05,14.51,Ulica na grad 2a,Ljubljana,Vrtec Pod Gradom,kindergarten,,,772,559,34.82,35.41,26.84,26.6,239.22,4322,8760
+relation/15014273,vrtec,"Vrtec Pod Gradom, enota Poljane",46.05,14.51,Strossmayerjeva ulica 3,Ljubljana,Vrtec Pod Gradom,kindergarten,,,750,580,55.45,57.95,44.75,39.84,550.98,5133,8760
+way/1039904243,vrtec,"Vrtec Pod Gradom, enota Poljanska",46.05,14.51,Poljanska cesta 21,Ljubljana,Vrtec Pod Gradom,kindergarten,,,738,584,57.16,60.1,46.22,39.01,619.13,5245,8760
+way/921985807,vrtec,"Vrtec Pod Gradom, enota Prule",46.04,14.51,Praprotnikova ulica 2,Ljubljana,,kindergarten,,,795,566,35.54,36.56,26.26,25.86,316.32,4181,8760
+way/267503064,vrtec,Vrtec Sapramiška,46.1,14.47,Ulica pregnancev 6,Ljubljana - Šentvid,,kindergarten,,,409,361,30.86,32.15,26.37,26.25,298.14,3531,8760
+way/366660989,vrtec,Vrtec Sapramiška,46.1,14.53,Cesta 24. junija 48,Ljubljana,,kindergarten,,,388,645,25.48,26.04,19.35,18.07,261.36,3193,8760
+way/332057365,vrtec,Vrtec Sonček,45.96,14.48,,,,kindergarten,,,1387,412,0.45,0.51,0.54,0.85,44.28,29,8760
+way/517779986,vrtec,Vrtec Trnovo,46.04,14.5,Kolezijska ulica 11,Ljubljana,,kindergarten,,,807,519,50.17,52.88,42.16,39.4,562.15,4862,8760
+way/1372633153,vrtec,Vrtec Urša - Enota Češmin,46.14,14.6,,,,kindergarten,,,58,1040,1.04,1.04,0.93,1.69,61.72,39,8760
+way/1568365738,vrtec,"Vrtec Urša, enota Bistra",46.14,14.6,,,Vrtec Urša,kindergarten,,,45,1011,0.97,0.95,0.83,1.58,56.6,32,8760
+way/1372003605,vrtec,"Vrtec Urša, enota Urša",46.14,14.6,,,,kindergarten,,,66,1023,1.03,0.99,1.02,1.58,71.06,30,8760
+way/1513219855,vrtec,"Vrtec Urša, enota Čebelica",46.14,14.6,,,,kindergarten,,,68,1009,1.17,1.16,1.2,1.95,56.18,40,8760
+way/249613396,vrtec,"Vrtec Viški Gaj, enota Bonifacija",46.04,14.47,,,,kindergarten,,,847,369,42.64,44.51,35.34,32.69,396.88,4437,8760
+relation/18475526,vrtec,"Vrtec Viški Gaj, enota Zarja",46.04,14.47,,,,kindergarten,,,831,375,47.63,49.61,39.09,34.52,440.28,4818,8760
+relation/13489235,vrtec,Vrtec Vodmat,46.06,14.52,,,Mestna občina Ljubljana,kindergarten,,,702,636,58.15,60.95,51.2,45.41,500.19,5544,8760
+relation/18368661,vrtec,Vrtec Vrhovci - Enota Brdo,46.05,14.45,Stantetova ulica 1a,Ljubljana,Enota Brdo,kindergarten,,,761,263,28.47,29.22,21.2,20.42,324.13,3491,8760
+way/1031016036,vrtec,Vrtec Vrhovci - Enota Vrhovci,46.04,14.45,"Vrhovci, Cesta XIX 10",Ljubljana,,kindergarten,,,791,270,33.82,34.93,26.95,24.34,381.47,3840,8760
+way/1549890372,vrtec,Vrtec Vrhovci - enota Rožnik,46.05,14.47,,,Vrtec Vrhovci,kindergarten,,,774,376,40.57,41.28,30.41,27.35,393.88,4268,8760
+node/3180276707,vrtec,"Vrtec Zelena jama - enota Vejica, Fužine",46.05,14.56,Preglov trg 10,Ljubljana,Vrtec Zelena jama,kindergarten,,,727,805,31.7,33.32,28.06,23.56,350.74,3542,8760
+relation/17968598,vrtec,"Vrtec Zelena jama - enota Vrba, Fužine",46.05,14.55,Brodarjev trg 8,Ljubljana,Vrtec Zelena jama,kindergarten,,,731,788,29.57,31.31,26.22,24.6,354.84,3394,8760
+relation/16140262,vrtec,Vrtec Zelena jama - enota Zelena jama,46.06,14.53,Zvezna ulica 24,Ljubljana,Vrtec Zelena jama,kindergarten,,,675,672,45.52,47.73,39.86,37.0,443.85,4802,8760
+relation/16102250,vrtec,Vrtec Zelena jama - enota Zmajček,46.06,14.54,Ulica Vide Pregarčeve 28,Ljubljana,Vrtec Zelena jama,kindergarten,,,689,708,54.57,55.92,42.18,39.18,487.59,5444,8760
+relation/16102246,vrtec,Vrtec Zelena jama - enota Zmajčica,46.06,14.54,Zakotnikova ulica 3,Ljubljana,Vrtec Zelena jama,kindergarten,,,689,715,70.14,71.4,51.75,46.04,678.65,5865,8760
+way/288734918,vrtec,Vrtec prizidek,46.11,14.46,,,,kindergarten,,,276,333,25.96,26.0,20.08,16.79,265.14,3074,8760
+way/381463900,vrtec,Vrtec Črnuče,46.09,14.58,Kraljeva ulica 10,Ljubljana - Črnuče,,kindergarten,,,434,929,24.67,24.48,17.89,15.46,277.44,2957,8760
+way/396167652,vrtec,Vrtec Črnuče,46.11,14.53,Cesta v Pečale 1,Ljubljana - Črnuče,,kindergarten,,,325,660,14.76,14.81,11.44,11.06,177.6,1660,8760
+way/324000116,vrtec,Vrtec Črnuče enota Ostržek,46.1,14.54,Dunajska cesta 400,Ljubljana - Črnuče,,kindergarten,,,352,696,27.86,28.45,22.24,20.48,239.42,3412,8760
+way/244799766,vrtec,Vrtec Šentvid - enota Mravljinček,46.11,14.47,Martinova pot 14,Ljubljana,,kindergarten,,,273,335,23.81,23.85,19.1,15.69,271.27,2832,8760
+way/674963117,vrtec,Vrtec Škatek Svit - podružnica Skaručna,46.15,14.48,,,,kindergarten,,,4,421,1.12,1.09,0.8,1.05,154.8,67,8760
+way/333991366,vrtec,Vrtec Škofljica,45.99,14.57,Mijavčeva ulica 18,Škofljica,Enota Citronček,kindergarten,,,1216,894,1.31,1.49,1.23,1.51,112.12,92,8760
+way/1554351886,vrtec,Vrtec Žabica,46.13,14.56,,,,kindergarten,,,143,803,1.91,1.94,1.73,2.48,78.32,140,8760
+way/437856373,vrtec,Vzgojno-Izobraževalni zavod Vrtci Brezovica,46.01,14.42,Nova pot 9,Brezovica pri Ljubljani,Vrtci Brezovica,kindergarten,,,1035,74,3.65,3.98,1.92,2.41,137.3,361,8760
+way/367827645,vrtec,ZAVOD ZASEBNI VRTEC BOSOPET,46.04,14.61,Litijska cesta 319,Ljubljana - Dobrunje,,kindergarten,,,828,1053,9.03,9.54,9.06,8.99,186.37,827,8760
+node/14206348607,zdravstveni_dom,Ambulanta ZDRAVJE,46.05,14.57,Pot k izviru 6,Ljubljana,Ambulanta ZDRAVJE d.o.o.,clinic,,,722,866,38.34,39.74,32.28,27.82,406.45,4066,8760
+node/8510719011,zdravstveni_dom,Dermacenter,46.07,14.51,Peričeva ulica 27,Ljubljana,,clinic,,,623,571,60.69,62.82,48.36,43.27,528.97,5716,8760
+node/10979450575,zdravstveni_dom,Dermatologija Bartenjev,46.04,14.5,Finžgarjeva ulica 4,,,clinic,,,788,504,57.91,60.16,47.69,40.58,462.71,5478,8760
+way/317942154,zdravstveni_dom,Dermatologija Rogl Fabjan,46.07,14.48,Derčeva ulica 35,Ljubljana,,clinic,,,587,425,54.38,55.96,42.99,37.99,470.68,5101,8760
+way/177401491,zdravstveni_dom,Dermatovenerološka klinika,46.05,14.52,Gradiškova ulica 10,Ljubljana,,clinic,,,734,627,65.06,68.85,57.94,48.08,639.11,5455,8760
+node/10982386305,zdravstveni_dom,"Diagnostični center Bled, podružnica Ljubljana",46.05,14.51,Barvarska steza 4,,,clinic,,,738,575,57.01,59.69,45.15,41.44,502.48,5437,8760
+node/7448534428,zdravstveni_dom,Estetika Nobilis,46.05,14.51,,,,clinic,,,724,572,58.83,61.74,48.75,43.34,685.72,5281,8760
+node/12304441874,zdravstveni_dom,Infekcijska klinika,46.05,14.52,,,UKC LJ,clinic,,,711,622,55.87,58.74,50.25,44.12,452.82,5373,8760
+node/10092074087,zdravstveni_dom,Kambič - Kafol,46.06,14.52,Hacquetova ulica 6,Ljubljana,Kambic-Kafol d.o.o.,clinic,,,668,593,66.48,68.41,53.48,49.48,530.3,5992,8760
+node/13544825321,zdravstveni_dom,Kirurgija Bitenc,46.06,14.51,Vilharjev podhod 1,Ljubljana,,clinic,,,669,589,68.59,70.48,53.13,48.75,635.77,6074,8760
+node/7806204077,zdravstveni_dom,Klinika Doktor 24,46.06,14.53,Savska cesta 3,Ljubljana,,clinic,,,638,642,93.96,97.67,72.76,63.4,794.56,6251,8760
+way/208145020,zdravstveni_dom,Klinični oddelek za maksilofacialno in oralno kirurgijo,46.05,14.52,Hrvatski trg 6,Ljubljana,,clinic,,,731,614,96.27,101.77,84.85,69.34,843.07,6277,8760
+way/177401492,zdravstveni_dom,Klinični oddelek za travmatologijo,46.05,14.52,Zaloška cesta 2b,Ljubljana,,clinic,,,731,626,66.44,70.74,60.19,48.89,579.71,5374,8760
+node/14014552037,zdravstveni_dom,LagunaMed,46.06,14.51,,,,clinic,,,637,563,74.71,77.25,61.01,53.96,621.44,6235,8760
+node/13544825322,zdravstveni_dom,MCL - Medicinski center Ljubljana,46.06,14.51,Vilharjev podhod 1,Ljubljana,,clinic,,,669,589,68.59,70.48,53.13,48.75,635.77,6074,8760
+node/14191786630,zdravstveni_dom,MD medicina,46.06,14.52,Bohoričeva ulica 5,,,clinic,,,705,615,91.4,96.77,81.57,67.86,854.08,6416,8760
+node/6912809532,zdravstveni_dom,Medilab,46.08,14.5,,,,clinic,,,535,528,45.61,46.94,35.92,33.42,350.93,4859,8760
+way/171475474,zdravstveni_dom,Nevrološka klinika,46.05,14.52,Zaloška cesta 2a,Ljubljana,,clinic,,,727,627,81.3,86.02,72.69,62.01,644.68,5802,8760
+way/24765164,zdravstveni_dom,Onkološki inštitut - B,46.05,14.52,Zaloška cesta 5,Ljubljana,,clinic,,,725,619,91.48,95.4,76.43,65.96,946.05,6533,8760
+way/24765675,zdravstveni_dom,Onkološki inštitut - C,46.05,14.52,,,,clinic,,,732,616,79.82,84.11,70.28,57.99,641.69,5995,8760
+way/171475475,zdravstveni_dom,Pediatrična klinika,46.05,14.52,,,,clinic,,,708,622,59.4,62.52,53.01,46.41,509.31,5419,8760
+way/319239537,zdravstveni_dom,Psihiatrična klinika,46.05,14.53,Grablovičeva ulica 48,Ljubljana,,clinic,,,710,663,87.88,90.17,69.0,61.48,685.91,6499,8760
+node/4657528354,zdravstveni_dom,Skin dermatologija,46.07,14.51,Peričeva ulica 37,Ljubljana,,clinic,,,616,574,86.87,90.71,71.1,60.4,642.07,6219,8760
+node/4246753225,zdravstveni_dom,Stomatološka klinika,46.05,14.52,,,,clinic,,,731,612,107.09,113.02,95.82,74.91,791.61,6437,8760
+way/319235110,zdravstveni_dom,UKC Poliklinika,46.05,14.52,Njegoševa cesta 4,Ljubljana,,clinic,,,721,615,78.78,82.64,70.0,57.65,627.56,6222,8760
+node/12956195801,zdravstveni_dom,Ultralab Samoplačniški ultrazvok v Ljubljani,46.07,14.51,,,,clinic,,,617,575,83.66,86.98,68.74,58.77,553.79,6112,8760
+way/225371834,zdravstveni_dom,"ZD Ljubljana - MOSTE-POLJE, PE Fužine",46.05,14.56,Preglov trg 14,Ljubljana,,clinic,,,720,814,35.9,37.99,31.71,25.96,369.6,3788,8760
+node/14226694833,zdravstveni_dom,ZVD,46.05,14.57,Pot k izviru 6,Ljubljana,Zavod za varstvo pri delu d. d.,clinic,,,720,866,40.43,41.75,32.44,27.5,413.81,4137,8760
+way/1214443629,zdravstveni_dom,Zdravstveni dom Ljubljana - Enota Vič-Rudnik,46.05,14.49,,,Zdravstveni dom Ljubljana,clinic,,,770,444,62.68,63.95,47.39,42.69,639.21,5338,8760
+way/114426895,zdravstveni_dom,Zdravstveni dom Ljubljana - Rudnik,46.04,14.52,Rakovniška ulica 4,Ljubljana,,clinic,,,845,632,32.61,34.24,30.74,32.6,326.83,3771,8760
+way/266281445,zdravstveni_dom,Zdravstveni dom Šentvid,46.1,14.46,Ob zdravstvenem domu 1,Ljubljana - Šentvid,Zdravstveni dom Ljubljana,clinic,,,383,333,67.45,70.27,56.91,55.77,567.56,5360,8760
+way/23061248,zdravstveni_dom,Zdravstveni dom Šiška,46.07,14.49,Derčeva ulica 5,Ljubljana,,clinic,,,606,450,61.99,64.18,48.25,40.9,525.76,5155,8760

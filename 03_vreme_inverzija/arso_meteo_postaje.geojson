@@ -1,0 +1,108 @@
+{
+ "type": "FeatureCollection",
+ "name": "arso_meteo_postaje",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.5123590017194,
+     46.0655056158452
+    ]
+   },
+   "properties": {
+    "station_id": 1828,
+    "station_name": "Ljubljana Bežigrad",
+    "slug": "lj_bezigrad",
+    "alt_m": 299,
+    "source": "ARSO, arhiv meritev samodejnih postaj"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.489271941364855,
+     46.03748538834803
+    ]
+   },
+   "properties": {
+    "station_id": 964,
+    "station_name": "Ljubljana Vič",
+    "slug": "lj_vic",
+    "alt_m": 293,
+    "source": "ARSO, arhiv meritev samodejnih postaj"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.371309873308338,
+     46.09405245834695
+    ]
+   },
+   "properties": {
+    "station_id": 2842,
+    "station_name": "Topol pri Medvodah",
+    "slug": "topol",
+    "alt_m": 692,
+    "source": "ARSO, arhiv meritev samodejnih postaj"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.228180813852049,
+     46.09794668946758
+    ]
+   },
+   "properties": {
+    "station_id": 2658,
+    "station_name": "Pasja ravan",
+    "slug": "pasja_ravan",
+    "alt_m": 1019,
+    "source": "ARSO, arhiv meritev samodejnih postaj"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.533314377372152,
+     46.297349481747936
+    ]
+   },
+   "properties": {
+    "station_id": 2210,
+    "station_name": "Krvavec",
+    "slug": "krvavec",
+    "alt_m": 1742,
+    "source": "ARSO, arhiv meritev samodejnih postaj"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     13.848899669767079,
+     46.378703770120936
+    ]
+   },
+   "properties": {
+    "station_id": 1820,
+    "station_name": "Kredarica",
+    "slug": "kredarica",
+    "alt_m": 2513,
+    "source": "ARSO, arhiv meritev samodejnih postaj"
+   }
+  }
+ ]
+}

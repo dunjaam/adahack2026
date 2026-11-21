@@ -1,0 +1,25 @@
+# Paket ADA Hack 2026 "Zrak, ki ga dihamo"
+# Namestitev: pip install -r requirements.txt   (Python 3.10 ali novejsi)
+# Spodnje meje so razlicice, s katerimi so bili zvezki izvedeni (november 2026).
+
+# skripte v zivo (v_zivo/) in vsi zvezki
+pandas>=2.2
+numpy>=1.26
+requests>=2.31
+
+# zvezki primeri/ (grafi, zvezki)
+matplotlib>=3.8
+jupyter
+
+# karte in relief (zvezki 01, 04, 07)
+geopandas>=1.0
+pyogrio>=0.9
+shapely>=2.0
+rasterio>=1.3
+
+# modeli (zvezka 03 in 06)
+scikit-learn>=1.4
+
+# polja CAMx v NetCDF (02_modeli/camx/*.nc); CSV s točkami deluje brez tega
+xarray>=2024.1
+netCDF4>=1.6

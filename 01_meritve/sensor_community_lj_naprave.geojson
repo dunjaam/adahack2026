@@ -1,0 +1,383 @@
+{
+ "type": "FeatureCollection",
+ "name": "sensor_community_lj_naprave",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.472,
+     46.042
+    ]
+   },
+   "properties": {
+    "sensor_id": 9821,
+    "sensor_type": "sds011",
+    "lat": 46.042,
+    "lon": 14.472,
+    "indoor": false,
+    "humidity_sensor_id": 9822,
+    "humidity_sensor_type": "bme280",
+    "prvi_dan": "2023-11-01",
+    "zadnji_dan": "2026-11-16",
+    "dni_z_meritvami": 499,
+    "najden_na": [
+     "2026-01-15",
+     "2025-01-15",
+     "2024-01-15",
+     "2026-11-10",
+     "živo 2026-11-17"
+    ],
+    "lokacije": [
+     [
+      46.042,
+      14.472
+     ]
+    ],
+    "dni_2023_24": 152,
+    "dni_2024_25": 149,
+    "dni_2025_26": 151,
+    "dni_2026_27": 47
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.47,
+     46.072
+    ]
+   },
+   "properties": {
+    "sensor_id": 14576,
+    "sensor_type": "sds011",
+    "lat": 46.072,
+    "lon": 14.47,
+    "indoor": false,
+    "humidity_sensor_id": 14577,
+    "humidity_sensor_type": "dht22",
+    "prvi_dan": "2024-11-01",
+    "zadnji_dan": "2025-03-31",
+    "dni_z_meritvami": 149,
+    "najden_na": [
+     "2025-01-15"
+    ],
+    "lokacije": [
+     [
+      46.072,
+      14.47
+     ]
+    ],
+    "dni_2023_24": 0,
+    "dni_2024_25": 149,
+    "dni_2025_26": 0,
+    "dni_2026_27": 0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.612,
+     46.038
+    ]
+   },
+   "properties": {
+    "sensor_id": 21901,
+    "sensor_type": "sds011",
+    "lat": 46.038,
+    "lon": 14.612,
+    "indoor": false,
+    "humidity_sensor_id": 21902,
+    "humidity_sensor_type": "bme280",
+    "prvi_dan": "2023-11-01",
+    "zadnji_dan": "2026-11-16",
+    "dni_z_meritvami": 350,
+    "najden_na": [
+     "2026-01-15",
+     "2026-11-10",
+     "živo 2026-11-17"
+    ],
+    "lokacije": [
+     [
+      46.038,
+      14.612
+     ]
+    ],
+    "dni_2023_24": 110,
+    "dni_2024_25": 107,
+    "dni_2025_26": 96,
+    "dni_2026_27": 37
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.474,
+     46.072
+    ]
+   },
+   "properties": {
+    "sensor_id": 44606,
+    "sensor_type": "sds011",
+    "lat": 46.072,
+    "lon": 14.474,
+    "indoor": false,
+    "humidity_sensor_id": 44607,
+    "humidity_sensor_type": "dht22",
+    "prvi_dan": "2023-11-01",
+    "zadnji_dan": "2026-11-16",
+    "dni_z_meritvami": 438,
+    "najden_na": [
+     "2026-01-15",
+     "2025-01-15",
+     "2024-01-15",
+     "2026-11-10",
+     "živo 2026-11-17"
+    ],
+    "lokacije": [
+     [
+      46.072,
+      14.474
+     ]
+    ],
+    "dni_2023_24": 136,
+    "dni_2024_25": 108,
+    "dni_2025_26": 147,
+    "dni_2026_27": 47
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.544,
+     46.052
+    ]
+   },
+   "properties": {
+    "sensor_id": 56181,
+    "sensor_type": "sds011",
+    "lat": 46.052,
+    "lon": 14.544,
+    "indoor": false,
+    "humidity_sensor_id": 56182,
+    "humidity_sensor_type": "bme280",
+    "prvi_dan": "2023-11-24",
+    "zadnji_dan": "2026-03-19",
+    "dni_z_meritvami": 333,
+    "najden_na": [
+     "2026-01-15",
+     "2025-01-15",
+     "2024-01-15"
+    ],
+    "lokacije": [
+     [
+      46.052,
+      14.544
+     ]
+    ],
+    "dni_2023_24": 119,
+    "dni_2024_25": 140,
+    "dni_2025_26": 74,
+    "dni_2026_27": 0
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.492,
+     46.07
+    ]
+   },
+   "properties": {
+    "sensor_id": 64688,
+    "sensor_type": "sds011",
+    "lat": 46.07,
+    "lon": 14.492,
+    "indoor": false,
+    "humidity_sensor_id": 64689,
+    "humidity_sensor_type": "dht22",
+    "prvi_dan": "2023-11-01",
+    "zadnji_dan": "2026-11-16",
+    "dni_z_meritvami": 499,
+    "najden_na": [
+     "2026-01-15",
+     "2025-01-15",
+     "2024-01-15",
+     "2026-11-10",
+     "živo 2026-11-17"
+    ],
+    "lokacije": [
+     [
+      46.07,
+      14.492
+     ]
+    ],
+    "dni_2023_24": 152,
+    "dni_2024_25": 149,
+    "dni_2025_26": 151,
+    "dni_2026_27": 47
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.47,
+     46.096
+    ]
+   },
+   "properties": {
+    "sensor_id": 67867,
+    "sensor_type": "sds011",
+    "lat": 46.096,
+    "lon": 14.47,
+    "indoor": false,
+    "humidity_sensor_id": 67868,
+    "humidity_sensor_type": "sht31",
+    "prvi_dan": "2023-11-01",
+    "zadnji_dan": "2026-10-28",
+    "dni_z_meritvami": 480,
+    "najden_na": [
+     "2026-01-15",
+     "2025-01-15",
+     "2024-01-15"
+    ],
+    "lokacije": [
+     [
+      46.096,
+      14.47
+     ]
+    ],
+    "dni_2023_24": 152,
+    "dni_2024_25": 149,
+    "dni_2025_26": 151,
+    "dni_2026_27": 28
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.492,
+     46.07
+    ]
+   },
+   "properties": {
+    "sensor_id": 74152,
+    "sensor_type": "sds011",
+    "lat": 46.07,
+    "lon": 14.492,
+    "indoor": true,
+    "humidity_sensor_id": 74153,
+    "humidity_sensor_type": "dht22",
+    "prvi_dan": "2023-11-01",
+    "zadnji_dan": "2026-11-16",
+    "dni_z_meritvami": 497,
+    "najden_na": [
+     "2026-01-15",
+     "2025-01-15",
+     "2024-01-15",
+     "2026-11-10",
+     "živo 2026-11-17"
+    ],
+    "lokacije": [
+     [
+      46.07,
+      14.492
+     ]
+    ],
+    "dni_2023_24": 150,
+    "dni_2024_25": 149,
+    "dni_2025_26": 151,
+    "dni_2026_27": 47
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.592,
+     46.042
+    ]
+   },
+   "properties": {
+    "sensor_id": 74650,
+    "sensor_type": "sds011",
+    "lat": 46.042,
+    "lon": 14.592,
+    "indoor": false,
+    "humidity_sensor_id": null,
+    "humidity_sensor_type": null,
+    "prvi_dan": "2023-11-01",
+    "zadnji_dan": "2026-11-16",
+    "dni_z_meritvami": 498,
+    "najden_na": [
+     "2026-01-15",
+     "2025-01-15",
+     "2024-01-15",
+     "2026-11-10",
+     "živo 2026-11-17"
+    ],
+    "lokacije": [
+     [
+      46.042,
+      14.592
+     ]
+    ],
+    "dni_2023_24": 152,
+    "dni_2024_25": 149,
+    "dni_2025_26": 150,
+    "dni_2026_27": 47
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     14.532,
+     46.064
+    ]
+   },
+   "properties": {
+    "sensor_id": 75285,
+    "sensor_type": "sds011",
+    "lat": 46.064,
+    "lon": 14.532,
+    "indoor": false,
+    "humidity_sensor_id": null,
+    "humidity_sensor_type": null,
+    "prvi_dan": "2023-11-01",
+    "zadnji_dan": "2026-03-20",
+    "dni_z_meritvami": 311,
+    "najden_na": [
+     "2025-01-15",
+     "2024-01-15"
+    ],
+    "lokacije": [
+     [
+      46.064,
+      14.532
+     ]
+    ],
+    "dni_2023_24": 152,
+    "dni_2024_25": 131,
+    "dni_2025_26": 28,
+    "dni_2026_27": 0
+   }
+  }
+ ]
+}
