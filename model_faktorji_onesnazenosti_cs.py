@@ -39,6 +39,7 @@ import shap
 # Paths
 # ---------------------------------------------------------------------------
 BASE = Path(__file__).parent
+DATA = BASE / "data"
 OUT = BASE / "output"
 CHARTS = OUT / "charts"
 OUT.mkdir(exist_ok=True)
@@ -51,9 +52,9 @@ HEATING_SEASON = [11, 12, 1, 2, 3]
 # ---------------------------------------------------------------------------
 print("Loading data ...")
 
-cs = pd.read_csv(BASE / "primeri/cs_kazalniki.csv")
+cs = pd.read_csv(DATA / "primeri/cs_kazalniki.csv")
 
-emisije = pd.read_csv(BASE / "04_prostor/emisije/emisije_po_cs.csv")
+emisije = pd.read_csv(DATA / "04_prostor/emisije/emisije_po_cs.csv")
 emisije["cs_ime"] = (
     emisije["cs_ime"]
     .str.replace("ČETRTNA SKUPNOST ", "", regex=False)
@@ -70,14 +71,14 @@ cs = cs.merge(
 )
 
 # EViDim — Ljubljana total furnace fuel split (used as prior)
-evidim = pd.read_csv(BASE / "04_prostor/evidim_kurilne_naprave_obcine.csv")
+evidim = pd.read_csv(DATA / "04_prostor/evidim_kurilne_naprave_obcine.csv")
 lj_ev = evidim[(evidim["obcina_sifra"] == 61) & (evidim["dimenzija"] == "vrsta_goriva")].copy()
 lj_ev = lj_ev.set_index("kategorija")["stevilo_naprav"]
 lj_total = lj_ev.get("SKUPAJ", lj_ev.sum())
 lj_solid_pct = lj_ev.get("TRDNO", 0) / lj_total  # ~0.188
 
 # SURS — Ljubljana heating type (2021)
-surs = pd.read_csv(BASE / "04_prostor/surs_ogrevanje_obcine.csv", dtype={"obcina_sifra": str})
+surs = pd.read_csv(DATA / "04_prostor/surs_ogrevanje_obcine.csv", dtype={"obcina_sifra": str})
 lj_surs = surs[
     (surs["obcina_sifra"] == "061")
     & (surs["leto"] == 2021)
@@ -119,7 +120,7 @@ for col in heat_cols:
 # ---------------------------------------------------------------------------
 print("Computing inversion feature ...")
 
-inv = pd.read_csv(BASE / "03_vreme_inverzija/inverzija_urno_2016_2026.csv")
+inv = pd.read_csv(DATA / "03_vreme_inverzija/inverzija_urno_2016_2026.csv")
 inv["time_utc"] = pd.to_datetime(inv["time_utc"], utc=True)
 inv["month"] = inv["time_utc"].dt.month
 inv_winter = inv[inv["month"].isin(HEATING_SEASON)]
@@ -160,8 +161,8 @@ def load_gral(path):
     df = df.rename(columns=rename)
     return df, list(rename.values())
 
-gral_heat, cs_names_h = load_gral(BASE / "02_modeli/gral/gral_kurisca_cs_urno.csv")
-gral_traf, cs_names_t = load_gral(BASE / "02_modeli/gral/gral_promet_cs_urno.csv")
+gral_heat, cs_names_h = load_gral(DATA / "02_modeli/gral/gral_kurisca_cs_urno.csv")
+gral_traf, cs_names_t = load_gral(DATA / "02_modeli/gral/gral_promet_cs_urno.csv")
 
 # Monthly mean per CS
 heat_monthly = gral_heat.groupby("month")[cs_names_h].mean()
@@ -407,7 +408,7 @@ plt.close(fig)
 
 # --- Chart 4: choropleth map — heating share ---
 try:
-    gdf = gpd.read_file(BASE / "04_prostor/mol_cetrtne_skupnosti.geojson")
+    gdf = gpd.read_file(DATA / "04_prostor/mol_cetrtne_skupnosti.geojson")
     gdf["cs_ime"] = gdf["ime"].str.strip().str.title() if "ime" in gdf.columns else gdf.iloc[:, 1].str.strip().str.title()
     gdf = gdf.merge(cs[["cs_ime", "heating_share", "traffic_share"]], on="cs_ime", how="left")
 
