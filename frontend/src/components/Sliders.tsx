@@ -42,7 +42,7 @@ function Slider({ d }: { d: SliderDef }) {
         step={d.step}
         value={v}
         onChange={(e) => setParam(d.key, Number(e.target.value))}
-        style={{ background: `linear-gradient(90deg,#10b981 ${pct}%, #e2e8f0 ${pct}%)` }}
+        style={{ background: `linear-gradient(90deg,#4fae60 ${pct}%, #e2e8f0 ${pct}%)` }}
         className="w-full"
       />
       <div className="mt-1 flex items-center justify-between text-[11px] text-slate-400">

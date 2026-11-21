@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="sl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ZrakVizija — Čistejši zrak</title>
+<style>
+  :root { color-scheme: dark; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif;
+  }
+
+  /* 16:9 stage designed at 1920x1080, scaled to fit any screen (letterboxed) */
+  #stage {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1920px;
+    height: 1080px;
+    transform-origin: center center;
+    overflow: hidden;
+    background: #0a0302;
+  }
+  #c { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+
+  .brand {
+    position: absolute;
+    top: 64px;
+    left: 80px;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.82);
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand .dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #6ee7b7, #10b981);
+    box-shadow: 0 0 22px rgba(16, 185, 129, 0.9);
+  }
+  .brand small { font-weight: 500; letter-spacing: 3px; font-size: 15px; color: rgba(255,255,255,0.45); text-transform: uppercase; }
+
+  .center {
+    position: absolute;
+    left: 50%;
+    top: 46%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+  }
+  #num {
+    font-size: 400px;
+    font-weight: 800;
+    line-height: 0.82;
+    letter-spacing: -8px;
+    font-variant-numeric: tabular-nums;
+    color: #ef4444;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+  }
+  .caption {
+    position: relative;
+    height: 60px;
+    margin-bottom: 40px;
+    font-size: 46px;
+    font-weight: 700;
+    letter-spacing: 14px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55);
+  }
+  .caption span {
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    opacity: 0;
+  }
+  #capNow  { color: rgba(255, 200, 180, 0.85); }
+  #capGoal { color: #b9ffe0; }
+  .unit {
+    margin-top: 64px;
+    font-size: 44px;
+    font-weight: 600;
+    letter-spacing: 12px;
+    color: rgba(255, 255, 255, 0.78);
+    text-shadow: 0 2px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  #msg {
+    position: absolute;
+    left: 50%;
+    top: 82%;
+    transform: translate(-50%, 20px);
+    width: 100%;
+    text-align: center;
+    font-size: 62px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #eafff4;
+    opacity: 0;
+    text-shadow: 0 0 40px rgba(16, 185, 129, 0.55), 0 4px 30px rgba(0, 0, 0, 0.5);
+    will-change: opacity, transform;
+  }
+
+  .disclaimer {
+    position: absolute;
+    bottom: 54px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+  }
+  .hint {
+    position: absolute;
+    bottom: 54px;
+    right: 80px;
+    font-size: 19px;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.32);
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .hint kbd {
+    font: inherit;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    padding: 2px 9px;
+    margin-right: 8px;
+    color: rgba(255,255,255,0.7);
+  }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <canvas id="c" width="1920" height="1080"></canvas>
+    <div class="center">
+      <div class="caption">
+        <span id="capNow">Danes</span>
+        <span id="capGoal">Naš cilj</span>
+      </div>
+      <div id="num">14,0</div>
+      <div class="unit">PM2.5&nbsp;·&nbsp;µg/m³</div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  "use strict";
+  const stage = document.getElementById("stage");
+  const canvas = document.getElementById("c");
+  const ctx = canvas.getContext("2d");
+  const numEl = document.getElementById("num");
+  const capNowEl = document.getElementById("capNow");
+  const capGoalEl = document.getElementById("capGoal");
+  const W = 1920, H = 1080;
+
+  // ---- fit the 16:9 stage into the window (contain / letterbox) ----
+  // canvas backing store matches real screen pixels (stage scale × devicePixelRatio)
+  // so gradients and smog stay sharp instead of being upscaled from 1920×1080
+  function fit() {
+    const s = Math.min(window.innerWidth / W, window.innerHeight / H);
+    stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+    const k = Math.min(Math.max(s * (window.devicePixelRatio || 1), 1), 3);
+    canvas.width = Math.round(W * k);
+    canvas.height = Math.round(H * k);
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.imageSmoothingQuality = "high";
+  }
+  window.addEventListener("resize", fit);
+  fit();
+
+  // ---- timeline (ms) ----
+  const T_INTRO  = 900;    // number fades in, air still polluted
+  const T_COUNT  = 3600;   // 14.0 -> 10.0, air clears
+  const T_SETTLE = 700;    // settle + message appears
+  const T_HOLD   = 2000;   // hold final result
+  const T_ANIM   = T_INTRO + T_COUNT + T_SETTLE;      // 5.2s
+  const T_END    = T_ANIM + T_HOLD;                   // ~7.2s
+
+  const V_START = 14.0, V_END = 10.0;
+
+  // ---- easing ----
+  const easeInOut = (p) => (p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const mix = (c1, c2, t) => [Math.round(lerp(c1[0], c2[0], t)), Math.round(lerp(c1[1], c2[1], t)), Math.round(lerp(c1[2], c2[2], t))];
+  const rgb = (c) => `rgb(${c[0]},${c[1]},${c[2]})`;
+
+  // number colour stops (value -> colour): red -> orange -> amber -> lime -> green
+  const STOPS = [
+    { v: 14, c: [239, 68, 68] },
+    { v: 13, c: [249, 115, 22] },
+    { v: 12, c: [245, 158, 11] },
+    { v: 11, c: [163, 230, 53] },
+    { v: 10, c: [52, 230, 162] },
+  ];
+  function colorForValue(v) {
+    v = clamp(v, 10, 14);
+    for (let i = 0; i < STOPS.length - 1; i++) {
+      const a = STOPS[i], b = STOPS[i + 1];
+      if (v <= a.v && v >= b.v) return mix(a.c, b.c, (a.v - v) / (a.v - b.v));
+    }
+    return STOPS[STOPS.length - 1].c;
+  }
+
+  // background gradient endpoints: polluted (dark red/brown) -> clean (luminous green)
+  const BG_INNER_P = [122, 64, 34],  BG_INNER_C = [11, 102, 75];
+  const BG_OUTER_P = [22, 12, 7],    BG_OUTER_C = [4, 32, 23];
+
+  // ---- soft particle sprite (warm smog glow) ----
+  function makeSprite(rgbStr) {
+    const s = 512, cv = document.createElement("canvas");
+    cv.width = cv.height = s;
+    const g = cv.getContext("2d");
+    const grd = g.createRadialGradient(s/2, s/2, 0, s/2, s/2, s/2);
+    grd.addColorStop(0, rgbStr + "0.95)");
+    grd.addColorStop(0.4, rgbStr + "0.45)");
+    grd.addColorStop(1, rgbStr + "0)");
+    g.fillStyle = grd;
+    g.fillRect(0, 0, s, s);
+    return cv;
+  }
+  const smokeSprite = makeSprite("rgba(255,170,110,");   // warm haze
+  const hazeSprite  = makeSprite("rgba(230,150,110,");   // large soft smog
+  const darkSprite  = makeSprite("rgba(66,48,36,");      // murky dark smog
+
+  // ---- dither noise: breaks up 8-bit banding in the big dark gradients ----
+  const ditherCv = document.createElement("canvas");
+  ditherCv.width = ditherCv.height = 256;
+  {
+    const g = ditherCv.getContext("2d");
+    const img = g.createImageData(256, 256);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const v = Math.random() < 0.5 ? 0 : 255;
+      img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+      img.data[i + 3] = Math.floor(Math.random() * 7);   // ±~1–2 colour levels
+    }
+    g.putImageData(img, 0, 0);
+  }
+  const ditherPattern = ctx.createPattern(ditherCv, "repeat");
+
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const particles = Array.from({ length: 240 }, () => ({
+    x: rnd(0, W), y: rnd(0, H),
+    r: rnd(16, 92),
+    vx: rnd(-10, 10), vy: rnd(-26, -6),   // drifting up (smog rises)
+    sway: rnd(0.4, 1.4), ph: rnd(0, Math.PI * 2),
+    a: rnd(0.3, 0.8), depth: rnd(0.4, 1),
+  }));
+  const blobs = Array.from({ length: 9 }, () => ({
+    x: rnd(0, W), y: rnd(100, H - 100),
+    r: rnd(380, 760), vx: rnd(-7, 7), vy: rnd(-5, 2),
+    a: rnd(0.12, 0.26), ph: rnd(0, Math.PI * 2),
+  }));
+  // murky dark smog layer that hangs in the air when polluted
+  const darkBlobs = Array.from({ length: 12 }, () => ({
+    x: rnd(0, W), y: rnd(0, H),
+    r: rnd(320, 680), vx: rnd(-9, 9), vy: rnd(-6, 4),
+    a: rnd(0.34, 0.62), ph: rnd(0, Math.PI * 2),
+  }));
+
+  let start = null, last = null;
+
+  function draw(now) {
+    if (start === null) { start = now; last = now; }
+    let dt = (now - last) / 1000; last = now;
+    if (dt > 0.05) dt = 0.05;
+    const e = now - start;
+    const te = Math.min(e, T_END);
+
+    // staged progress
+    const pCount = clamp((te - T_INTRO) / T_COUNT, 0, 1);
+    const clearT = easeInOut(pCount);                 // 0 polluted -> 1 clean
+    const value = V_START - (V_START - V_END) * clearT;
+    const introA = clamp(e / T_INTRO, 0, 1);
+    const msgT = easeInOut(clamp((te - (T_INTRO + T_COUNT)) / T_SETTLE, 0, 1));
+    const pollution = 1 - clearT;
+
+    // ---------- background ----------
+    const inner = mix(BG_INNER_P, BG_INNER_C, clearT);
+    const outer = mix(BG_OUTER_P, BG_OUTER_C, clearT);
+    const bg = ctx.createRadialGradient(W/2, H*0.48, 80, W/2, H*0.5, W*0.75);
+    bg.addColorStop(0, rgb(inner));
+    bg.addColorStop(1, rgb(outer));
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // clarity bloom that grows as the air clears
+    const bloom = ctx.createRadialGradient(W/2, H*0.46, 0, W/2, H*0.46, 1050);
+    bloom.addColorStop(0, `rgba(190,255,225,${0.12 * clearT})`);
+    bloom.addColorStop(1, "rgba(190,255,225,0)");
+    ctx.fillStyle = bloom;
+    ctx.fillRect(0, 0, W, H);
+
+    const t = now / 1000;
+
+    // ---------- thick smog veil (murky, hazy air) — stays behind the number ----------
+    const veil = ctx.createLinearGradient(0, 0, 0, H);
+    veil.addColorStop(0, `rgba(96,72,54,${0.32 * pollution})`);
+    veil.addColorStop(1, `rgba(56,36,25,${0.46 * pollution})`);
+    ctx.fillStyle = veil;
+    ctx.fillRect(0, 0, W, H);
+
+    // ---------- murky dark smog hanging in the air ----------
+    for (const b of darkBlobs) {
+      b.x += b.vx * dt; b.y += b.vy * dt;
+      if (b.x < -b.r) b.x = W + b.r; if (b.x > W + b.r) b.x = -b.r;
+      if (b.y < -b.r) b.y = H + b.r; if (b.y > H + b.r) b.y = -b.r;
+      const a = b.a * pollution * (0.7 + 0.3 * Math.sin(t * 0.4 + b.ph));
+      if (a <= 0.01) continue;
+      ctx.globalAlpha = a;
+      ctx.drawImage(darkSprite, b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
+    }
+    ctx.globalAlpha = 1;
+
+    // ---------- large drifting smog blobs ----------
+    ctx.globalCompositeOperation = "lighter";
+    for (const b of blobs) {
+      b.x += b.vx * dt; b.y += b.vy * dt;
+      if (b.x < -b.r) b.x = W + b.r; if (b.x > W + b.r) b.x = -b.r;
+      if (b.y < -b.r) b.y = H + b.r; if (b.y > H + b.r) b.y = -b.r;
+      const a = b.a * pollution * (0.75 + 0.25 * Math.sin(t * 0.5 + b.ph));
+      if (a <= 0.01) continue;
+      ctx.globalAlpha = a;
+      ctx.drawImage(hazeSprite, b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
+    }
+
+    // ---------- floating particles ----------
+    for (const p of particles) {
+      p.x += (p.vx + Math.sin(t * p.sway + p.ph) * 12) * dt * p.depth;
+      p.y += p.vy * dt * p.depth;
+      if (p.y < -p.r) { p.y = H + p.r; p.x = rnd(0, W); }
+      if (p.x < -p.r) p.x = W + p.r; if (p.x > W + p.r) p.x = -p.r;
+      const a = p.a * pollution;
+      if (a <= 0.01) continue;
+      ctx.globalAlpha = a;
+      ctx.drawImage(smokeSprite, p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+
+    // ---------- cinematic vignette ----------
+    const vig = ctx.createRadialGradient(W/2, H/2, H*0.35, W/2, H/2, W*0.72);
+    vig.addColorStop(0, "rgba(0,0,0,0)");
+    vig.addColorStop(1, `rgba(0,0,0,${0.55 - 0.15 * clearT})`);
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, 0, W, H);
+
+    // ---------- dither (drawn at device pixels, 1 noise px = 1 screen px) ----------
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = ditherPattern;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
+
+    // ---------- number + glow (HTML overlay) ----------
+    const col = colorForValue(value);
+    const cstr = rgb(col);
+    const pop = 1 + 0.04 * msgT;                       // gentle settle pop
+    numEl.textContent = value.toFixed(1).replace(".", ",");
+    numEl.style.color = cstr;
+    numEl.style.opacity = introA.toFixed(3);
+    numEl.style.transform = `scale(${(0.96 + 0.04 * introA) * pop})`;
+    numEl.style.textShadow =
+      `0 0 55px rgba(${col[0]},${col[1]},${col[2]},${0.6 + 0.25 * clearT}),` +
+      `0 0 150px rgba(${col[0]},${col[1]},${col[2]},${0.4 + 0.3 * clearT}),` +
+      `0 10px 48px rgba(0,25,16,0.45)`;
+
+    // ---------- caption: "Danes" -> "Naš cilj" as the value nears 10 ----------
+    const swap = easeInOut(clamp((clearT - 0.55) / 0.3, 0, 1));
+    capNowEl.style.opacity = (introA * (1 - swap)).toFixed(3);
+    capNowEl.style.transform = `translateY(${-24 * swap}px)`;
+    capGoalEl.style.opacity = swap.toFixed(3);
+    capGoalEl.style.transform = `translateY(${24 * (1 - swap)}px)`;
+
+
+
+    requestAnimationFrame(draw);
+  }
+
+  function play() { start = null; }
+
+  window.addEventListener("keydown", (ev) => {
+    if (ev.key === "r" || ev.key === "R") play();
+  });
+
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>

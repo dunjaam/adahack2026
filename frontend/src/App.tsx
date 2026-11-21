@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Wind } from "lucide-react";
 import { useStore } from "./store";
 import { Topbar } from "./components/Topbar";
 import { Dashboard } from "./components/Dashboard";
@@ -15,11 +14,9 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center gap-3 bg-gradient-to-br from-brand-50 to-white">
-        <div className="flex h-14 w-14 animate-pulse items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-teal-600 text-white shadow-float">
-          <Wind className="h-7 w-7" />
-        </div>
-        <div className="text-sm font-medium text-slate-500">Nalagam AirShift …</div>
+      <div className="flex h-screen flex-col items-center justify-center gap-5 bg-gradient-to-br from-brand-50 to-white">
+        <img src="/zrakvizija-logo.svg" alt="ZrakVizija" className="w-56 animate-pulse" />
+        <div className="text-sm font-medium text-slate-500">Nalagam ZrakVizija …</div>
       </div>
     );
   }

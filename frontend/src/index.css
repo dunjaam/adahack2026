@@ -23,7 +23,7 @@ body {
 
 /* react-grid-layout polish */
 .react-grid-item.react-grid-placeholder {
-  background: #10b981 !important;
+  background: #4fae60 !important;
   opacity: 0.15 !important;
   border-radius: 1rem;
 }
@@ -52,7 +52,7 @@ input[type="range"]::-webkit-slider-thumb {
   width: 20px;
   height: 20px;
   border-radius: 9999px;
-  background: #10b981;
+  background: #4fae60;
   border: 3px solid #fff;
   box-shadow: 0 1px 4px rgba(16, 24, 40, 0.25);
   cursor: pointer;

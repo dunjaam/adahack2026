@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ZrakVizija — From data to decisions</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; background: #0b0f0e;
+    font-family: "Inter", "Helvetica Neue", Arial, system-ui, sans-serif; }
+
+  #stage {
+    position: absolute; left: 50%; top: 50%;
+    width: 1920px; height: 1080px; transform-origin: center center;
+    overflow: hidden;
+    background:
+      radial-gradient(1200px 800px at 50% 42%, #ffffff 0%, #f3f7f5 55%, #e7efeb 100%);
+  }
+  #c { position: absolute; inset: 0; width: 1920px; height: 1080px; z-index: 1; }
+
+  .brand {
+    position: absolute; top: 60px; left: 76px; z-index: 5;
+    font-size: 26px; font-weight: 800; letter-spacing: 1px; color: #0f3d2e;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand .dot { width: 14px; height: 14px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #6ee7b7, #10b981);
+    box-shadow: 0 0 18px rgba(16,185,129,0.8); }
+  .brand small { font-weight: 500; letter-spacing: 2px; font-size: 13px;
+    color: #8aa399; text-transform: uppercase; }
+
+  /* floating data sources */
+  .node {
+    position: absolute; left: 0; top: 0; z-index: 3;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    will-change: transform, opacity;
+  }
+  .node .ic {
+    width: 130px; height: 130px; border-radius: 34px;
+    display: grid; place-items: center;
+    background: #fff; border: 1px solid #e4ece8;
+    box-shadow: 0 18px 44px rgba(16,40,32,0.12), 0 2px 6px rgba(16,40,32,0.05);
+  }
+  .node .ic svg { width: 58px; height: 58px; stroke: currentColor; stroke-width: 1.9;
+    fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .node .lbl { font-size: 23px; font-weight: 600; color: #35504a; letter-spacing: .3px; }
+
+  /* center unified card */
+  .card {
+    position: absolute; left: 0; top: 0; z-index: 4;
+    width: 540px; padding: 34px 36px 38px;
+    background: #ffffff; border: 1px solid #e8efec; border-radius: 34px;
+    box-shadow: 0 50px 120px rgba(16,50,38,0.22), 0 10px 30px rgba(16,50,38,0.10);
+    opacity: 0; will-change: transform, opacity;
+  }
+  .card-head { display: flex; align-items: center; gap: 12px;
+    font-size: 26px; font-weight: 800; color: #0f3d2e; letter-spacing: .3px; }
+  .card-head .d { width: 13px; height: 13px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #6ee7b7, #10b981);
+    box-shadow: 0 0 14px rgba(16,185,129,0.7); }
+  .card-head small { margin-left: auto; font-size: 13px; font-weight: 600;
+    letter-spacing: 1.5px; color: #9fb4ab; text-transform: uppercase; }
+
+  .pm { display: flex; align-items: baseline; gap: 12px; margin: 22px 0 8px; }
+  .pm .v { font-size: 74px; font-weight: 800; line-height: .9; color: #10b981;
+    font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+  .pm .u { font-size: 20px; font-weight: 600; color: #93a7a0; letter-spacing: 1px; }
+
+  .mini-map { height: 150px; border-radius: 20px; overflow: hidden;
+    border: 1px solid #e8efec; background: #eef4f1; margin-bottom: 20px; }
+  .mini-map svg { width: 100%; height: 100%; display: block; }
+
+  .slider { position: relative; height: 40px; display: flex; align-items: center; }
+  .slider .track { height: 10px; width: 100%; border-radius: 999px; background: #e7efec; overflow: hidden; }
+  .slider .fill { height: 100%; width: 62%;
+    background: linear-gradient(90deg, #10b981, #14b8a6); border-radius: 999px; }
+  .slider .thumb { position: absolute; left: 62%; top: 50%;
+    width: 26px; height: 26px; border-radius: 50%; background: #fff;
+    border: 4px solid #10b981; transform: translate(-50%, -50%);
+    box-shadow: 0 4px 12px rgba(16,185,129,.35); }
+  .slider-cap { margin-top: 12px; font-size: 15px; color: #90a69d; font-weight: 500; letter-spacing:.3px; }
+
+  .msg {
+    position: absolute; left: 50%; bottom: 120px; z-index: 5;
+    transform: translate(-50%, 16px); opacity: 0;
+    font-size: 48px; font-weight: 700; letter-spacing: .5px; color: #103a2c;
+    text-shadow: 0 2px 20px rgba(255,255,255,.6); will-change: opacity, transform;
+  }
+  .hint { position: absolute; bottom: 52px; right: 76px; z-index: 5;
+    font-size: 17px; letter-spacing: 2px; color: #9fb4ab; text-transform: uppercase;
+    opacity: 0; transition: opacity .5s ease; }
+  .hint kbd { border: 1px solid #c7d6cf; border-radius: 6px; padding: 2px 9px;
+    margin-right: 8px; color: #5c756c; font: inherit; }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <canvas id="c" width="1920" height="1080"></canvas>
+    <div class="brand"><span class="dot"></span>ZrakVizija <small>Environmental digital twin</small></div>
+
+    <!-- 4 data sources -->
+    <div class="node" data-i="0">
+      <div class="ic" style="color:#10b981">
+        <svg viewBox="0 0 24 24"><path d="M3 12h3.5l2.5 6 3-13 2.5 10 1.8-5H21"/></svg>
+      </div><div class="lbl">Measurements</div>
+    </div>
+    <div class="node" data-i="1">
+      <div class="ic" style="color:#0ea5e9">
+        <svg viewBox="0 0 24 24"><path d="M7 18h9a4 4 0 0 0 .4-7.98A6 6 0 0 0 4.6 11 3.5 3.5 0 0 0 7 18z"/><path d="M17 8.5a3 3 0 0 1 2.9-4"/></svg>
+      </div><div class="lbl">Weather</div>
+    </div>
+    <div class="node" data-i="2">
+      <div class="ic" style="color:#64748b">
+        <svg viewBox="0 0 24 24"><path d="M4 21V7l6-3v17M10 21V9l7 3v9M4 21h16M13 12.5v.01M13 15.5v.01M7 11v.01M7 14v.01M7 17v.01"/></svg>
+      </div><div class="lbl">Buildings</div>
+    </div>
+    <div class="node" data-i="3">
+      <div class="ic" style="color:#f97316">
+        <svg viewBox="0 0 24 24"><path d="M3 22V12l5 3V12l5 3V9l5 3v10z"/><path d="M8 7c0-1.2 1.2-1.6 1.2-2.8M12 6c0-1.2 1.2-1.6 1.2-2.8"/></svg>
+      </div><div class="lbl">Emissions</div>
+    </div>
+
+    <!-- unified platform card -->
+    <div class="card" id="card">
+      <div class="card-head"><span class="d"></span>ZrakVizija <small>one platform</small></div>
+      <div class="pm"><span class="v">12,4</span><span class="u">µg/m³ · PM2.5</span></div>
+      <div class="mini-map">
+        <svg viewBox="0 0 472 150" preserveAspectRatio="xMidYMid slice">
+          <rect width="472" height="150" fill="#eef4f1"/>
+          <path d="M40 110 L120 40 L210 70 L180 130 L70 140 Z" fill="#34d399"/>
+          <path d="M210 70 L300 35 L360 85 L300 125 L180 130 Z" fill="#a7f3d0"/>
+          <path d="M300 35 L430 55 L440 120 L360 85 Z" fill="#fde047"/>
+          <path d="M70 140 L180 130 L300 125 L360 85 L440 120 L440 150 L40 150 Z" fill="#10b981" opacity=".18"/>
+          <circle cx="150" cy="86" r="5" fill="#047857"/><circle cx="300" cy="80" r="5" fill="#047857"/>
+        </svg>
+      </div>
+      <div class="slider"><div class="track"><div class="fill"></div></div><div class="thumb"></div></div>
+      <div class="slider-cap">Intervention · electric buses 60%</div>
+    </div>
+
+    <div class="msg" id="msg">From data to decisions.</div>
+    <div class="hint" id="hint"><kbd>R</kbd>replay</div>
+  </div>
+
+<script>
+(() => {
+  "use strict";
+  const stage = document.getElementById("stage");
+  const canvas = document.getElementById("c");
+  const ctx = canvas.getContext("2d");
+  const nodes = [...document.querySelectorAll(".node")];
+  const card = document.getElementById("card");
+  const msg = document.getElementById("msg");
+  const hint = document.getElementById("hint");
+  const W = 1920, H = 1080;
+  const CX = 960, CY = 508;   // convergence centre (card centre)
+
+  function fit() {
+    const s = Math.min(window.innerWidth / W, window.innerHeight / H);
+    stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+  }
+  addEventListener("resize", fit); fit();
+
+  // scattered start positions (design space)
+  const SRC = [
+    { x: 455, y: 315 },   // measurements  (top-left)
+    { x: 1470, y: 300 },  // weather        (top-right)
+    { x: 455, y: 790 },   // buildings      (bottom-left)
+    { x: 1470, y: 775 },  // emissions      (bottom-right)
+  ];
+  SRC.forEach((s, i) => { s.ph = i * 1.7; s.col = ["#10b981","#0ea5e9","#64748b","#f97316"][i]; });
+
+  // timeline (ms)
+  const T_IN = 900, STAG = 120;
+  const T_MOVE_S = 1500, T_MOVE = 1700;
+  const T_CARD_S = 2600, T_CARD = 950;
+  const T_MSG_S = 3800, T_MSG = 750;
+  const T_END = 6000;
+
+  const clamp = (x,a,b)=>Math.max(a,Math.min(b,x));
+  const lerp = (a,b,t)=>a+(b-a)*t;
+  const easeOut = p => 1 - Math.pow(1-p, 3);
+  const easeInOut = p => p<.5 ? 4*p*p*p : 1 - Math.pow(-2*p+2,3)/2;
+
+  // flowing particles source->centre
+  const flows = [];
+  let start = null, last = null;
+
+  function draw(now) {
+    if (start === null) { start = now; last = now; }
+    let dt = (now - last) / 1000; last = now;
+    if (dt > 0.05) dt = 0.05;
+    const e = now - start;
+    const t = now / 1000;
+
+    ctx.clearRect(0, 0, W, H);
+
+    const moveP = easeInOut(clamp((e - T_MOVE_S) / T_MOVE, 0, 1));
+    const cardP = easeOut(clamp((e - T_CARD_S) / T_CARD, 0, 1));
+    const lineA = clamp(moveP * 1.4, 0, 1) * (1 - cardP);
+
+    // current node positions (float in, then travel to centre)
+    const pos = SRC.map((s, i) => {
+      const bob = (1 - moveP) * 10;
+      const sx = s.x + Math.sin(t * 0.8 + s.ph) * bob;
+      const sy = s.y + Math.cos(t * 0.7 + s.ph) * bob;
+      return { x: lerp(sx, CX, moveP), y: lerp(sy, CY, moveP) };
+    });
+
+    // connecting lines + flowing particles
+    const flowActive = e > T_MOVE_S - 300 && e < T_CARD_S + 500;
+    for (let i = 0; i < 4; i++) {
+      const p = pos[i];
+      if (lineA > 0.01) {
+        const g = ctx.createLinearGradient(p.x, p.y, CX, CY);
+        g.addColorStop(0, `rgba(16,185,129,0)`);
+        g.addColorStop(1, `rgba(16,185,129,${0.28 * lineA})`);
+        ctx.strokeStyle = g; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(CX, CY); ctx.stroke();
+      }
+      if (flowActive && Math.random() < 0.5) {
+        flows.push({ sx: p.x, sy: p.y, tt: 0, sp: 0.6 + Math.random() * 0.6,
+          jr: (Math.random() - 0.5) * 60, col: s_col(i) });
+      }
+    }
+    for (let k = flows.length - 1; k >= 0; k--) {
+      const f = flows[k];
+      f.tt += f.sp * dt;
+      if (f.tt >= 1) { flows.splice(k, 1); continue; }
+      const te = easeOut(f.tt);
+      const perp = Math.sin(f.tt * Math.PI) * f.jr;
+      const x = lerp(f.sx, CX, te), y = lerp(f.sy, CY, te) + perp;
+      const a = Math.sin(f.tt * Math.PI) * 0.9;
+      ctx.beginPath(); ctx.arc(x, y, 3.2, 0, 7); ctx.fillStyle = f.col.replace(")", `,${a})`).replace("rgb","rgba"); ctx.fill();
+    }
+
+    // apply node transforms
+    nodes.forEach((n, i) => {
+      const inP = clamp((e - i * STAG) / T_IN, 0, 1);
+      const show = easeOut(inP);
+      const fade = 1 - clamp((moveP - 0.55) / 0.4, 0, 1);  // dissolve as they reach centre
+      const sc = lerp(0.8, 1, show) * lerp(1, 0.5, moveP);
+      n.style.opacity = (show * fade).toFixed(3);
+      n.style.transform =
+        `translate(${pos[i].x}px, ${pos[i].y + (1 - show) * 24}px) translate(-50%,-50%) scale(${sc})`;
+    });
+
+    // card reveal
+    card.style.opacity = cardP.toFixed(3);
+    card.style.transform =
+      `translate(${CX}px, ${CY + (1 - cardP) * 18}px) translate(-50%,-50%) scale(${lerp(0.82, 1, cardP)})`;
+
+    // message
+    const mP = easeOut(clamp((e - T_MSG_S) / T_MSG, 0, 1));
+    msg.style.opacity = mP.toFixed(3);
+    msg.style.transform = `translate(-50%, ${16 - 16 * mP}px)`;
+    if (e > T_MSG_S) hint.style.opacity = "1";
+
+    requestAnimationFrame(draw);
+  }
+
+  const COLS = ["rgb(16,185,129)","rgb(14,165,233)","rgb(100,116,139)","rgb(249,115,22)"];
+  function s_col(i){ return COLS[i]; }
+
+  function play(){ start = null; flows.length = 0; hint.style.opacity = "0"; }
+  addEventListener("keydown", (ev) => { if (ev.key === "r" || ev.key === "R") play(); });
+
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>

@@ -4,22 +4,26 @@ export default {
   theme: {
     extend: {
       colors: {
+        // derived from the ZrakVizija logo (hills / leaf greens)
         brand: {
-          50: "#ecfdf5",
-          100: "#d1fae5",
-          200: "#a7f3d0",
-          300: "#6ee7b7",
-          400: "#34d399",
-          500: "#10b981",
-          600: "#059669",
-          700: "#047857",
-          800: "#065f46",
-          900: "#064e3b",
+          50: "#eef7f0",
+          100: "#d6eed0",
+          200: "#b4e0ac",
+          300: "#93d193",
+          400: "#6fc27e",
+          500: "#4fae60",
+          600: "#3a8f50",
+          700: "#2f7d52",
+          800: "#276744",
+          900: "#1e4d34",
         },
+        // logo sky / leaf blue accent
         teal: {
-          500: "#14b8a6",
-          600: "#0d9488",
+          400: "#8ecbdd",
+          500: "#5cb4ce",
+          600: "#3e97b5",
         },
+        ink: "#1e2a3a", // logo wordmark navy
       },
       boxShadow: {
         card: "0 1px 3px rgba(16,24,40,0.06), 0 1px 2px rgba(16,24,40,0.04)",
