@@ -186,6 +186,20 @@ FEATURES = [
 cs["stavbe_brez_omrezij_km2"] = cs["stavbe_brez_omrezij"] / cs["povrsina_km2"].replace(0, np.nan)
 FEATURES.append("stavbe_brez_omrezij_km2")
 
+# Human-readable Slovenian labels, used by the matplotlib charts below and
+# mirrored in the frontend-facing feature_metadata.json export further down.
+FEATURE_LABELS_SL = {
+    "pct_solid":               "Delež ogrevanja na trda goriva",
+    "pct_gas":                 "Delež ogrevanja na plin",
+    "pct_district":            "Delež daljinskega ogrevanja",
+    "kurisca_na_km2":          "Gostota kurišč",
+    "delez_pred_1980":         "Delež stavb pred 1980",
+    "inv_exposure":            "Izpostavljenost inverziji",
+    "delez_ob_plinovodu":      "Dostop do plinovoda",
+    "delez_pod_30m":           "Delež površine pod 30 m nad dnom",
+    "stavbe_brez_omrezij_km2": "Stavbe brez omrežij / km²",
+}
+
 TARGET = "gral_pm10_kurilna"
 
 ml_df = cs[FEATURES + [TARGET, "cs_ime", "gral_quality_flag"]].dropna(subset=FEATURES + [TARGET])
@@ -397,11 +411,16 @@ fig.savefig(CHARTS / "02_heating_type_breakdown.png", dpi=150)
 plt.close(fig)
 
 # --- Chart 3: ML feature importance ---
-fig, ax = plt.subplots(figsize=(8, 5))
+fig, ax = plt.subplots(figsize=(9, 5))
 imp = importance_df.sort_values("mean_abs_shap")
-ax.barh(imp["feature"], imp["mean_abs_shap"], color="#4c72b0")
-ax.set_xlabel("Povprečna absolutna vrednost SHAP (µg/m³)")
-ax.set_title(f"Globalni pomen spremenljivk — naključni gozd\n(tarča: gral_pm10_kurilna, 5-CV RMSE={cv_rmse:.3f})")
+labels = imp["feature"].map(FEATURE_LABELS_SL).fillna(imp["feature"])
+ax.barh(labels, imp["mean_abs_shap"], color="#4c72b0")
+ax.set_xlabel("Povprečni prispevek k napovedi PM10 (µg/m³, |SHAP|)")
+ax.set_title(
+    "Kateri dejavniki najbolj vplivajo na napoved PM10 iz ogrevanja\n"
+    f"(model: naključni gozd, 5-kratna CV RMSE = {cv_rmse:.3f} µg/m³)"
+)
+ax.margins(y=0.02)
 fig.tight_layout()
 fig.savefig(CHARTS / "03_ml_feature_importance.png", dpi=150)
 plt.close(fig)
@@ -463,12 +482,13 @@ except Exception as exc:
     print(f"  Map chart skipped: {exc}")
 
 # --- Chart 5: SHAP per CS (dot plot) ---
-fig, ax = plt.subplots(figsize=(11, 7))
+fig, ax = plt.subplots(figsize=(13, 7))
 shap_plot = shap_df.copy()
 
-# Sort features by mean abs SHAP
+# Sort features by mean abs SHAP, then relabel with human-readable Slovenian names
 feat_order = importance_df.sort_values("mean_abs_shap", ascending=True)["feature"].tolist()
 shap_plot = shap_plot[feat_order]
+shap_plot = shap_plot.rename(columns=FEATURE_LABELS_SL)
 
 # Heatmap-style: rows = CS, cols = features, values = SHAP
 sns.heatmap(
@@ -479,11 +499,14 @@ sns.heatmap(
     annot=True,
     fmt=".2f",
     linewidths=0.4,
-    cbar_kws={"label": "SHAP vrednost (µg/m³)"},
+    cbar_kws={"label": "Prispevek (µg/m³, SHAP)"},
     annot_kws={"size": 7},
 )
-ax.set_title("SHAP vrednosti po četrtnih skupnostih — kateri dejavniki povečajo/zmanjšajo PM10 kurišč", fontsize=10)
-ax.set_xlabel("Spremenljivke")
+ax.set_title(
+    "Prispevek posameznih dejavnikov k napovedi PM10 iz ogrevanja — po četrtnih skupnostih",
+    fontsize=10,
+)
+ax.set_xlabel("Dejavnik")
 ax.set_ylabel("Četrtna skupnost")
 plt.xticks(rotation=30, ha="right", fontsize=8)
 plt.yticks(fontsize=8)
