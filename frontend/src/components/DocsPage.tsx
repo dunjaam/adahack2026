@@ -172,13 +172,6 @@ export function DocsPage() {
             <Def term="Skupna investicija">
               Vsota stroškov vseh ukrepov. Označeno, ali je znotraj proračuna.
             </Def>
-            <Def term="Stroškovna učinkovitost (€ / µg/m³)">
-              Koliko evrov stane znižanje za 1 µg/m³ PM2.5. <b>Nižje = bolje.</b> Idealno
-              za primerjavo ukrepov.
-            </Def>
-            <Def term="Prebivalci z izboljšanjem">
-              Število gospodinjstev in površina (km²) z zaznanim izboljšanjem.
-            </Def>
           </Section>
 
           <Section id="grafi" icon={<Gauge className="h-5 w-5" />} title="Grafi">

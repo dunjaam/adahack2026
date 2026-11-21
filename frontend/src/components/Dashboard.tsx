@@ -7,16 +7,18 @@ import {
   Gauge,
   LineChart as LineIcon,
   Map as MapIcon,
-  Plus,
   Sliders as SlidersIcon,
   Sparkles,
+  Wallet,
+  Wind,
   X,
 } from "lucide-react";
 import { Card } from "../lib";
 import { useStore } from "../store";
 import { MapView } from "./MapView";
 import { Sliders } from "./Sliders";
-import { Kpis } from "./Kpis";
+import { AirVisual } from "./AirVisual";
+import { BudgetCard } from "./BudgetCard";
 import { BeforeAfterChart, HistoryChart, SourceBreakdown } from "./Charts";
 import { Optimizer } from "./Optimizer";
 import { Scenarios } from "./Scenarios";
@@ -36,9 +38,10 @@ interface WidgetDef {
 }
 
 const DEFAULT_IDS = [
-  "kpis",
+  "airquality",
   "map",
   "sliders",
+  "budget",
   "optimizer",
   "beforeafter",
   "source",
@@ -49,25 +52,25 @@ const DEFAULT_IDS = [
 export function Dashboard() {
   const [active, setActive] = useState<string[]>(DEFAULT_IDS);
   const [mapMode, setMapMode] = useState<MapMode>("after");
-  const [showAdd, setShowAdd] = useState(false);
 
   const pollutant = useStore((s) => s.pollutant);
   const setPollutant = useStore((s) => s.setPollutant);
 
   const widgets: Record<string, WidgetDef> = useMemo(
     () => ({
-      kpis: {
-        id: "kpis",
-        title: "Ključni kazalniki",
-        icon: <Gauge className="h-4 w-4 text-brand-600" />,
-        layout: { x: 0, y: 0, w: 12, h: 4, minH: 4, minW: 4 },
-        body: <Kpis />,
+      airquality: {
+        id: "airquality",
+        title: "Kakovost zraka",
+        icon: <Wind className="h-4 w-4 text-brand-600" />,
+        layout: { x: 0, y: 0, w: 12, h: 8, minH: 6, minW: 5 },
+        noPad: true,
+        body: <AirVisual />,
       },
       map: {
         id: "map",
         title: "Zemljevid onesnaženosti",
         icon: <MapIcon className="h-4 w-4 text-brand-600" />,
-        layout: { x: 0, y: 4, w: 8, h: 15, minH: 8, minW: 5 },
+        layout: { x: 0, y: 8, w: 8, h: 16, minH: 8, minW: 5 },
         noPad: true,
         right: (
           <div className="flex items-center gap-1.5">
@@ -98,42 +101,49 @@ export function Dashboard() {
         id: "sliders",
         title: "Simulacija ukrepov",
         icon: <SlidersIcon className="h-4 w-4 text-brand-600" />,
-        layout: { x: 8, y: 4, w: 4, h: 10, minH: 7, minW: 3 },
+        layout: { x: 8, y: 8, w: 4, h: 11, minH: 9, minW: 3 },
         body: <Sliders />,
+      },
+      budget: {
+        id: "budget",
+        title: "Proračun",
+        icon: <Wallet className="h-4 w-4 text-emerald-600" />,
+        layout: { x: 8, y: 19, w: 4, h: 4, minH: 3, minW: 3 },
+        body: <BudgetCard />,
       },
       optimizer: {
         id: "optimizer",
         title: "Optimizacija investicije",
         icon: <Sparkles className="h-4 w-4 text-brand-600" />,
-        layout: { x: 8, y: 14, w: 4, h: 9, minH: 6, minW: 3 },
+        layout: { x: 8, y: 23, w: 4, h: 9, minH: 6, minW: 3 },
         body: <Optimizer />,
       },
       beforeafter: {
         id: "beforeafter",
         title: "PM2.5 prej / potem po območjih",
         icon: <BarChart3 className="h-4 w-4 text-brand-600" />,
-        layout: { x: 0, y: 19, w: 7, h: 9, minH: 6, minW: 4 },
+        layout: { x: 0, y: 24, w: 5, h: 9, minH: 6, minW: 4 },
         body: <BeforeAfterChart />,
       },
       source: {
         id: "source",
         title: "Prispevek virov",
         icon: <Flame className="h-4 w-4 text-orange-500" />,
-        layout: { x: 7, y: 19, w: 5, h: 9, minH: 6, minW: 3 },
+        layout: { x: 5, y: 24, w: 3, h: 9, minH: 6, minW: 3 },
         body: <SourceBreakdown />,
       },
       history: {
         id: "history",
         title: "Sezonski trend PM2.5 (ocena)",
         icon: <LineIcon className="h-4 w-4 text-teal-600" />,
-        layout: { x: 0, y: 28, w: 7, h: 8, minH: 6, minW: 4 },
+        layout: { x: 0, y: 33, w: 5, h: 8, minH: 6, minW: 4 },
         body: <HistoryChart />,
       },
       scenarios: {
         id: "scenarios",
         title: "Scenariji — shrani & primerjaj",
         icon: <Bookmark className="h-4 w-4 text-brand-600" />,
-        layout: { x: 7, y: 28, w: 5, h: 8, minH: 6, minW: 3 },
+        layout: { x: 5, y: 33, w: 3, h: 8, minH: 6, minW: 3 },
         body: <Scenarios />,
       },
     }),
@@ -143,43 +153,9 @@ export function Dashboard() {
   const layout: Layout[] = active.map((id) => ({ i: id, ...widgets[id].layout }));
 
   const remove = (id: string) => setActive((a) => a.filter((x) => x !== id));
-  const add = (id: string) => {
-    setActive((a) => (a.includes(id) ? a : [...a, id]));
-    setShowAdd(false);
-  };
-  const removed = DEFAULT_IDS.filter((id) => !active.includes(id));
 
   return (
     <div className="relative px-4 pb-10 pt-4">
-      <div className="mb-3 flex items-center justify-between">
-        <h1 className="text-lg font-bold tracking-tight text-slate-800">
-          Nadzorna plošča <span className="text-brand-600">· okoljski digitalni dvojček</span>
-        </h1>
-        <div className="relative">
-          <button
-            onClick={() => setShowAdd((s) => !s)}
-            disabled={removed.length === 0}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 shadow-card transition hover:bg-slate-50 disabled:opacity-40"
-          >
-            <Plus className="h-4 w-4" /> Dodaj gradnik
-          </button>
-          {showAdd && removed.length > 0 && (
-            <div className="absolute right-0 z-[800] mt-2 w-60 animate-fade-in rounded-xl border border-slate-200 bg-white p-1.5 shadow-float">
-              {removed.map((id) => (
-                <button
-                  key={id}
-                  onClick={() => add(id)}
-                  className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm text-slate-700 hover:bg-brand-50"
-                >
-                  {widgets[id].icon}
-                  {widgets[id].title}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
       <ResponsiveGrid
         className="layout"
         layouts={{ lg: layout, md: layout }}
@@ -196,8 +172,6 @@ export function Dashboard() {
           return (
             <div key={id}>
               <Card
-                title={w.title}
-                icon={w.icon}
                 dragHandle
                 noPad={w.noPad}
                 right={

@@ -1,6 +1,6 @@
 import { useStore } from "../store";
-import { ArrowDownRight, ArrowRight, Coins, Users, Wind } from "lucide-react";
-import { eur, num, int, Badge } from "../lib";
+import { ArrowDownRight, ArrowRight, Coins, Wind } from "lucide-react";
+import { eur, num, Badge } from "../lib";
 
 export function Kpis() {
   const result = useStore((s) => s.result);
@@ -54,26 +54,10 @@ export function Kpis() {
         </span>
       ),
     },
-    {
-      label: "Stroškovna učinkovitost",
-      icon: <Coins className="h-4 w-4 text-teal-600" />,
-      main: (
-        <span className="text-2xl font-bold text-slate-800">
-          {result.eur_per_ug_m3 ? eur(result.eur_per_ug_m3) : "—"}
-        </span>
-      ),
-      sub: <span className="text-slate-400">na µg/m³ znižanja PM2.5</span>,
-    },
-    {
-      label: "Prebivalci z izboljšanjem",
-      icon: <Users className="h-4 w-4 text-sky-600" />,
-      main: <span className="text-2xl font-bold text-slate-800">{int(result.affected_dwellings)}</span>,
-      sub: <span className="text-slate-400">gospodinjstev · {num(result.affected_area_km2)} km²</span>,
-    },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {cards.map((c, i) => (
         <div
           key={i}

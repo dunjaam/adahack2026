@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import {
   CircleMarker,
   GeoJSON,
@@ -8,10 +8,9 @@ import {
   useMap,
 } from "react-leaflet";
 import L from "leaflet";
-import { useEffect } from "react";
 import { useStore } from "../store";
 import { pmColor, num } from "../lib";
-import { Flame, Car, MapPin, Wind, Building2 } from "lucide-react";
+import { Flame, Car, MapPin, Wind } from "lucide-react";
 
 type MapMode = "before" | "after" | "diff";
 
@@ -49,23 +48,17 @@ export function MapView({ mode }: { mode: MapMode }) {
     return m;
   }, [result]);
 
-  // signature forces GeoJSON restyle when inputs change
-  const sig = `${layer}-${pollutant}-${mode}-${selected}-${result?.delta_pm25}`;
-
-  const styleFn = (feature: any) => {
+  const styleFn = (feature: any): L.PathOptions => {
     const p = feature.properties;
     const r = resById[p.cs_ime];
     let fill = "#cbd5e1";
     if (layer === "heating") {
-      const max = 30000;
-      const t = Math.min(1, (p.heating_emis_kg || 0) / max);
+      const t = Math.min(1, (p.heating_emis_kg || 0) / 30000);
       fill = `rgb(${Math.round(254)}, ${Math.round(226 - 160 * t)}, ${Math.round(210 - 180 * t)})`;
     } else if (layer === "traffic") {
-      const max = 70000;
-      const t = Math.min(1, (p.traffic_emis_kg || 0) / max);
+      const t = Math.min(1, (p.traffic_emis_kg || 0) / 70000);
       fill = `rgb(${Math.round(226 - 120 * t)}, ${Math.round(232 - 150 * t)}, ${Math.round(254)})`;
     } else {
-      // pollution
       const before = pollutant === "pm25" ? p.pm25_winter : p.pm10_winter;
       const after = r ? (pollutant === "pm25" ? r.pm25_after : r.pm10_after) : before;
       if (mode === "diff") {
@@ -85,6 +78,30 @@ export function MapView({ mode }: { mode: MapMode }) {
     };
   };
 
+  const tooltipHtml = (feature: any) => {
+    const p = feature.properties;
+    const r = resById[p.cs_ime];
+    const after = r ? (pollutant === "pm25" ? r.pm25_after : r.pm10_after) : null;
+    const before = pollutant === "pm25" ? p.pm25_winter : p.pm10_winter;
+    return `<b>${p.cs_ime}</b><br/>${pollutant.toUpperCase()}: ${num(before)}${
+      after != null ? ` → <b>${num(after)}</b>` : ""
+    } µg/m³<br/>${p.measured ? "📍 meritev" : "〜 ocena"}`;
+  };
+
+  const geoRef = useRef<L.GeoJSON | null>(null);
+
+  // Re-style polygons IN PLACE on any change → CSS animates the fill (no flicker).
+  useEffect(() => {
+    const g = geoRef.current;
+    if (!g) return;
+    g.eachLayer((l: any) => {
+      if (!l.feature) return;
+      l.setStyle(styleFn(l.feature));
+      if (l.getTooltip()) l.setTooltipContent(tooltipHtml(l.feature));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resById, layer, pollutant, mode, selected]);
+
   const onEach = (feature: any, lyr: L.Layer) => {
     const p = feature.properties;
     lyr.on({
@@ -92,15 +109,7 @@ export function MapView({ mode }: { mode: MapMode }) {
       mouseover: (e: any) => e.target.setStyle({ weight: 3, color: "#0d9488" }),
       mouseout: (e: any) => (e.target as any).setStyle(styleFn(feature)),
     });
-    const r = resById[p.cs_ime];
-    const after = r ? (pollutant === "pm25" ? r.pm25_after : r.pm10_after) : null;
-    const before = pollutant === "pm25" ? p.pm25_winter : p.pm10_winter;
-    lyr.bindTooltip(
-      `<b>${p.cs_ime}</b><br/>${pollutant.toUpperCase()}: ${num(before)}${
-        after != null ? ` → <b>${num(after)}</b>` : ""
-      } µg/m³<br/>${p.measured ? "📍 meritev" : "〜 ocena"}`,
-      { sticky: true }
-    );
+    lyr.bindTooltip(tooltipHtml(feature), { sticky: true });
   };
 
   if (!geojson)
@@ -108,19 +117,13 @@ export function MapView({ mode }: { mode: MapMode }) {
 
   return (
     <div className="relative h-full w-full">
-      <MapContainer
-        center={[46.0569, 14.5058]}
-        zoom={12}
-        className="h-full w-full"
-        zoomControl={true}
-        scrollWheelZoom={true}
-      >
+      <MapContainer center={[46.0569, 14.5058]} zoom={12} className="h-full w-full" zoomControl scrollWheelZoom>
         <TileLayer
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; OpenStreetMap'
+          attribution="&copy; OpenStreetMap"
           maxZoom={19}
         />
-        <GeoJSON key={sig} data={geojson} style={styleFn as any} onEachFeature={onEach} />
+        <GeoJSON ref={geoRef as any} data={geojson} style={styleFn as any} onEachFeature={onEach} />
 
         {layer === "sensitive" &&
           sensitive.slice(0, 250).map((s, i) => (
@@ -154,9 +157,7 @@ function LayerSwitcher() {
   ] as const;
   return (
     <div className="absolute left-3 top-3 z-[500] flex flex-col gap-1 rounded-xl border border-slate-200 bg-white/95 p-1.5 shadow-float backdrop-blur">
-      <div className="px-2 pb-1 pt-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
-        Sloji
-      </div>
+      <div className="px-2 pb-1 pt-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">Sloji</div>
       {items.map((it) => (
         <button
           key={it.k}
@@ -178,8 +179,7 @@ function MapLegend({ mode, layer, pollutant }: { mode: MapMode; layer: string; p
   if (layer === "heating") content = <span>Emisije ogrevanja (kg PM10/leto) — svetlo → temno</span>;
   else if (layer === "traffic") content = <span>Prometne emisije (kg PM10/leto) — svetlo → temno</span>;
   else if (layer === "sensitive") content = <span>Občutljive lokacije (šole, vrtci, domovi)</span>;
-  else if (mode === "diff")
-    content = <span>Δ {pollutant.toUpperCase()} — temnejše zeleno = večje izboljšanje</span>;
+  else if (mode === "diff") content = <span>Δ {pollutant.toUpperCase()} — temnejše zeleno = večje izboljšanje</span>;
   else
     content = (
       <div className="flex items-center gap-2">

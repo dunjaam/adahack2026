@@ -40,8 +40,8 @@ export function BeforeAfterChart() {
         <Tooltip formatter={(v: number) => [`${num(v)} µg/m³`, ""]} contentStyle={{ borderRadius: 12, fontSize: 12 }} />
         <ReferenceLine y={25} stroke="#ef4444" strokeDasharray="4 4" label={{ value: "meja EU 25", fontSize: 10, fill: "#ef4444", position: "right" }} />
         <Legend wrapperStyle={{ fontSize: 12 }} />
-        <Bar dataKey="Prej" fill="#cbd5e1" radius={[3, 3, 0, 0]} onClick={(d: any) => selectDistrict(d.name)} cursor="pointer" />
-        <Bar dataKey="Potem" radius={[3, 3, 0, 0]} onClick={(d: any) => selectDistrict(d.name)} cursor="pointer">
+        <Bar dataKey="Prej" fill="#cbd5e1" radius={[3, 3, 0, 0]} isAnimationActive={false} onClick={(d: any) => selectDistrict(d.name)} cursor="pointer" />
+        <Bar dataKey="Potem" radius={[3, 3, 0, 0]} isAnimationActive={false} onClick={(d: any) => selectDistrict(d.name)} cursor="pointer">
           {data.map((d, i) => (
             <Cell key={i} fill={pmColor(d.Potem)} stroke={d.name === selected ? "#047857" : undefined} strokeWidth={d.name === selected ? 2 : 0} />
           ))}
@@ -86,9 +86,9 @@ export function SourceBreakdown() {
         <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} />
         <Tooltip formatter={(v: number) => [`${num(v)} µg/m³`, ""]} contentStyle={{ borderRadius: 12, fontSize: 12 }} />
         <Legend wrapperStyle={{ fontSize: 12 }} />
-        <Bar dataKey="Ozadje" stackId="a" fill="#cbd5e1" radius={[0, 0, 0, 0]} />
-        <Bar dataKey="Ogrevanje" stackId="a" fill="#fb923c" radius={[0, 0, 0, 0]} />
-        <Bar dataKey="Promet" stackId="a" fill="#38bdf8" radius={[3, 3, 0, 0]} />
+        <Bar dataKey="Ozadje" stackId="a" fill="#cbd5e1" radius={[0, 0, 0, 0]} isAnimationActive={false} />
+        <Bar dataKey="Ogrevanje" stackId="a" fill="#fb923c" radius={[0, 0, 0, 0]} isAnimationActive={false} />
+        <Bar dataKey="Promet" stackId="a" fill="#38bdf8" radius={[3, 3, 0, 0]} isAnimationActive={false} />
       </BarChart>
     </ResponsiveContainer>
   );

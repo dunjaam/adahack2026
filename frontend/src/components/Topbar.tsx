@@ -1,4 +1,4 @@
-import { Building2, BookOpen, Download, MapPin, RotateCcw, Wind } from "lucide-react";
+import { BookOpen, Download, MapPin, RotateCcw, Wind } from "lucide-react";
 import { useStore } from "../store";
 import { SearchableSelect } from "./SearchableSelect";
 import { exportSummary } from "../lib/export";
@@ -36,31 +36,14 @@ export function Topbar() {
 
         <div className="mx-1 hidden h-8 w-px bg-slate-200 sm:block" />
 
-        <div>
-          <label className="mb-1 block text-[11px] font-medium text-slate-400">Izberi občino</label>
-          <SearchableSelect
-            value={municipality?.id ?? null}
-            options={municipality ? [{ value: municipality.id, label: municipality.name, sub: `${municipality.n_districts} ČS` }] : []}
-            onChange={() => {}}
-            icon={<Building2 className="h-4 w-4 text-brand-500" />}
-            placeholder="Izberi občino"
-            width="w-64"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1 block text-[11px] font-medium text-slate-400">
-            Četrtna skupnost (območje)
-          </label>
-          <SearchableSelect
-            value={selected}
-            options={[{ value: "__all__", label: "Vsa občina", sub: "agregat" }, ...districtOpts]}
-            onChange={(v) => selectDistrict(v === "__all__" ? null : v)}
-            icon={<MapPin className="h-4 w-4 text-teal-500" />}
-            placeholder="Vsa občina"
-            width="w-60"
-          />
-        </div>
+        <SearchableSelect
+          value={selected}
+          options={[{ value: "__all__", label: "Vsa občina", sub: "agregat" }, ...districtOpts]}
+          onChange={(v) => selectDistrict(v === "__all__" ? null : v)}
+          icon={<MapPin className="h-4 w-4 text-teal-500" />}
+          placeholder="Vsa občina"
+          width="w-60"
+        />
 
         <div className="ml-auto flex items-center gap-2 self-end">
           <span
@@ -81,16 +64,20 @@ export function Topbar() {
           </a>
           <button
             onClick={resetParams}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50"
+            title="Ponastavi"
+            aria-label="Ponastavi"
+            className="flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-50"
           >
-            <RotateCcw className="h-4 w-4" /> Ponastavi
+            <RotateCcw className="h-4 w-4" />
           </button>
           <button
             onClick={() => result && exportSummary(result, selected)}
             disabled={!result}
-            className="flex items-center gap-1.5 rounded-xl bg-brand-600 px-3 py-2 text-sm font-medium text-white shadow-card transition hover:bg-brand-700 disabled:opacity-50"
+            title="Izvozi povzetek"
+            aria-label="Izvozi povzetek"
+            className="flex items-center justify-center rounded-xl bg-brand-600 p-2 text-white shadow-card transition hover:bg-brand-700 disabled:opacity-50"
           >
-            <Download className="h-4 w-4" /> Izvozi povzetek
+            <Download className="h-4 w-4" />
           </button>
         </div>
       </div>

@@ -60,15 +60,16 @@ export function Card({
   dragHandle?: boolean;
   noPad?: boolean;
 }) {
+  const showHeader = title || right || dragHandle;
   return (
     <div className={`flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card ${className}`}>
-      {title && (
+      {showHeader && (
         <div
-          className={`flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-2.5 ${dragHandle ? "widget-drag-handle" : ""}`}
+          className={`flex items-center justify-between gap-2 px-3 py-1.5 ${title ? "border-b border-slate-100" : ""} ${dragHandle ? "widget-drag-handle" : ""}`}
         >
           <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-            {icon}
-            <span>{title}</span>
+            {title && icon}
+            {title && <span>{title}</span>}
           </div>
           <div className="flex items-center gap-1" onMouseDown={(e) => e.stopPropagation()}>
             {right}
