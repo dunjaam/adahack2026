@@ -1,3 +1,4 @@
+import { md } from "../theme/material";
 import {
   Bar,
   BarChart,
@@ -34,16 +35,16 @@ export function BeforeAfterChart() {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data} margin={{ top: 6, right: 8, left: -18, bottom: 40 }} barGap={2}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#eef2f1" vertical={false} />
-        <XAxis dataKey="name" angle={-45} textAnchor="end" interval={0} tick={{ fontSize: 10, fill: "#64748b" }} height={60} />
-        <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} />
-        <Tooltip formatter={(v: number) => [`${num(v)} µg/m³`, ""]} contentStyle={{ borderRadius: 12, fontSize: 12 }} />
-        <ReferenceLine y={25} stroke="#ef4444" strokeDasharray="4 4" label={{ value: "meja EU 25", fontSize: 10, fill: "#ef4444", position: "right" }} />
+        <CartesianGrid strokeDasharray="3 3" stroke={md.grey[200]} vertical={false} />
+        <XAxis dataKey="name" angle={-45} textAnchor="end" interval={0} tick={{ fontSize: 10, fill: md.grey[700] }} height={60} />
+        <YAxis tick={{ fontSize: 11, fill: md.grey[600] }} />
+        <Tooltip formatter={(v: number) => [`${num(v)} µg/m³`, ""]} contentStyle={{ borderRadius: 4, fontSize: 12, borderColor: md.grey[300] }} />
+        <ReferenceLine y={25} stroke={md.red[700]} strokeDasharray="4 4" label={{ value: "meja EU 25", fontSize: 10, fill: md.red[700], position: "right" }} />
         <Legend wrapperStyle={{ fontSize: 12 }} />
-        <Bar dataKey="Prej" fill="#cbd5e1" radius={[3, 3, 0, 0]} isAnimationActive={false} onClick={(d: any) => selectDistrict(d.name)} cursor="pointer" />
+        <Bar dataKey="Prej" fill={md.grey[400]} radius={[3, 3, 0, 0]} isAnimationActive={false} onClick={(d: any) => selectDistrict(d.name)} cursor="pointer" />
         <Bar dataKey="Potem" radius={[3, 3, 0, 0]} isAnimationActive={false} onClick={(d: any) => selectDistrict(d.name)} cursor="pointer">
           {data.map((d, i) => (
-            <Cell key={i} fill={pmColor(d.Potem)} stroke={d.name === selected ? "#047857" : undefined} strokeWidth={d.name === selected ? 2 : 0} />
+            <Cell key={i} fill={pmColor(d.Potem)} stroke={d.name === selected ? md.teal[700] : undefined} strokeWidth={d.name === selected ? 2 : 0} />
           ))}
         </Bar>
       </BarChart>
@@ -81,14 +82,14 @@ export function SourceBreakdown() {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data} margin={{ top: 6, right: 8, left: -18, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#eef2f1" vertical={false} />
-        <XAxis dataKey="name" tick={{ fontSize: 12, fill: "#64748b" }} />
-        <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} />
-        <Tooltip formatter={(v: number) => [`${num(v)} µg/m³`, ""]} contentStyle={{ borderRadius: 12, fontSize: 12 }} />
+        <CartesianGrid strokeDasharray="3 3" stroke={md.grey[200]} vertical={false} />
+        <XAxis dataKey="name" tick={{ fontSize: 12, fill: md.grey[700] }} />
+        <YAxis tick={{ fontSize: 11, fill: md.grey[600] }} />
+        <Tooltip formatter={(v: number) => [`${num(v)} µg/m³`, ""]} contentStyle={{ borderRadius: 4, fontSize: 12, borderColor: md.grey[300] }} />
         <Legend wrapperStyle={{ fontSize: 12 }} />
-        <Bar dataKey="Ozadje" stackId="a" fill="#cbd5e1" radius={[0, 0, 0, 0]} isAnimationActive={false} />
-        <Bar dataKey="Ogrevanje" stackId="a" fill="#fb923c" radius={[0, 0, 0, 0]} isAnimationActive={false} />
-        <Bar dataKey="Promet" stackId="a" fill="#38bdf8" radius={[3, 3, 0, 0]} isAnimationActive={false} />
+        <Bar dataKey="Ozadje" stackId="a" fill={md.grey[400]} radius={[0, 0, 0, 0]} isAnimationActive={false} />
+        <Bar dataKey="Ogrevanje" stackId="a" fill={md.deepOrange[400]} radius={[0, 0, 0, 0]} isAnimationActive={false} />
+        <Bar dataKey="Promet" stackId="a" fill={md.indigo[400]} radius={[3, 3, 0, 0]} isAnimationActive={false} />
       </BarChart>
     </ResponsiveContainer>
   );
@@ -102,12 +103,12 @@ export function HistoryChart() {
     <div className="flex h-full flex-col">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={history.series} margin={{ top: 6, right: 12, left: -18, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#eef2f1" vertical={false} />
-          <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#64748b" }} />
-          <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} />
-          <Tooltip formatter={(v: number) => [`${num(v)} µg/m³`, "PM2.5"]} contentStyle={{ borderRadius: 12, fontSize: 12 }} />
-          <ReferenceLine y={history.eu_annual_limit} stroke="#ef4444" strokeDasharray="4 4" label={{ value: "meja EU", fontSize: 10, fill: "#ef4444", position: "insideTopRight" }} />
-          <Line type="monotone" dataKey="pm25" stroke="#10b981" strokeWidth={2.5} dot={{ r: 3, fill: "#10b981" }} activeDot={{ r: 5 }} />
+          <CartesianGrid strokeDasharray="3 3" stroke={md.grey[200]} vertical={false} />
+          <XAxis dataKey="month" tick={{ fontSize: 11, fill: md.grey[700] }} />
+          <YAxis tick={{ fontSize: 11, fill: md.grey[600] }} />
+          <Tooltip formatter={(v: number) => [`${num(v)} µg/m³`, "PM2.5"]} contentStyle={{ borderRadius: 4, fontSize: 12, borderColor: md.grey[300] }} />
+          <ReferenceLine y={history.eu_annual_limit} stroke={md.red[700]} strokeDasharray="4 4" label={{ value: "meja EU", fontSize: 10, fill: md.red[700], position: "insideTopRight" }} />
+          <Line type="monotone" dataKey="pm25" stroke={md.teal[500]} strokeWidth={2.5} dot={{ r: 3, fill: md.teal[500] }} activeDot={{ r: 5 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>

@@ -59,7 +59,7 @@ export function Scenarios() {
                   <tr key={s.id} className="border-t border-slate-100 hover:bg-slate-50">
                     <td className="py-2">
                       <div className="font-medium text-slate-700">{s.name}</div>
-                      <div className="text-[10px] text-slate-400">
+                      <div className="text-2xs text-slate-400">
                         {s.district ?? "vsa občina"} · e{params.electric_bus_pct}% · k{num(params.wood_systems_replaced, 0)}
                         {previousTraffic === undefined
                           ? ` · ${num(params.diesel_cars_replaced ?? 0, 0)} dizlov`

@@ -33,22 +33,18 @@ const SECTIONS = [
 
 export function DocsPage() {
   return (
-    <div className="min-h-screen bg-[#f6f8f7]">
+    <div className="min-h-screen bg-paper">
       {/* header */}
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-3 px-5 py-3">
-          <span className="inline-flex items-center rounded-xl border border-brand-100 bg-gradient-to-br from-brand-50 to-white px-2 py-1.5 shadow-card">
-            <img src="/zrakvizija-mark.svg" alt="" className="h-7 w-auto" />
-          </span>
+      <header className="sticky top-0 z-20 bg-paper/95 backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-5">
+          <img src="/zrakvizija-mark.svg" alt="" className="h-8 w-auto" />
           <div className="leading-tight">
-            <div className="text-[15px] font-bold tracking-tight text-ink">
-              ZrakVizija · Dokumentacija
-            </div>
-            <div className="text-[11px] text-slate-400">Kako uporabljati nadzorno ploščo</div>
+            <div className="text-lg font-semibold text-on-surface">ZrakVizija · dokumentacija</div>
+            <div className="text-xs text-on-surface-variant">Kako uporabljati nadzorno ploščo</div>
           </div>
           <a
             href="/"
-            className="ml-auto flex items-center gap-1.5 rounded-xl bg-brand-600 px-3 py-2 text-sm font-medium text-white shadow-card transition hover:bg-brand-700"
+            className="state ml-auto flex h-10 items-center gap-2 rounded-full bg-primary pl-4 pr-5 text-sm font-medium text-on-primary transition-shadow hover:shadow-e1"
           >
             <ArrowLeft className="h-4 w-4" /> Nazaj na ploščo
           </a>
@@ -58,15 +54,13 @@ export function DocsPage() {
       <div className="mx-auto flex max-w-6xl gap-8 px-5 py-8">
         {/* sticky TOC */}
         <nav className="sticky top-24 hidden h-max w-56 shrink-0 lg:block">
-          <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-            Vsebina
-          </div>
-          <ul className="space-y-1">
+          <div className="mb-2 px-4 text-sm font-medium text-on-surface-variant">Vsebina</div>
+          <ul className="space-y-0.5">
             {SECTIONS.map((s) => (
               <li key={s.id}>
                 <a
                   href={`#${s.id}`}
-                  className="block rounded-lg px-3 py-1.5 text-sm text-slate-600 transition hover:bg-white hover:text-brand-700"
+                  className="state block rounded-full px-4 py-2 text-sm text-on-surface-variant transition-colors hover:text-on-surface"
                 >
                   {s.label}
                 </a>
@@ -76,7 +70,7 @@ export function DocsPage() {
         </nav>
 
         {/* content */}
-        <main className="min-w-0 flex-1 space-y-10">
+        <main className="min-w-0 flex-1 space-y-6">
           <Section id="uvod" icon={<Wind className="h-5 w-5" />} title="Kaj je ZrakVizija">
             <p>
               ZrakVizija je <b>okoljski digitalni dvojček</b> za slovenske občine in
@@ -118,13 +112,13 @@ export function DocsPage() {
           <Section id="zemljevid" icon={<Layers className="h-5 w-5" />} title="Zemljevid in sloji">
             <p>Interaktivni zemljevid (Leaflet) je osrednji del plošče.</p>
             <ul className="mt-2 space-y-2">
-              <Bullet icon={<Wind className="h-4 w-4 text-brand-600" />} name="Onesnaženost">
+              <Bullet icon={<Wind className="h-4 w-4 text-primary" />} name="Onesnaženost">
                 Območja so obarvana po PM2.5 ali PM10 (zeleno = čisto, rdeče = onesnaženo).
               </Bullet>
               <Bullet icon={<Flame className="h-4 w-4 text-orange-500" />} name="Ogrevanje">
                 Obarva po emisijah malih kurišč (kg PM10/leto).
               </Bullet>
-              <Bullet icon={<Car className="h-4 w-4 text-sky-500" />} name="Promet">
+              <Bullet icon={<Car className="h-4 w-4 text-indigo-500" />} name="Promet">
                 Obarva po prometnih emisijah (kg PM10/leto).
               </Bullet>
               <Bullet icon={<MapIcon className="h-4 w-4 text-violet-500" />} name="Občutljive lokacije">
@@ -145,7 +139,7 @@ export function DocsPage() {
               takoj</b> (skupno stanje aplikacije).
             </p>
             <ul className="mt-2 space-y-2">
-              <Bullet icon={<Bus className="h-4 w-4 text-brand-600" />} name="Elektrifikacija avtobusov (%)">
+              <Bullet icon={<Bus className="h-4 w-4 text-primary" />} name="Elektrifikacija avtobusov (%)">
                 Delež dizelskih mestnih avtobusov, zamenjanih z električnimi. Zniža
                 prometni del onesnaženosti.
               </Bullet>
@@ -153,15 +147,15 @@ export function DocsPage() {
                 Koliko malih kurišč na drva/premog zamenjamo s toplotnimi črpalkami.
                 Največ učinka v predmestjih, kjer prevladuje ogrevanje (npr. Sostro).
               </Bullet>
-              <Bullet icon={<Car className="h-4 w-4 text-sky-500" />} name="Zamenjava dizlov EURO 4 (št.)">
+              <Bullet icon={<Car className="h-4 w-4 text-indigo-500" />} name="Zamenjava dizlov EURO 4 (št.)">
                 Izberete število osebnih dizlov, ki jih na začetku leta umaknemo iz prometa
                 in zamenjamo z rabljenimi baterijskimi električnimi vozili. Subvencija
                 znaša 3.000 € na avto po referenčni postavki{" "}
-                <a className="underline" href="https://borzen.si/enkratne-subvencije/mobilnost/elektricna-vozila/subvencije-za-nakup-elektricnih-vozil-po-javnem-pozivu-sub-ev26">Borzen JP SUB-EV26</a>.
+                <a className="text-primary underline underline-offset-2 hover:text-primary-800" href="https://borzen.si/enkratne-subvencije/mobilnost/elektricna-vozila/subvencije-za-nakup-elektricnih-vozil-po-javnem-pozivu-sub-ev26">Borzen JP SUB-EV26</a>.
                 Zgornja meja je 14.753 dizlov EURO 4, registriranih 30. 6. 2023
-                po <a className="underline" href="https://www.ljubljana.si/assets/20260309_EB_MOL_2024.pdf#page=47">tabeli 16 MOL</a>.
+                po <a className="text-primary underline underline-offset-2 hover:text-primary-800" href="https://www.ljubljana.si/assets/20260309_EB_MOL_2024.pdf#page=47">tabeli 16 MOL</a>.
               </Bullet>
-              <Bullet icon={<Wallet className="h-4 w-4 text-emerald-600" />} name="Razpoložljiv proračun (€)">
+              <Bullet icon={<Wallet className="h-4 w-4 text-secondary" />} name="Razpoložljiv proračun (€)">
                 Letna investicija občine. Vrstica »Poraba proračuna« pokaže, ali ukrepi
                 ostanejo znotraj proračuna (zeleno) ali ga presežejo (rdeče).
               </Bullet>
@@ -242,7 +236,7 @@ export function DocsPage() {
                 zamenjave kurišč, obnove stavb in zamenjave dizlov. Pri dizlih delež
                 preprečenih primarnih emisij izračunamo glede na evidenco prometa MOL
                 (187,1 t/leto za vsako velikost delcev,{" "}
-                <a className="underline" href="https://www.ljubljana.si/assets/20260309_EB_MOL_2024.pdf#page=89">preglednici 30 in 31</a>).
+                <a className="text-primary underline underline-offset-2 hover:text-primary-800" href="https://www.ljubljana.si/assets/20260309_EB_MOL_2024.pdf#page=89">preglednici 30 in 31</a>).
                 Za enak delež zmanjšamo ocenjeni prometni prispevek v četrti. To je
                 približek ob enakem vremenu in predpostavki, da zamenjana vozila sledijo
                 prostorskemu in sezonskemu vzorcu prometa. Zemljevid in izračun stroškov
@@ -254,10 +248,10 @@ export function DocsPage() {
             <p className="mt-2">
               Pri zamenjavi dizlov uporabimo približno 12.907 km na leto za obe vozili.
               To je državno povprečje za dizle, stare 15–19 let, na domačih in tujih cestah
-              (<a className="underline" href="https://pxweb.stat.si/SiStatData/pxweb/sl/Data/Data/2282005S.px/">SURS 2282005S</a>).
+              (<a className="text-primary underline underline-offset-2 hover:text-primary-800" href="https://pxweb.stat.si/SiStatData/pxweb/sl/Data/Data/2282005S.px/">SURS 2282005S</a>).
               Uporabimo faktorje EMEP/EEA za srednje velika vozila,{" "}
-              <a className="underline" href="https://copert.emisia.com/wp-content/uploads/2026/09/1.A.3.b.i-iv-Road-transport-June-2026.pdf#page=28">izpušne emisije</a>{" "}
-              in <a className="underline" href="https://copert.emisia.com/wp-content/uploads/2025/10/1.A.3.b.vi-vii-Road-tyre-and-brake-wear-2025.pdf#page=18">obrabo</a>{" "}
+              <a className="text-primary underline underline-offset-2 hover:text-primary-800" href="https://copert.emisia.com/wp-content/uploads/2026/09/1.A.3.b.i-iv-Road-transport-June-2026.pdf#page=28">izpušne emisije</a>{" "}
+              in <a className="text-primary underline underline-offset-2 hover:text-primary-800" href="https://copert.emisia.com/wp-content/uploads/2025/10/1.A.3.b.vi-vii-Road-tyre-and-brake-wear-2025.pdf#page=18">obrabo</a>{" "}
               pri povprečni hitrosti pod 40 km/h. PM₂.₅ je del PM₁₀. NOₓ je izražen v
               ekvivalentu mase NO₂.
             </p>
@@ -274,7 +268,7 @@ export function DocsPage() {
           </Section>
 
           <Section id="pojmi" icon={<Gauge className="h-5 w-5" />} title="Slovar pojmov">
-            <dl className="divide-y divide-slate-100">
+            <dl className="divide-y divide-surface-container-high">
               <Glossary term="PM2.5" desc="Drobni delci < 2,5 µm; prodrejo globoko v pljuča. Letna meja EU: 25 µg/m³." />
               <Glossary term="PM10" desc="Delci < 10 µm. V aplikaciji izpeljan iz PM2.5 z zimskim razmerjem." />
               <Glossary term="µg/m³" desc="Mikrogrami onesnaževala na kubični meter zraka — enota koncentracije." />
@@ -289,7 +283,7 @@ export function DocsPage() {
           <div className="pt-4">
             <a
               href="/"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-medium text-white shadow-card transition hover:bg-brand-700"
+              className="state inline-flex h-10 items-center gap-2 rounded-full bg-primary pl-4 pr-5 text-sm font-medium text-on-primary transition-shadow hover:shadow-e1"
             >
               <ArrowLeft className="h-4 w-4" /> Nazaj na nadzorno ploščo
             </a>
@@ -302,21 +296,21 @@ export function DocsPage() {
 
 function Section({ id, icon, title, children }: { id: string; icon: ReactNode; title: string; children: ReactNode }) {
   return (
-    <section id={id} className="scroll-mt-24">
-      <h2 className="mb-3 flex items-center gap-2 text-xl font-bold tracking-tight text-slate-800">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+    <section id={id} className="scroll-mt-24 rounded-xl bg-surface p-6">
+      <h2 className="mb-3 flex items-center gap-3 text-xl font-semibold text-on-surface">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container text-on-primary-container">
           {icon}
         </span>
         {title}
       </h2>
-      <div className="space-y-2 leading-relaxed text-slate-600">{children}</div>
+      <div className="space-y-2 text-base leading-relaxed text-on-surface-variant">{children}</div>
     </section>
   );
 }
 
 function Callout({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-xl border border-brand-200 bg-brand-50 p-3.5 text-sm text-slate-700">
+    <div className="rounded-lg bg-secondary-container p-4 text-sm text-on-secondary-container">
       {children}
     </div>
   );
@@ -324,19 +318,19 @@ function Callout({ children }: { children: ReactNode }) {
 
 function Def({ term, children }: { term: string; children: ReactNode }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-card">
-      <div className="mb-0.5 font-semibold text-slate-800">{term}</div>
-      <div className="text-sm text-slate-600">{children}</div>
+    <div className="rounded-lg bg-surface-container-low p-4">
+      <div className="mb-0.5 font-medium text-on-surface">{term}</div>
+      <div className="text-sm text-on-surface-variant">{children}</div>
     </div>
   );
 }
 
 function Bullet({ icon, name, children }: { icon: ReactNode; name: string; children: ReactNode }) {
   return (
-    <li className="flex gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-card">
+    <li className="flex gap-3 rounded-lg bg-surface-container-low p-4">
       <span className="mt-0.5 shrink-0">{icon}</span>
-      <span className="text-sm text-slate-600">
-        <b className="text-slate-800">{name}</b> — {children}
+      <span className="text-sm text-on-surface-variant">
+        <b className="font-medium text-on-surface">{name}</b> — {children}
       </span>
     </li>
   );
@@ -345,15 +339,15 @@ function Bullet({ icon, name, children }: { icon: ReactNode; name: string; child
 function Glossary({ term, desc }: { term: string; desc: string }) {
   return (
     <div className="flex flex-col gap-0.5 py-2.5 sm:flex-row sm:gap-4">
-      <dt className="w-40 shrink-0 font-semibold text-slate-800">{term}</dt>
-      <dd className="text-sm text-slate-600">{desc}</dd>
+      <dt className="w-40 shrink-0 font-medium text-on-surface">{term}</dt>
+      <dd className="text-sm text-on-surface-variant">{desc}</dd>
     </div>
   );
 }
 
 function Chip({ children }: { children: ReactNode }) {
   return (
-    <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[12px] font-medium text-slate-700">
+    <span className="rounded-md bg-surface-container-high px-1.5 py-0.5 text-xs font-medium text-on-surface">
       {children}
     </span>
   );

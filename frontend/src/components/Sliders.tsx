@@ -1,64 +1,105 @@
+import { useEffect, useState } from "react";
 import { Bus, Flame, Car, Building2 } from "lucide-react";
 import { useStore } from "../store";
 import type { SimParams } from "../types";
 import { eur, int, num } from "../lib";
 
-interface SliderDef {
+interface LeverDef {
   key: keyof SimParams;
   label: string;
   icon: React.ReactNode;
   min: number;
   max: number;
   step: number;
-  fmt: (v: number) => string;
-  hint: string;
-  rangeOnly?: boolean;
-  detail?: string;
+  unit: string;
+  /** what the current value means in concrete terms (shown only when > 0) */
+  impact?: string;
+  /** cost of this lever at current value (shown only when > 0) */
+  cost?: number;
+  /** muted context shown at zero instead of impact/cost */
+  idle: string;
 }
 
-function Slider({ d }: { d: SliderDef }) {
-  const v = useStore((s) => s.params[d.key]);
+/** M3 outlined text field (dense): type freely, clamps + snaps to step on blur/enter. */
+function ValueInput({ d, v }: { d: LeverDef; v: number }) {
   const setParam = useStore((s) => s.setParam);
-  const pct = d.max > d.min ? ((v - d.min) / (d.max - d.min)) * 100 : 0;
+  const [draft, setDraft] = useState(String(v));
+  useEffect(() => setDraft(String(v)), [v]);
+  const commit = () => {
+    const n = Math.max(d.min, Math.min(d.max, Math.round((Number(draft) || 0) / d.step) * d.step));
+    setParam(d.key, n);
+    setDraft(String(n));
+  };
   return (
-    <div>
-      <div className="mb-1.5 flex items-center justify-between">
-        <span className="flex items-center gap-2 text-sm font-medium text-slate-700">
-          {d.icon}
-          {d.label}
-        </span>
-        {d.rangeOnly ? (
-          <output className="whitespace-nowrap text-right text-sm font-semibold tabular-nums text-brand-600">
-            {d.fmt(v)}
-          </output>
-        ) : <input
-          type="number"
-          value={v}
-          min={d.min}
-          max={d.max}
-          step={d.step}
-          onChange={(e) => setParam(d.key, Math.max(d.min, Math.min(d.max, Number(e.target.value) || 0)))}
-          className="w-24 rounded-lg border border-slate-200 px-2 py-1 text-right text-sm tabular-nums outline-none focus:border-brand-400"
-        />}
-      </div>
+    <label className="flex h-8 shrink-0 items-center gap-1 rounded-md border border-outline-variant bg-surface px-2 transition-colors hover:border-on-surface-variant focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
       <input
-        type="range"
+        type="number"
+        inputMode="numeric"
         aria-label={d.label}
-        aria-valuetext={d.fmt(v)}
+        value={draft}
         min={d.min}
         max={d.max}
         step={d.step}
-        value={v}
         disabled={d.max === d.min}
-        onChange={(e) => setParam(d.key, Number(e.target.value))}
-        style={{ background: `linear-gradient(90deg,#4fae60 ${pct}%, #e2e8f0 ${pct}%)` }}
-        className="w-full"
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => e.key === "Enter" && (e.currentTarget as HTMLInputElement).blur()}
+        className="num w-[6ch] bg-transparent text-right text-sm font-medium text-on-surface outline-none"
       />
-      <div className="mt-1 flex items-center justify-between text-[11px] text-slate-400">
-        <span>{d.hint}</span>
-        {!d.rangeOnly && <span className="font-semibold text-brand-600">{d.fmt(v)}</span>}
+      <span className="text-xs text-on-surface-variant">{d.unit}</span>
+    </label>
+  );
+}
+
+function Lever({ d }: { d: LeverDef }) {
+  const v = useStore((s) => s.params[d.key]);
+  const setParam = useStore((s) => s.setParam);
+  const pct = d.max > d.min ? ((v - d.min) / (d.max - d.min)) * 100 : 0;
+  const active = v > 0;
+
+  return (
+    <div className="py-3 first:pt-0 last:pb-0 [@media(max-height:800px)]:py-2">
+      <div className="flex items-center gap-3">
+        <span
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors ${
+            active ? "bg-primary-container text-on-primary-container" : "bg-surface-container-high text-on-surface-variant"
+          }`}
+        >
+          {d.icon}
+        </span>
+        <span className="min-w-0 flex-1 truncate text-sm font-medium text-on-surface" title={d.label}>
+          {d.label}
+        </span>
+        <ValueInput d={d} v={v} />
       </div>
-      {d.detail && <div className="mt-1 text-xs text-slate-600">{d.detail}</div>}
+
+      <div className="pl-11">
+        <input
+          type="range"
+          aria-label={d.label}
+          aria-valuetext={`${int(v)} ${d.unit}`}
+          min={d.min}
+          max={d.max}
+          step={d.step}
+          value={v}
+          disabled={d.max === d.min}
+          onChange={(e) => setParam(d.key, Number(e.target.value))}
+          style={{ ["--pct" as any]: `${pct}%` }}
+          className="m3-slider block"
+        />
+        <div className="flex min-h-[18px] items-baseline justify-between gap-3 text-xs">
+          {active ? (
+            <>
+              <span className="truncate text-on-surface-variant" title={d.impact}>{d.impact}</span>
+              {d.cost !== undefined && d.cost > 0 && (
+                <span className="num shrink-0 font-medium text-on-surface">{eur(d.cost)}</span>
+              )}
+            </>
+          ) : (
+            <span className="truncate text-on-surface-muted">{d.idle}</span>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -66,64 +107,70 @@ function Slider({ d }: { d: SliderDef }) {
 /** All four policy levers in one controls widget. */
 export function Sliders() {
   const muni = useStore((s) => s.municipality);
-  const cost = useStore((s) => s.result?.cost);
   const result = useStore((s) => s.result);
-  const dieselCount = useStore((s) => s.params.diesel_cars_replaced);
-  const retrofitPct = useStore((s) => s.params.pre1980_retrofit_pct);
+  const cost = result?.cost;
+  const params = useStore((s) => s.params);
   const totalOld = muni?.total_pre_1980_buildings ?? 0;
-  const retrofittedNow = Math.round((totalOld * retrofitPct) / 100);
-  const emissions = result?.params.diesel_cars_replaced === dieselCount
+  const totalWood = muni?.total_wood_systems ?? 14000;
+  const retrofittedNow = Math.round((totalOld * params.pre1980_retrofit_pct) / 100);
+
+  const em = result?.params.diesel_cars_replaced === params.diesel_cars_replaced
     ? result.diesel_avoided_kg_per_year
     : undefined;
+  const emParts = em
+    ? [
+        em.pm25_kg > 0 && `PM₂.₅ ${num(em.pm25_kg)}`,
+        em.pm10_kg > 0 && `PM₁₀ ${num(em.pm10_kg)}`,
+        em.nox_kg > 0 && `NOₓ ${num(em.nox_kg)}`,
+      ].filter(Boolean)
+    : [];
 
-  const defs: SliderDef[] = [
+  const defs: LeverDef[] = [
     {
       key: "electric_bus_pct",
       label: "Elektrifikacija avtobusov",
-      icon: <Bus className="h-4 w-4 text-brand-600" />,
-      min: 0, max: 100, step: 5,
-      fmt: (v) => `${v}%`,
-      hint: cost ? `${cost.n_buses} e-busov · ${eur(cost.bus_cost)}` : "",
+      icon: <Bus className="h-4 w-4" strokeWidth={1.75} />,
+      min: 0, max: 100, step: 5, unit: "%",
+      impact: cost ? `${int(cost.n_buses)} e-avtobusov` : undefined,
+      cost: cost?.bus_cost,
+      idle: "Delež mestne flote na elektriko",
     },
     {
       key: "wood_systems_replaced",
       label: "Zamenjava kurišč na trda goriva",
-      icon: <Flame className="h-4 w-4 text-orange-500" />,
-      min: 0, max: muni?.total_wood_systems ?? 14000, step: 100,
-      fmt: (v) => int(v),
-      hint: cost ? `s toplotnimi črpalkami · ${eur(cost.wood_cost)}` : "",
+      icon: <Flame className="h-4 w-4" strokeWidth={1.75} />,
+      min: 0, max: totalWood, step: 100, unit: "kos",
+      impact: `${num((params.wood_systems_replaced / Math.max(1, totalWood)) * 100, 0)}% kurišč → toplotne črpalke`,
+      cost: cost?.wood_cost,
+      idle: `${int(totalWood)} kurišč v občini`,
     },
     {
       key: "diesel_cars_replaced",
       label: "Zamenjava dizlov EURO 4",
-      icon: <Car className="h-4 w-4 text-sky-500" />,
-      min: 0, max: muni?.diesel_fleet_limit ?? 0, step: 1,
-      fmt: (v) => `${int(v)} vozil`,
-      rangeOnly: true,
-      hint: muni ? `${int(muni.diesel_subsidy_eur)} €/vozilo · ${eur(dieselCount * muni.diesel_subsidy_eur)} subvencij` : "",
-      detail: emissions
-        ? `Preprečene emisije (kg/leto) · NOₓ ${num(emissions.nox_kg)} · PM₂.₅ ${num(emissions.pm25_kg)} · PM₁₀ ${num(emissions.pm10_kg)}`
-        : "Ocena preprečenih emisij (kg/leto)",
+      icon: <Car className="h-4 w-4" strokeWidth={1.75} />,
+      min: 0, max: muni?.diesel_fleet_limit ?? 0, step: 1, unit: "voz",
+      impact: emParts.length ? `−${emParts.join(" · ")} kg/leto` : "Računam emisije …",
+      cost: muni ? params.diesel_cars_replaced * muni.diesel_subsidy_eur : undefined,
+      idle: muni ? `Subvencija ${int(muni.diesel_subsidy_eur)} € / vozilo` : "",
     },
     {
       key: "pre1980_retrofit_pct",
       label: "Energetska obnova stavb pred 1980",
-      icon: <Building2 className="h-4 w-4 text-amber-600" />,
-      min: 0, max: 100, step: 5,
-      fmt: (v) => `${v}%`,
-      hint: cost
-        ? `${int(retrofittedNow)} stavb · ${eur(cost.retrofit_cost)}`
-        : totalOld
-        ? `${int(totalOld)} starih stavb skupno`
-        : "izolacija starejšega sklada",
+      icon: <Building2 className="h-4 w-4" strokeWidth={1.75} />,
+      min: 0, max: 100, step: 5, unit: "%",
+      impact: `${int(retrofittedNow)} obnovljenih stavb`,
+      cost: cost?.retrofit_cost,
+      idle: totalOld ? `${int(totalOld)} stavb pred 1980` : "Izolacija starejšega sklada",
     },
   ];
 
   return (
-    <div className="flex flex-col gap-5">
-      {defs.map((d) => (
-        <Slider key={d.key} d={d} />
-      ))}
+    <div className="flex h-full flex-col">
+      <div className="divide-y divide-surface-container-high">
+        {defs.map((d) => (
+          <Lever key={d.key} d={d} />
+        ))}
+      </div>
     </div>
   );
 }

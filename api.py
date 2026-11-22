@@ -46,7 +46,8 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True,
 class SimParams(BaseModel):
     electric_bus_pct: float = Field(0, ge=0, le=100)
     wood_systems_replaced: float = Field(0, ge=0)
-    traffic_reduction_pct: float = Field(0, ge=0, le=100)
+    diesel_cars_replaced: float = Field(0, ge=0)
+    pre1980_retrofit_pct: float = Field(0, ge=0, le=100)
     budget_eur: float = Field(0, ge=0)
 
 
@@ -57,6 +58,7 @@ class SimRequest(BaseModel):
 
 class OptimizeRequest(BaseModel):
     budget_eur: float = Field(1_000_000, ge=0)
+    diesel_cars_replaced: int = Field(0, ge=0)
 
 
 # --------------------------------------------------------------------------- #
@@ -104,6 +106,9 @@ def municipalities():
         "lat": 46.0569, "lon": 14.5058, "zoom": 12,
         "pm25_winter": pm25, "n_districts": len(districts),
         "total_wood_systems": sim.TOTAL_WOOD, "total_dwellings": sim.TOTAL_DWELLINGS,
+        "total_pre_1980_buildings": sim.TOTAL_PRE_1980,
+        "diesel_fleet_limit": sim.DIESEL_FLEET_LIMIT,
+        "diesel_subsidy_eur": sim.DIESEL_SUBSIDY_EUR,
         "districts": districts,
     }]}
 
@@ -144,7 +149,13 @@ def simulate(req: SimRequest):
 
 @app.post("/api/optimize")
 def optimize(req: OptimizeRequest):
-    return sim.optimize(req.budget_eur)
+    return sim.optimize(req.budget_eur, diesel_cars_replaced=req.diesel_cars_replaced)
+
+
+@app.get("/api/sensitivity")
+def sensitivity():
+    """Per-lever Δ municipality PM2.5 at max intervention."""
+    return sim.sensitivity()
 
 
 @app.get("/api/history")

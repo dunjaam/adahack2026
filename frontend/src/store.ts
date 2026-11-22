@@ -25,6 +25,7 @@ interface AppState {
   sensitive: { name: string; type: string; lat: number; lon: number }[];
   selectedDistrict: string | null;
   params: SimParams;
+  years: number;
   result: SimResult | null;
   calculatedParams: SimParams | null;
   history: HistoryResult | null;
@@ -40,6 +41,7 @@ interface AppState {
 
   init: () => Promise<void>;
   setParam: <K extends keyof SimParams>(k: K, v: number) => void;
+  setYears: (v: number) => void;
   resetParams: () => void;
   applyParams: (p: Partial<SimParams>) => void;
   selectDistrict: (cs: string | null) => void;
@@ -60,6 +62,7 @@ export const useStore = create<AppState>((set, get) => ({
   sensitive: [],
   selectedDistrict: null,
   params: { ...DEFAULT_PARAMS },
+  years: 3,
   result: null,
   calculatedParams: null,
   history: null,
@@ -92,6 +95,8 @@ export const useStore = create<AppState>((set, get) => ({
     set((s) => ({ params: { ...s.params, [k]: v } }));
     scheduleSim(get);
   },
+
+  setYears: (v) => set({ years: Math.max(0.5, Math.round(v * 2) / 2) }),
 
   resetParams: () => {
     set({ params: { ...DEFAULT_PARAMS } });

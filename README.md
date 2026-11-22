@@ -20,12 +20,13 @@ We don't measure this directly - Ljubljana only has a handful of measurement sta
 
 ### What we feed the model (the "features")
 
-Think of it as **9 facts about each neighborhood** - a profile card:
+Think of it as **8 facts about each neighborhood** - a profile card:
 
 **How people heat their homes** (the fuel mix)
 - % of households burning wood / pellets / coal
 - % hooked up to district heating (clean)
-- % on the gas grid
+
+(We also estimate the % on the gas grid and "other" fuels to complete the mix, but those two shares are not fed into the model.)
 
 **The buildings themselves**
 - How many chimneys per square kilometer
@@ -39,7 +40,7 @@ Think of it as **9 facts about each neighborhood** - a profile card:
 
 That last one matters because Ljubljana is in a basin: in winter, cold air settles at the bottom and traps smoke like a lid on a pot. Two identical houses - one on a hill, one in the basin - produce very different air quality.
 
-### The data behind those 9 facts
+### The data behind those 8 facts
 
 We cross-reference **six public datasets**:
 
@@ -81,7 +82,7 @@ The front-end slider changes the wood-heating input, the model re-predicts, and 
 
 ### 30-second version for the pitch
 
-> *"We take 9 facts about each of Ljubljana's 17 neighborhoods - how people heat their homes, how old the buildings are, and how often cold air gets trapped in winter - and train 300 small decision trees to predict how much wintertime air pollution comes from home heating in that neighborhood. The ground truth comes from a physics simulation ARSO ran for the whole city. The model isn't just a black box: for every neighborhood we can show exactly which factors are driving its pollution, which lets the city plan subsidies where they'll actually help."*
+> *"We take 8 facts about each of Ljubljana's 17 neighborhoods - how people heat their homes, how old the buildings are, and how often cold air gets trapped in winter - and train 300 small decision trees to predict how much wintertime air pollution comes from home heating in that neighborhood. The ground truth comes from a physics simulation ARSO ran for the whole city. The model isn't just a black box: for every neighborhood we can show exactly which factors are driving its pollution, which lets the city plan subsidies where they'll actually help."*
 
 ---
 
@@ -167,7 +168,7 @@ It launches the FastAPI backend on port 8000 and the Vite frontend on port 5173,
 
 | Path | Purpose                                                                                                                      |
 |---|------------------------------------------------------------------------------------------------------------------------------|
-| `model_faktorji_onesnazenosti_cs.py` | End-to-end training pipeline - loads data, builds the 9 features, fits the Random Forest, runs SHAP, exports artifacts.      |
+| `model_faktorji_onesnazenosti_cs.py` | End-to-end training pipeline - loads data, builds the 8 features, fits the Random Forest, runs SHAP, exports artifacts.      |
 | `api.py` | FastAPI service that loads the trained model and exposes baselines, predictions, SHAP attribution, and the district GeoJSON. |
 | `backend/` | Policy-lever simulation layer wrapping the model for scenario questions.                                                     |
 | `frontend/` | React + Vite dashboard: interactive map, grouped sliders, live SHAP chart, scenario optimizer.                               |

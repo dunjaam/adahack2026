@@ -1,13 +1,8 @@
 import { useEffect, useRef } from "react";
-import { animate, AnimatePresence, motion, useMotionValue, useMotionValueEvent } from "framer-motion";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { animate, motion, useAnimationControls, useMotionValue, useMotionValueEvent } from "framer-motion";
+import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
 import { useStore } from "../store";
-import { pmColor, num, eur } from "../lib";
-
-const CLEAN = 5;
-const DIRTY = 32;
-const toT = (pm: number) => Math.max(0, Math.min(1, (pm - CLEAN) / (DIRTY - CLEAN)));
-const scalePos = (pm: number) => Math.max(2, Math.min(98, toT(pm) * 100));
+import { pmColor, pmInk, num } from "../lib";
 
 function statusLabel(pm: number) {
   if (pm < 10) return "Odličen zrak";
@@ -17,197 +12,151 @@ function statusLabel(pm: number) {
   return "Zelo onesnažen";
 }
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
 /**
- * HERO air-quality readout. The PM value animates (counts) between the previous
- * and the new simulated value, its colour eases red→green, a floating particle
- * haze thins as the air clears, and an improvement badge shows the % change.
- * All numbers come straight from the simulation engine.
+ * Centerpiece readout. Shows the simulated PM value as a large instrument-style
+ * number that counts and re-colours as the simulation updates; when interventions
+ * are active the baseline → simulated transformation and the % change are shown.
+ * All values come straight from the simulation engine.
  */
 export function AirVisual() {
   const result = useStore((s) => s.result);
   const selected = useStore((s) => s.selectedDistrict);
   const pollutant = useStore((s) => s.pollutant);
 
-  let before = result?.municipality_pm25_before ?? 18;
-  let after = result?.municipality_pm25_after ?? 18;
-  let outside = pollutant === "pm25" ? result?.municipality_pm25_after_outside : result?.municipality_pm10_after_outside;
+  let before = result?.municipality_pm25_before ?? 0;
+  let after = result?.municipality_pm25_after ?? 0;
   if (result && selected) {
     const d = result.districts.find((x) => x.cs_ime === selected);
     if (d) {
       before = pollutant === "pm25" ? d.pm25_before : d.pm10_before;
       after = pollutant === "pm25" ? d.pm25_after : d.pm10_after;
-      outside = pollutant === "pm25" ? d.pm25_after_outside : d.pm10_after_outside;
     }
   } else if (result && pollutant === "pm10") {
     before = result.municipality_pm10_before;
     after = result.municipality_pm10_after;
   }
-  const pctRaw = before ? ((after - before) / before) * 100 : 0;
-  const withDiesel = (result?.params.diesel_cars_replaced ?? 0) > 0;
-  const dieselEffect = Math.max(0, (outside ?? after) - after);
-  const digits = withDiesel ? 3 : 1;
-  const improved = pctRaw < -0.1;
-  const worsened = pctRaw > 0.1;
+  const delta = after - before;
+  const pctRaw = before ? (delta / before) * 100 : 0;
+  const digits = (result?.params.diesel_cars_replaced ?? 0) > 0 ? 3 : 2;
+  const changed = Math.abs(delta) >= 0.5 * 10 ** -digits;
+  const improved = delta < 0;
+  const pctDigits = Math.abs(pctRaw) < 1 ? 2 : 1;
+  const label = pollutant === "pm25" ? "PM₂.₅" : "PM₁₀";
 
-  // --- animated number + colour (framer-motion, interruptible = no flicker) ---
+  // --- hero number: counts + re-colours every frame ---
   const numRef = useRef<HTMLSpanElement>(null);
-  const markerRef = useRef<HTMLDivElement>(null);
   const pm = useMotionValue(after);
   useEffect(() => {
-    const controls = animate(pm, after, { duration: 0.9, ease: [0.22, 1, 0.36, 1] });
-    return () => controls.stop();
+    const c = animate(pm, after, { duration: 0.9, ease: EASE });
+    return () => c.stop();
   }, [after, pm]);
   useMotionValueEvent(pm, "change", (v) => {
-    if (numRef.current) {
-      numRef.current.textContent = num(v, digits);
-      numRef.current.style.color = pmColor(v);
-    }
-    if (markerRef.current) markerRef.current.style.left = `${scalePos(v)}%`;
+    if (!numRef.current) return;
+    numRef.current.innerHTML = num(v, digits);
+    numRef.current.style.color = pmInk(v);
   });
 
-  // --- animated percentage ---
+  // --- percentage counts too ---
   const pctRef = useRef<HTMLSpanElement>(null);
   const pct = useMotionValue(Math.abs(pctRaw));
   useEffect(() => {
-    const controls = animate(pct, Math.abs(pctRaw), { duration: 0.9, ease: [0.22, 1, 0.36, 1] });
-    return () => controls.stop();
+    const c = animate(pct, Math.abs(pctRaw), { duration: 0.9, ease: EASE });
+    return () => c.stop();
   }, [pctRaw, pct]);
   useMotionValueEvent(pct, "change", (v) => {
-    if (pctRef.current) pctRef.current.textContent = num(v);
+    if (pctRef.current) pctRef.current.textContent = num(v, pctDigits);
   });
 
-  // --- particle haze canvas ---
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const targetT = useRef(toT(after));
-  const curT = useRef(toT(after));
-  targetT.current = toT(after);
+  // --- a short, subtle "pulse" whenever the simulated value changes ---
+  const pulse = useAnimationControls();
+  const first = useRef(true);
   useEffect(() => {
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
-    let raf = 0, w = 0, h = 0;
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
-      w = rect.width; h = rect.height;
-      canvas.width = w * dpr; canvas.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    resize();
-    const ro = new ResizeObserver(resize);
-    ro.observe(canvas);
-    const P = Array.from({ length: 90 }, () => ({
-      x: Math.random(), y: Math.random(),
-      r: 1 + Math.random() * 3,
-      vx: (Math.random() - 0.5) * 0.0005 - 0.0003,
-      vy: (Math.random() - 0.5) * 0.0003 - 0.00015,
-      ph: Math.random() * Math.PI * 2,
-    }));
-    const draw = () => {
-      curT.current += (targetT.current - curT.current) * 0.06;
-      const t = curT.current;
-      ctx.clearRect(0, 0, w, h);
-      // soft pollution tint, stronger when dirty
-      const tint = ctx.createLinearGradient(0, 0, 0, h);
-      tint.addColorStop(0, `rgba(120,113,108,${0.10 * t})`);
-      tint.addColorStop(1, `rgba(180,120,60,${0.16 * t})`);
-      ctx.fillStyle = tint;
-      ctx.fillRect(0, 0, w, h);
-      const visible = Math.round(2 + 88 * t);
-      const time = performance.now() * 0.001;
-      for (let i = 0; i < visible; i++) {
-        const p = P[i];
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < -0.02) p.x = 1.02; if (p.x > 1.02) p.x = -0.02;
-        if (p.y < -0.02) p.y = 1.02; if (p.y > 1.02) p.y = -0.02;
-        const bob = Math.sin(time + p.ph) * 2;
-        ctx.beginPath();
-        ctx.arc(p.x * w, p.y * h + bob, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(90,74,58,${0.03 + 0.22 * t})`;
-        ctx.fill();
-      }
-      raf = requestAnimationFrame(draw);
-    };
-    raf = requestAnimationFrame(draw);
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); };
-  }, []);
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    pulse.start({ opacity: [0.55, 1], transition: { duration: 0.5, ease: "easeOut" } });
+  }, [after, pulse]);
+
+  const tone = !changed
+    ? "bg-surface-container-high text-on-surface-variant"
+    : improved
+    ? "bg-positive-container text-positive-on"
+    : "bg-error-container text-error-on";
 
   return (
-    <div className="relative h-full w-full overflow-hidden">
-      <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 h-full w-full" />
-
-      <div className="relative flex h-full flex-col justify-between gap-2 p-5">
-        {/* top row: label + improvement badge */}
-        <div className="flex items-start justify-between">
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-            Kakovost zraka · {pollutant.toUpperCase()} {selected ? `· ${selected}` : "· vsa občina"}
-          </div>
-          <AnimatePresence mode="wait">
-            {(improved || worsened) && (
-              <motion.div
-                key={improved ? "down" : "up"}
-                initial={{ opacity: 0, y: -6, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -6, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
-                className={`flex items-center gap-1 rounded-full px-3 py-1 text-sm font-bold shadow-sm ${
-                  improved ? "bg-brand-50 text-brand-700" : "bg-red-50 text-red-600"
-                }`}
-              >
-                {improved ? <ArrowDownRight className="h-4 w-4" /> : <ArrowUpRight className="h-4 w-4" />}
-                <span ref={pctRef}>{num(Math.abs(pctRaw))}</span>%
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* hero number */}
-        <div className="flex items-end gap-4">
-          <div className="flex items-end gap-2">
-            <span
-              ref={numRef}
-              className="font-bold leading-[0.85] tabular-nums tracking-tight"
-              style={{ color: pmColor(after), fontSize: "clamp(3.5rem, 9vw, 7rem)" }}
-            >
-              {num(after, digits)}
-            </span>
-            <span className="pb-2 text-lg font-medium text-slate-400">µg/m³</span>
-          </div>
-          <div className="pb-2.5">
-            <div className="text-sm font-semibold" style={{ color: pmColor(after) }}>
-              {statusLabel(after)}
-            </div>
-            <div className="text-xs text-slate-400">
-              izhodišče <span className="font-semibold text-slate-500">{num(before, digits)}</span> µg/m³
-            </div>
-            {result && <div className="text-xs text-slate-600">Skupni strošek ukrepov · {eur(result.cost.total_cost)}</div>}
+    <div className="flex h-full w-full flex-col justify-between px-5 pb-4 pt-4" style={{ containerType: "size" }}>
+      {/* context */}
+      <div className="flex items-start justify-between gap-3 pr-10">
+        <div className="min-w-0">
+          <div className="truncate text-title font-medium text-on-surface">Kakovost zraka</div>
+          <div className="truncate text-xs text-on-surface-variant">
+            {label} · {selected ?? "vsa občina"} · zimsko povprečje
           </div>
         </div>
+        <span
+          className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-lg bg-surface-container-low px-2.5 text-xs font-medium transition-colors duration-700"
+          style={{ color: pmInk(after) }}
+        >
+          <span className="h-2 w-2 rounded-full transition-colors duration-700" style={{ background: pmColor(after) }} />
+          {statusLabel(after)}
+        </span>
+      </div>
 
-        {withDiesel && outside !== undefined && (
-          <p className="text-xs text-slate-600">
-            Prikazana ocena velja, če vse vožnje zamenjanih vozil potekajo v MOL.
-            Če vse potekajo zunaj MOL, je ocena z drugimi izbranimi ukrepi {num(outside, digits)} µg/m³.
-            {" "}Razlika zaradi dizlov: {dieselEffect > 0 && dieselEffect < 0.001 ? "< 0,001" : num(dieselEffect, 3)} µg/m³.
-          </p>
-        )}
-
-        {/* colour scale with animated marker */}
-        <div className="relative">
-          <div
-            className="h-2.5 w-full rounded-full"
-            style={{ background: "linear-gradient(90deg,#2f7d52 0%,#4fae60 18%,#fde047 42%,#fb923c 64%,#ef4444 83%,#b91c1c 100%)" }}
+      {/* simulated value, baseline underneath */}
+      <div className="flex min-h-0 flex-col justify-center">
+        <motion.div animate={pulse} className="flex items-baseline gap-2">
+          <span
+            ref={numRef}
+            className="display-num leading-[0.88]"
+            style={{
+              color: pmInk(pm.get()),
+              fontSize: "clamp(3rem, min(50cqh, 24cqw), 9.5rem)",
+              letterSpacing: "-0.01em",
+            }}
+            /* text is written imperatively each animation frame; keep React out of the node */
+            dangerouslySetInnerHTML={{ __html: num(pm.get(), digits) }}
           />
-          <div
-            ref={markerRef}
-            className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white shadow-md transition-[background] duration-500"
-            style={{ left: `${scalePos(after)}%`, background: pmColor(after) }}
-          />
-          <div className="mt-1 flex justify-between text-[10px] text-slate-400">
-            <span>čisto</span>
-            <span>meja EU 25</span>
-            <span>onesnaženo</span>
-          </div>
+          <span className="font-medium text-on-surface-variant" style={{ fontSize: "clamp(0.9rem, min(8cqh, 4.4cqw), 1.4rem)" }}>
+            µg/m³
+          </span>
+        </motion.div>
+        <div
+          className="mt-1 flex items-center gap-1.5 text-on-surface-variant"
+          style={{ fontSize: "clamp(0.8rem, min(7cqh, 3.6cqw), 1rem)" }}
+        >
+          {changed ? (
+            <>
+              <span>Izhodišče</span>
+              <span className="num font-medium text-on-surface">{num(before, digits)}</span>
+              <ArrowRight className="h-[0.9em] w-[0.9em]" />
+              <span>simulacija z ukrepi</span>
+            </>
+          ) : (
+            <span>Izhodišče brez ukrepov</span>
+          )}
         </div>
+      </div>
+
+      {/* change indicator */}
+      <div className="flex items-center gap-3" style={{ fontSize: "clamp(0.8rem, min(7cqh, 3.8cqw), 1.05rem)" }}>
+        <motion.span
+          animate={pulse}
+          className={`num inline-flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1 font-semibold transition-colors duration-500 ${tone}`}
+        >
+          {changed && (improved ? <ArrowDownRight className="h-[1em] w-[1em]" /> : <ArrowUpRight className="h-[1em] w-[1em]" />)}
+          {changed ? (improved ? "−" : "+") : "±"}
+          <span ref={pctRef}>{num(pct.get(), pctDigits)}</span>&nbsp;%
+        </motion.span>
+        <span className="truncate text-[0.85em] text-on-surface-variant">
+          {!changed
+            ? "Premaknite drsnik, da simulirate ukrepe"
+            : improved
+            ? "Ocenjeno zmanjšanje onesnaženosti"
+            : "Ocenjeno povečanje onesnaženosti"}
+        </span>
       </div>
     </div>
   );

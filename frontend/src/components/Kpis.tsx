@@ -77,11 +77,11 @@ export function Kpis() {
 
 export function DataNote() {
   return (
-    <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
-      <Badge kind="measured">📍 meritev (ARSO)</Badge>
-      <Badge kind="model">〜 modelska ocena</Badge>
-      <span>
-        Izhodišče PM2.5 je zimsko sidro 2025/26 iz paketa ADA Hack; vplivi ukrepov so modelske ocene.
+    <div className="flex min-w-0 items-center gap-5">
+      <Badge kind="measured">Meritev ARSO</Badge>
+      <Badge kind="model">Modelska ocena</Badge>
+      <span className="truncate text-xs text-on-surface-muted">
+        Izhodišče PM₂.₅: zima 2025/26 · podatki ADA Hack 2026
       </span>
     </div>
   );

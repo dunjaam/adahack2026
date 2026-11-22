@@ -1,27 +1,18 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Responsive, WidthProvider, type Layout } from "react-grid-layout";
 import {
-  BarChart3,
-  Bookmark,
-  Flame,
-  Gauge,
-  LineChart as LineIcon,
   Map as MapIcon,
   Sliders as SlidersIcon,
-  Sparkles,
   Wallet,
   Wind,
   X,
 } from "lucide-react";
-import { Card } from "../lib";
+import { Card, IconButton, Segmented } from "../lib";
 import { useStore } from "../store";
 import { MapView } from "./MapView";
 import { Sliders } from "./Sliders";
 import { AirVisual } from "./AirVisual";
 import { BudgetCard } from "./BudgetCard";
-import { BeforeAfterChart, HistoryChart, SourceBreakdown } from "./Charts";
-import { Optimizer } from "./Optimizer";
-import { Scenarios } from "./Scenarios";
 
 const ResponsiveGrid = WidthProvider(Responsive);
 
@@ -35,23 +26,39 @@ interface WidgetDef {
   body: React.ReactNode;
   noPad?: boolean;
   right?: React.ReactNode;
+  bare?: boolean;
 }
 
-const DEFAULT_IDS = [
-  "airquality",
-  "map",
-  "sliders",
-  "budget",
-  "optimizer",
-  "beforeafter",
-  "source",
-  "history",
-  "scenarios",
-];
+const DEFAULT_IDS = ["airquality", "map", "sliders", "budget"];
+
+const ROWS = 20;
+const MARGIN = 10; // gap between cards (and outer padding)
 
 export function Dashboard() {
   const [active, setActive] = useState<string[]>(DEFAULT_IDS);
   const [mapMode, setMapMode] = useState<MapMode>("after");
+
+  // size the grid so all widgets fit the viewport height (no page scroll)
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [rowH, setRowH] = useState(30);
+  const [short, setShort] = useState(false); // small laptop: give controls a row
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const measure = () => {
+      const h = el.clientHeight;
+      const rh = Math.max(14, Math.floor((h - MARGIN * (ROWS + 1)) / ROWS));
+      setRowH(rh);
+      setShort(h < 720);
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  useEffect(() => {
+    window.dispatchEvent(new Event("resize")); // keep Leaflet in sync
+  }, [rowH]);
 
   const pollutant = useStore((s) => s.pollutant);
   const setPollutant = useStore((s) => s.setPollutant);
@@ -61,20 +68,21 @@ export function Dashboard() {
       airquality: {
         id: "airquality",
         title: "Kakovost zraka",
-        icon: <Wind className="h-4 w-4 text-brand-600" />,
-        layout: { x: 0, y: 0, w: 12, h: 8, minH: 6, minW: 5 },
-        noPad: true,
+        icon: <Wind className="h-3.5 w-3.5 text-brand-600" />,
+        layout: { x: 8, y: 0, w: 4, h: short ? 6 : 7, minH: 4, minW: 3 },
+        bare: true,
         body: <AirVisual />,
       },
       map: {
         id: "map",
         title: "Zemljevid onesnaženosti",
-        icon: <MapIcon className="h-4 w-4 text-brand-600" />,
-        layout: { x: 0, y: 8, w: 8, h: 16, minH: 8, minW: 5 },
+        icon: <MapIcon className="h-3.5 w-3.5 text-brand-600" />,
+        layout: { x: 0, y: 0, w: 8, h: 20, minH: 8, minW: 5 },
         noPad: true,
         right: (
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <Segmented
+              ariaLabel="Onesnaževalo"
               value={pollutant}
               onChange={(v) => setPollutant(v as any)}
               options={[
@@ -83,12 +91,13 @@ export function Dashboard() {
               ]}
             />
             <Segmented
+              ariaLabel="Prikaz"
               value={mapMode}
               onChange={(v) => setMapMode(v as MapMode)}
               options={[
-                { v: "before", l: "Prej" },
-                { v: "after", l: "Potem" },
-                { v: "diff", l: "Δ" },
+                { v: "before", l: "Izhodišče", title: "Stanje brez ukrepov" },
+                { v: "after", l: "Z ukrepi", title: "Simulirano stanje z ukrepi" },
+                { v: "diff", l: "Razlika", title: "Sprememba zaradi ukrepov" },
               ]}
             />
           </div>
@@ -99,55 +108,21 @@ export function Dashboard() {
       } as any,
       sliders: {
         id: "sliders",
-        title: "Simulacija ukrepov",
-        icon: <SlidersIcon className="h-4 w-4 text-brand-600" />,
-        layout: { x: 8, y: 8, w: 4, h: 14, minH: 12, minW: 3 },
+        title: "Ukrepi",
+        icon: <SlidersIcon className="h-3.5 w-3.5 text-brand-600" />,
+        layout: { x: 8, y: short ? 6 : 7, w: 4, h: short ? 12 : 11, minH: 6, minW: 3 },
         body: <Sliders />,
       },
       budget: {
         id: "budget",
         title: "Proračun",
-        icon: <Wallet className="h-4 w-4 text-emerald-600" />,
-        layout: { x: 8, y: 22, w: 4, h: 4, minH: 3, minW: 3 },
+        icon: <Wallet className="h-3.5 w-3.5 text-emerald-600" />,
+        layout: { x: 8, y: 18, w: 4, h: 2, minH: 2, minW: 3 },
+        bare: true,
         body: <BudgetCard />,
       },
-      optimizer: {
-        id: "optimizer",
-        title: "Optimizacija investicije",
-        icon: <Sparkles className="h-4 w-4 text-brand-600" />,
-        layout: { x: 8, y: 26, w: 4, h: 9, minH: 6, minW: 3 },
-        body: <Optimizer />,
-      },
-      beforeafter: {
-        id: "beforeafter",
-        title: "PM2.5 prej / potem po območjih",
-        icon: <BarChart3 className="h-4 w-4 text-brand-600" />,
-        layout: { x: 0, y: 24, w: 5, h: 9, minH: 6, minW: 4 },
-        body: <BeforeAfterChart />,
-      },
-      source: {
-        id: "source",
-        title: "Prispevek virov",
-        icon: <Flame className="h-4 w-4 text-orange-500" />,
-        layout: { x: 5, y: 24, w: 3, h: 9, minH: 6, minW: 3 },
-        body: <SourceBreakdown />,
-      },
-      history: {
-        id: "history",
-        title: "Sezonski trend PM2.5 (ocena)",
-        icon: <LineIcon className="h-4 w-4 text-teal-600" />,
-        layout: { x: 0, y: 33, w: 5, h: 8, minH: 6, minW: 4 },
-        body: <HistoryChart />,
-      },
-      scenarios: {
-        id: "scenarios",
-        title: "Scenariji — shrani & primerjaj",
-        icon: <Bookmark className="h-4 w-4 text-brand-600" />,
-        layout: { x: 5, y: 33, w: 3, h: 8, minH: 6, minW: 3 },
-        body: <Scenarios />,
-      },
     }),
-    [mapMode, pollutant, setPollutant]
+    [mapMode, pollutant, setPollutant, short]
   );
 
   const layout: Layout[] = active.map((id) => ({ i: id, ...widgets[id].layout }));
@@ -155,15 +130,18 @@ export function Dashboard() {
   const remove = (id: string) => setActive((a) => a.filter((x) => x !== id));
 
   return (
-    <div className="relative px-4 pb-10 pt-4">
+    <div ref={gridRef} className="h-full overflow-hidden bg-paper">
       <ResponsiveGrid
         className="layout"
         layouts={{ lg: layout, md: layout }}
         breakpoints={{ lg: 1100, md: 760, sm: 0 }}
-        cols={{ lg: 12, md: 12, sm: 1 }}
-        rowHeight={34}
-        margin={[14, 14]}
+        cols={{ lg: 12, md: 12, sm: 12 }}
+        rowHeight={rowH}
+        margin={[MARGIN, MARGIN]}
+        compactType={null}
+        isBounded
         draggableHandle=".widget-drag-handle"
+        draggableCancel="input,button,textarea,select,label"
         onResizeStop={() => window.dispatchEvent(new Event("resize"))}
         onDragStop={() => window.dispatchEvent(new Event("resize"))}
       >
@@ -173,17 +151,21 @@ export function Dashboard() {
             <div key={id}>
               <Card
                 dragHandle
+                bare={w.bare}
+                title={w.bare ? undefined : w.title}
+                icon={w.icon}
                 noPad={w.noPad}
                 right={
                   <>
                     {w.right}
-                    <button
+                    <IconButton
                       onClick={() => remove(id)}
-                      className="rounded-md p-1 text-slate-300 transition hover:bg-red-50 hover:text-red-500"
+                      className="opacity-0 group-hover:opacity-100"
                       title="Odstrani gradnik"
+                      aria-label="Odstrani gradnik"
                     >
                       <X className="h-4 w-4" />
-                    </button>
+                    </IconButton>
                   </>
                 }
               >
@@ -193,32 +175,6 @@ export function Dashboard() {
           );
         })}
       </ResponsiveGrid>
-    </div>
-  );
-}
-
-function Segmented({
-  value,
-  onChange,
-  options,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  options: { v: string; l: string }[];
-}) {
-  return (
-    <div className="flex items-center rounded-lg bg-slate-100 p-0.5">
-      {options.map((o) => (
-        <button
-          key={o.v}
-          onClick={() => onChange(o.v)}
-          className={`rounded-md px-2 py-1 text-[11px] font-medium transition ${
-            value === o.v ? "bg-white text-brand-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
-          }`}
-        >
-          {o.l}
-        </button>
-      ))}
     </div>
   );
 }
