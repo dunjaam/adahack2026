@@ -1,132 +1,180 @@
 # AirShift — Ljubljana PM10 Attribution & Scenario Model
 
-**ADA Hack 2026 — "Zrak, ki ga dihamo"**
+**ADA Hack 2026 - "Zrak, ki ga dihamo"**
 
-An interactive tool that estimates how **PM10 from residential heating** varies
-across Ljubljana's 17 city districts (četrtne skupnosti) and lets a user
-simulate what happens when heating-mix, building stock or network coverage
-changes. The goal is to let citizens and policymakers ask *"what if we
-replaced X % of solid-fuel heaters?"* and see an immediate, explainable answer.
+An interactive tool that estimates how much of Ljubljana's winter air pollution comes from **home heating** and lets citizens and policymakers ask *"what if we replaced X % of wood stoves?"* and see an immediate, explainable answer, district by district.
 
-## What's in the repo
+---
 
-| Path | Purpose |
+## The data and the model
+
+### What we're trying to predict
+
+For each of Ljubljana's **17 neighborhoods**, we want one number:
+
+> *"How much of the dirty winter air in this neighborhood comes from people's home heating - specifically from wood stoves, pellet boilers, and old furnaces?"*
+
+Measured in micrograms of PM10 per cubic meter - the same unit you see on air-quality apps. Across the city this number ranges from about **1.5 (clean)** in well-connected central districts up to **7+ (heavy)** in hilly, suburban ones.
+
+We don't measure this directly - Ljubljana only has a handful of measurement stations. Instead, we use **ARSO's physics simulation** (a dispersion model called GRAL) that ran the whole city at 15-meter resolution for the year 2021 and tells us, hour by hour, how smoke from chimneys spreads. We average that down to one "heating pollution" number per neighborhood. **That's our ground truth.**
+
+### What we feed the model (the "features")
+
+Think of it as **9 facts about each neighborhood** - a profile card:
+
+**How people heat their homes** (the fuel mix)
+- % of households burning wood / pellets / coal
+- % hooked up to district heating (clean)
+- % on the gas grid
+
+**The buildings themselves**
+- How many chimneys per square kilometer
+- How many buildings are from before 1980 (badly insulated → they burn more)
+- How many houses are isolated - no gas, no district heating (they're forced to burn wood)
+- How close buildings are to the gas pipeline (could they switch?)
+
+**The geography / weather trap**
+- How much of the neighborhood sits on the valley floor (below 30 m elevation)
+- How often cold air gets trapped there in winter - the **temperature inversion** effect, computed from 10 years of weather balloons and thermometers (2016–2026)
+
+That last one matters because Ljubljana is in a basin: in winter, cold air settles at the bottom and traps smoke like a lid on a pot. Two identical houses - one on a hill, one in the basin - produce very different air quality.
+
+### The data behind those 9 facts
+
+We cross-reference **six public datasets**:
+
+| Dataset | What it tells us |
 |---|---|
-| `model_faktorji_onesnazenosti_cs.py` | End-to-end training pipeline — reads the data package, engineers 9 features per district, fits a Random Forest, computes SHAP, and exports the model artifacts. |
-| `api.py` | FastAPI service that loads the trained model and exposes per-district baselines, prediction, SHAP attribution, and the district GeoJSON. |
-| `backend/` *(on `feature/frontend`)* | Policy-lever simulation layer that wraps the model to answer scenario questions (e.g. "replace 30 % of solid-fuel heaters, reinsulate 20 % of pre-1980 buildings"). |
-| `frontend/` *(on `makedonka/frontend`, `feature/frontend`)* | React + Vite dashboard: interactive map of districts shaded by baseline PM10, grouped sliders, live SHAP waterfall, and a scenario optimiser. |
-| `data/` | The pre-cleaned ADA Hack 2026 data package. See `data/README.md` for the full index. |
-| `output/` | Generated artifacts: model, per-district defaults, feature metadata, GeoJSON, diagnostic charts. |
+| **SURS** census | How Slovenian households heat |
+| **EViDim** furnace registry | Which furnaces exist and what they burn |
+| **Building cadastre** | Age and location of every building |
+| **GRAL** physics model | Where the pollution ends up (our target) |
+| **ARSO emissions inventory** | How much pollution comes from traffic vs. heating |
+| **IGRA2** weather balloons | 10 years of inversion events |
 
-## Tech stack
+### How the model learns
 
-**Backend** — Python 3.10+, `scikit-learn` (RandomForestRegressor), `shap`
-(TreeExplainer), `pandas`, `geopandas`, `numpy`, `joblib`, `FastAPI`,
-`uvicorn`.
+We use a **Random Forest** - picture **300 decision trees** voting together. Each tree asks questions like:
 
-**Frontend** — React 18, TypeScript, Vite, Tailwind CSS, Leaflet /
-react-leaflet (district map), Recharts (SHAP chart), Zustand (state),
-React Router, Lucide icons, react-grid-layout (dashboard panels).
+> *"Is the share of wood heating above 20%? → Yes → Are more than half the buildings old? → Yes → Predict high pollution."*
 
-**Charts** — `matplotlib` + `seaborn` for the training-time diagnostic PNGs
-in `output/charts/`.
+Each tree asks slightly different questions, and the forest averages their answers. We deliberately keep the trees **shallow** (only 3 questions deep) because we only have 17 neighborhoods to learn from - a deep tree would just memorize them.
 
-## How the model is built
+### Why not a neural network or something fancier?
 
-1. **Target** — `gral_pm10_kurilna`: the ground-level PM10 contribution from
-   small residential furnaces, taken from the **ARSO GRAL** 15 m dispersion
-   model and averaged over the heating season (Nov–Mar).
-2. **Training sample** — 17 rows, one per *četrtna skupnost*. Districts with
-   partial GRAL coverage (e.g. Sostro, 23 %) are held out from training but
-   still get predictions at inference time with median-imputed features.
-3. **9 engineered features**, joined on `cs_ime`:
-   - `pct_district`, `pct_gas`, `pct_solid`, `pct_other` — heating-fuel mix
-     (row-normalised to sum to 1), built from utility-network proximity +
-     EViDim furnace registry + SURS dwelling heating stats.
-   - `delez_pred_1980` — share of buildings built before 1980 (insulation proxy).
-   - `kurisca_na_km2` — small-furnace density.
-   - `delez_pod_30m` — fraction of district surface in the basin floor
-     (cold-air trap).
-   - `delez_ob_plinovodu` — share of buildings near the gas network.
-   - `inv_exposure` — winter inversion frequency × basin-floor fraction.
-   - `stavbe_brez_omrezij_km2` — buildings with no gas *and* no district
-     heating, per km² (isolated-heating proxy).
-4. **Algorithm** — `RandomForestRegressor(n_estimators=300, max_depth=3,
-   min_samples_leaf=2, random_state=42)`. Trees are deliberately shallow —
-   with only 17 rows, overfitting is the real risk.
-5. **Evaluation** — 5-fold CV RMSE (currently ~1.75 µg/m³), plus a linear
-   sanity check on the 3 ARSO-measured districts with real PM2.5 to confirm
-   coefficient signs.
-6. **Explainability** — `shap.TreeExplainer` is fit once and reused at
-   runtime, so every `/api/predict` response decomposes the prediction into
-   per-feature SHAP contributions.
+Two reasons:
 
-Retrain with:
+1. **17 data points.** Fancy models need thousands. A random forest is honest with small data.
+2. **We need to explain *why*.** For every prediction, we can show which features pushed it up or down — using a technique called **SHAP**. That matters because this is a **policy tool**, not a toy: the city needs to see *"your district's pollution is 60% old buildings, 30% wood stoves, 10% being in the valley"* before they spend money.
+
+### How accurate is it?
+
+We tested by hiding each neighborhood in turn and predicting it from the other 16. Average error: **about 1.75 µg/m³**, against values that range from 1.5 to 7+ - good enough to compare districts and simulate policy, not good enough to replace a real sensor.
+
+### What the model is actually used for
+
+Once trained, it answers **"what if"** questions in real time:
+
+> *"If we replace half of the wood stoves in Sostro with heat pumps, what happens to winter PM10?"*
+
+The front-end slider changes the wood-heating input, the model re-predicts, and the map updates. That's it - a decision-support tool for cleaning Ljubljana's winter air.
+
+### 30-second version for the pitch
+
+> *"We take 9 facts about each of Ljubljana's 17 neighborhoods - how people heat their homes, how old the buildings are, and how often cold air gets trapped in winter - and train 300 small decision trees to predict how much wintertime air pollution comes from home heating in that neighborhood. The ground truth comes from a physics simulation ARSO ran for the whole city. The model isn't just a black box: for every neighborhood we can show exactly which factors are driving its pollution, which lets the city plan subsidies where they'll actually help."*
+
+---
+
+## How to run the app
+
+### Prerequisites
+
+- **Python 3.10+** with `pip` (and ideally a virtualenv)
+- **Node.js 18+** with `npm`
+
+### 1. Install backend dependencies
+
+From the repo root:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install fastapi uvicorn scikit-learn shap pandas geopandas joblib numpy
+```
+
+### 2. (Optional) Retrain the model
+
+The repo already ships with a trained model under `output/model/`. To regenerate it from scratch:
 
 ```bash
 python model_faktorji_onesnazenosti_cs.py
 ```
 
-That regenerates `output/model/{model.joblib, cs_defaults.json,
-feature_metadata.json, cs_geojson.json}` plus the diagnostic PNGs in
-`output/charts/`.
+This reads the CSVs under `data/`, fits the Random Forest, computes SHAP, and writes:
 
-## Data sources
+- `output/model/model.joblib` - the trained model
+- `output/model/cs_defaults.json` - per-district baselines
+- `output/model/feature_metadata.json` - slider ranges & labels for the UI
+- `output/model/cs_geojson.json` - district polygons
+- `output/charts/*.png` - diagnostic plots
 
-Everything comes from the ADA Hack 2026 data package in `data/` (see
-`data/README.md` for the full index). Primary sources used by this project:
-
-| Source | What we use it for |
-|---|---|
-| **ARSO** — hourly meteorology from 6 basin + ridge stations, hourly PM10/PM2.5 from Bežigrad / Vič / Celovška, GRAL 15 m dispersion model for heating + traffic PM10, CAMx 4.4 km regional forecasts | target variable, inversion feature, measurement validation |
-| **EEA** — validated PM10/PM2.5/NO2/O3 (2013–2025) for 13 Slovenian stations | long-term validation |
-| **SURS** — dwellings by heating type per municipality (2011–2021) | city-level heating-mix prior |
-| **EViDim** (2026) — small furnace registry by fuel type | per-district solid-fuel share normalisation |
-| **GURS / MOL** — cadastral buildings with year of construction + networks, utility network traces (district heating & gas), četrtna skupnost boundaries | 6 of the 9 input features |
-| **Copernicus DEM 30 m** — basin elevation + height-above-basin-floor raster | `delez_pod_30m` (cold-air trap) |
-| **OpenStreetMap** (ODbL) — sensitive-location POIs (schools, kindergartens, hospitals, care homes) | optimiser weighting |
-| **IGRA2** — Ljubljana radiosondes | inversion diagnostics |
-
-**Important nuance:** The model's target is only the **heating-sector**
-contribution to PM10, from a dispersion model — not total measured PM10.
-It is a sector attribution tool, not a replacement for ARSO's monitoring
-network.
-
-## How to run
-
-### Backend
+### 3. Start the API (FastAPI backend)
 
 ```bash
-# Python 3.10+
-pip install fastapi uvicorn scikit-learn shap pandas geopandas joblib numpy
 uvicorn api:app --reload --port 8000
-# Swagger UI at http://localhost:8000/docs
 ```
 
-### Frontend (on `makedonka/frontend` or `feature/frontend`)
+- Base URL: `http://localhost:8000`
+- Interactive docs (Swagger UI): `http://localhost:8000/docs`
+
+Key endpoints:
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /api/municipalities` | 17 districts + baseline PM values |
+| `GET /api/districts` | Per-district feature data |
+| `GET /api/geojson` | District polygons enriched with model output |
+| `GET /api/features` | SHAP feature importance |
+| `POST /api/simulate` | Run a policy scenario (wood replaced, buses, retrofit %) |
+| `POST /api/optimize` | Budget-constrained optimizer |
+
+### 4. Start the frontend (Vite + React)
+
+In a second terminal:
 
 ```bash
 cd frontend
 npm install
 npm run dev
-# http://localhost:5173
 ```
 
-Vite proxies `/api` to `http://localhost:8000`, so run both in parallel
-during development.
+- App: `http://localhost:5173`
+- Vite proxies `/api` → `http://localhost:8000`, so keep both running in parallel.
 
-## Project status by branch
+### 5. One-command start (both together)
 
-- **`main`** — trained model + REST API.
-- **`makedonka/frontend`** — first React UI (map + sliders + SHAP chart).
-- **`makedonka/charts`** — human-readable Slovenian axis labels on the
-  diagnostic PNGs.
-- **`feature/frontend`** — AirShift dashboard with the policy-lever
-  simulator, scenario optimiser, and in-app docs page.
+A helper script is provided:
+
+```bash
+./start.sh
+```
+
+It launches the FastAPI backend on port 8000 and the Vite frontend on port 5173, and shuts the backend down when you stop the frontend (Ctrl-C).
+
+---
+
+## What's in the repo
+
+| Path | Purpose                                                                                                                      |
+|---|------------------------------------------------------------------------------------------------------------------------------|
+| `model_faktorji_onesnazenosti_cs.py` | End-to-end training pipeline - loads data, builds the 9 features, fits the Random Forest, runs SHAP, exports artifacts.      |
+| `api.py` | FastAPI service that loads the trained model and exposes baselines, predictions, SHAP attribution, and the district GeoJSON. |
+| `backend/` | Policy-lever simulation layer wrapping the model for scenario questions.                                                     |
+| `frontend/` | React + Vite dashboard: interactive map, grouped sliders, live SHAP chart, scenario optimizer.                               |
+| `data/` | The pre-cleaned ADA Hack 2026 data package. See `data/README.md` for the full index.                                         |
+| `output/` | Generated artifacts: trained model, per-district defaults, feature metadata, GeoJSON, charts.                                |
+| `start.sh` | Runs backend + frontend together.                                                                                            |
 
 ## License & attribution
 
-Data retains the licences of the original providers (ARSO, EEA, SURS, GURS,
-MOL, Copernicus, OSM / ODbL, NOAA IGRA2). Source attribution is required on
-any publication. See `data/LICENCE.md` for details.
+Data retains the licences of the original providers (ARSO, EEA, SURS, GURS, MOL, Copernicus, OSM / ODbL, NOAA IGRA2). Source attribution is required on any publication. See `data/LICENCE.md` for details.
