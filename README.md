@@ -1,4 +1,4 @@
-# AirShift — Ljubljana PM10 Attribution & Scenario Model
+# ZrakVizija 
 
 **ADA Hack 2026 - "Zrak, ki ga dihamo"**
 
