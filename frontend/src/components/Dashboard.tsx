@@ -10,6 +10,7 @@ import {
 import { Card, IconButton, Segmented } from "../lib";
 import { useStore } from "../store";
 import { MapView } from "./MapView";
+import { AirQualityPlot } from "./AirQualityPlot";
 import { Sliders } from "./Sliders";
 import { AirVisual } from "./AirVisual";
 import { BudgetCard } from "./BudgetCard";
@@ -17,6 +18,7 @@ import { BudgetCard } from "./BudgetCard";
 const ResponsiveGrid = WidthProvider(Responsive);
 
 type MapMode = "before" | "after" | "diff";
+type MapTab = "map" | "plot";
 
 interface WidgetDef {
   id: string;
@@ -37,6 +39,7 @@ const MARGIN = 10; // gap between cards (and outer padding)
 export function Dashboard() {
   const [active, setActive] = useState<string[]>(DEFAULT_IDS);
   const [mapMode, setMapMode] = useState<MapMode>("after");
+  const [mapTab, setMapTab] = useState<MapTab>("map");
 
   // size the grid so all widgets fit the viewport height (no page scroll)
   const gridRef = useRef<HTMLDivElement>(null);
@@ -82,6 +85,15 @@ export function Dashboard() {
         right: (
           <div className="flex items-center gap-2">
             <Segmented
+              ariaLabel="Pogled"
+              value={mapTab}
+              onChange={(v) => setMapTab(v as MapTab)}
+              options={[
+                { v: "map", l: "Zemljevid" },
+                { v: "plot", l: "Graf" },
+              ]}
+            />
+            <Segmented
               ariaLabel="Onesnaževalo"
               value={pollutant}
               onChange={(v) => setPollutant(v as any)}
@@ -90,20 +102,22 @@ export function Dashboard() {
                 { v: "pm10", l: "PM10" },
               ]}
             />
-            <Segmented
-              ariaLabel="Prikaz"
-              value={mapMode}
-              onChange={(v) => setMapMode(v as MapMode)}
-              options={[
-                { v: "before", l: "Izhodišče", title: "Stanje brez ukrepov" },
-                { v: "after", l: "Z ukrepi", title: "Simulirano stanje z ukrepi" },
-                { v: "diff", l: "Razlika", title: "Sprememba zaradi ukrepov" },
-              ]}
-            />
+            {mapTab === "map" && (
+              <Segmented
+                ariaLabel="Prikaz"
+                value={mapMode}
+                onChange={(v) => setMapMode(v as MapMode)}
+                options={[
+                  { v: "before", l: "Prej", title: "Stanje brez ukrepov" },
+                  { v: "after", l: "Potem", title: "Simulirano stanje z ukrepi" },
+                  { v: "diff", l: "Razlika", title: "Sprememba zaradi ukrepov" },
+                ]}
+              />
+            )}
           </div>
         ),
         get bodyNode() {
-          return <MapView mode={mapMode} />;
+          return mapTab === "map" ? <MapView mode={mapMode} /> : <AirQualityPlot />;
         },
       } as any,
       sliders: {
@@ -122,7 +136,7 @@ export function Dashboard() {
         body: <BudgetCard />,
       },
     }),
-    [mapMode, pollutant, setPollutant, short]
+    [mapMode, mapTab, pollutant, setPollutant, short]
   );
 
   const layout: Layout[] = active.map((id) => ({ i: id, ...widgets[id].layout }));

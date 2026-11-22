@@ -223,7 +223,7 @@ function MapLegend({ mode, layer, pollutant }: { mode: MapMode; layer: string; p
     title = `Sprememba ${label}`;
     body = <Ramp from={RAMP.diff[0]} to={RAMP.diff[1]} lo="0" hi="−4 µg/m³" />;
   } else {
-    title = `${label} ${mode === "after" ? "z ukrepi" : "izhodišče"}`;
+    title = `${label} ${mode === "after" ? "Potem" : "Prej"}`;
     body = (
       <div>
         <div className="flex h-2 gap-0.5 overflow-hidden rounded-full">
