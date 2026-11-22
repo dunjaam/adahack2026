@@ -2,6 +2,7 @@ import { BookOpen, Download, MapPin, RotateCcw } from "lucide-react";
 import { useStore } from "../store";
 import { SearchableSelect } from "./SearchableSelect";
 import { exportSummary } from "../lib/export";
+import { IconButton } from "../lib";
 
 /** Simplified ZrakVizija mark (leaf + hills) that stays crisp at ~36px. */
 function BrandIcon({ className = "" }: { className?: string }) {
@@ -48,55 +49,58 @@ export function Topbar() {
         sub: `${d.pm25_winter} µg/m³`,
       })) ?? [];
 
-  const tool =
-    "flex h-7 w-7 items-center justify-center rounded-md border border-line bg-surface text-ink-2 transition hover:border-ink-3 hover:text-ink";
-
   return (
-    <header className="z-[1000] shrink-0 border-b border-line bg-surface">
-      <div className="flex h-12 items-center gap-4 px-4">
+    <header className="z-[1000] shrink-0 bg-paper">
+      <div className="flex h-16 items-center gap-5 px-5">
         {/* brand */}
-        <div className="flex items-center gap-2.5">
-          <BrandIcon className="h-6 w-6" />
-          <div className="flex items-baseline gap-2.5">
-            <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">ZrakVizija</span>
-            <span className="hidden text-2xs font-medium uppercase tracking-label text-ink-3 md:inline">
-              Okoljski digitalni dvojček
-            </span>
+        <div className="flex items-center gap-3">
+          <BrandIcon className="h-8 w-8" />
+          <div className="flex flex-col leading-none">
+            <span className="text-lg font-semibold leading-6 text-on-surface">ZrakVizija</span>
+            <span className="hidden text-xs text-on-surface-variant md:block">Okoljski digitalni dvojček Ljubljane</span>
           </div>
         </div>
 
-        <div className="h-5 w-px bg-line" />
-
         <SearchableSelect
           value={selected}
-          options={[{ value: "__all__", label: "Vsa občina", sub: "agregat" }, ...districtOpts]}
+          options={[{ value: "__all__", label: "Vsa občina", sub: "skupaj" }, ...districtOpts]}
           onChange={(v) => selectDistrict(v === "__all__" ? null : v)}
-          icon={<MapPin className="h-3.5 w-3.5 text-ink-3" />}
+          icon={<MapPin className="h-4 w-4 text-on-surface-variant" />}
           placeholder="Vsa občina"
-          width="w-56"
+          width="w-64"
         />
 
-        <div className="ml-auto flex items-center gap-1.5">
-          <span className="mr-2 flex items-center gap-1.5 text-2xs font-medium uppercase tracking-label text-ink-2">
+        <div className="ml-auto flex items-center gap-1">
+          <span
+            className="mr-2 hidden h-8 items-center gap-2 rounded-lg bg-surface-container-high px-3 text-xs font-medium text-on-surface-variant sm:flex"
+            aria-live="polite"
+          >
             <span
-              className={`h-1.5 w-1.5 rounded-full ${simulating ? "animate-pulse bg-warn" : "bg-accent-500"}`}
+              className={`h-2 w-2 rounded-full transition-colors ${simulating ? "animate-pulse bg-primary-300" : "bg-secondary"}`}
             />
-            {simulating ? "Računam" : "Simulacija v živo"}
+            {simulating ? "Računam …" : "Simulacija v živo"}
           </span>
-          <a href="/docs" target="_blank" rel="noopener noreferrer" title="Navodila" aria-label="Navodila" className={tool}>
-            <BookOpen className="h-3.5 w-3.5" />
+          <a
+            href="/docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Navodila"
+            aria-label="Navodila"
+            className="state flex h-10 w-10 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:text-on-surface"
+          >
+            <BookOpen className="h-5 w-5" strokeWidth={1.75} />
           </a>
-          <button onClick={resetParams} title="Ponastavi ukrepe" aria-label="Ponastavi" className={tool}>
-            <RotateCcw className="h-3.5 w-3.5" />
-          </button>
+          <IconButton onClick={resetParams} title="Ponastavi ukrepe" aria-label="Ponastavi ukrepe" className="h-10 w-10">
+            <RotateCcw className="h-5 w-5" strokeWidth={1.75} />
+          </IconButton>
           <button
             onClick={() => result && exportSummary(result, selected)}
             disabled={!result}
             title="Izvozi povzetek"
-            className="flex h-7 items-center gap-1.5 rounded-md bg-ink px-2.5 text-xs font-medium text-surface transition hover:bg-accent-600 disabled:opacity-40"
+            className="state ml-2 flex h-10 items-center gap-2 rounded-full bg-primary pl-4 pr-5 text-sm font-medium text-on-primary transition-shadow hover:shadow-e1 disabled:opacity-40"
           >
-            <Download className="h-3.5 w-3.5" />
-            Izvoz
+            <Download className="h-[18px] w-[18px]" strokeWidth={2} />
+            Izvozi
           </button>
         </div>
       </div>

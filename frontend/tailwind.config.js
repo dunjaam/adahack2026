@@ -1,32 +1,58 @@
 /** @type {import('tailwindcss').Config} */
-import { md } from "./src/theme/material.js";
+import { md, m3, primary } from "./src/theme/material.js";
 
 /*
- * ZrakVizija design system — Google Material Design palette only.
+ * ZrakVizija design system — Material Design 3.
  * ------------------------------------------------------------------
- * paper / surface   Grey 100 / White
- * ink, ink-2, ink-3 Grey 900 / 700 / 600   (primary / secondary / hint text)
- * line, line-2      Grey 300 / 200         (dividers)
- * accent            Teal                    (interaction, positive change)
- * danger / warn     Red / Orange            (over budget, worsening)
- * Pollutant severity scales live in lib.tsx and also use md.* only.
+ * Semantic M3 roles (preferred in components):
+ *   primary / on-primary / primary-container / on-primary-container   blue
+ *   secondary / secondary-container / on-secondary-container          teal
+ *   surface, surface-container-{lowest,low,DEFAULT,high,highest}      neutrals
+ *   on-surface, on-surface-variant, outline, outline-variant          text, dividers
+ *   positive*, error*                                                  results
  *
- * Tailwind's default colour names are remapped onto Material palettes so
- * every component (incl. Docs, charts) is Material without per-file edits.
+ * Legacy aliases (ink / paper / line / accent / brand) map onto the same
+ * roles so every screen shares one system.
+ *
+ * Green / yellow / orange / red stay Material reference palettes and are
+ * reserved for pollution severity & environmental outcomes.
  */
 export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        paper: md.grey[100],
-        surface: md.white,
-        ink: { DEFAULT: md.grey[900], 2: md.grey[700], 3: md.grey[600] },
-        line: { DEFAULT: md.grey[300], 2: md.grey[200] },
-        accent: { DEFAULT: md.teal[500], ...md.teal },
+        /* ---- M3 roles ---- */
+        primary: { DEFAULT: m3.primary, ...primary },
+        "on-primary": m3.onPrimary,
+        "primary-container": m3.primaryContainer,
+        "on-primary-container": m3.onPrimaryContainer,
+        secondary: { DEFAULT: m3.secondary, ...md.teal },
+        "secondary-container": m3.secondaryContainer,
+        "on-secondary-container": m3.onSecondaryContainer,
+        "surface-container": {
+          lowest: m3.surfaceContainerLowest,
+          low: m3.surfaceContainerLow,
+          DEFAULT: m3.surfaceContainer,
+          high: m3.surfaceContainerHigh,
+          highest: m3.surfaceContainerHighest,
+        },
+        "on-surface": { DEFAULT: m3.onSurface, variant: m3.onSurfaceVariant, muted: m3.onSurfaceMuted },
+        outline: { DEFAULT: m3.outline, variant: m3.outlineVariant },
+        positive: { DEFAULT: m3.positive, container: m3.positiveContainer, on: m3.onPositiveContainer },
+        error: { DEFAULT: m3.error, container: m3.errorContainer, on: m3.onErrorContainer },
+
+        /* ---- legacy aliases onto the M3 roles ---- */
+        paper: m3.surfaceContainer, // app background
+        surface: m3.surfaceContainerLowest, // cards / sheets
+        ink: { DEFAULT: m3.onSurface, 2: m3.onSurfaceVariant, 3: m3.onSurfaceMuted },
+        line: { DEFAULT: m3.outlineVariant, 2: m3.surfaceContainerHigh },
+        accent: { DEFAULT: m3.primary, ...primary },
+        brand: primary,
         danger: { DEFAULT: md.red[700], ...md.red },
         warn: { DEFAULT: md.orange[800], ...md.orange },
-        brand: md.teal,
+
+        /* ---- Tailwind default names → Material reference palettes ---- */
         teal: md.teal,
         slate: md.grey,
         gray: md.grey,
@@ -43,7 +69,7 @@ export default {
         emerald: md.green,
         sky: md.lightBlue,
         cyan: md.lightBlue,
-        blue: md.blue,
+        blue: primary,
         indigo: md.indigo,
         violet: md.deepPurple,
         purple: md.deepPurple,
@@ -51,37 +77,48 @@ export default {
         black: md.black,
       },
       fontFamily: {
-        sans: ['"IBM Plex Sans"', "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: ['"IBM Plex Mono"', "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+        sans: ['"Barlow"', "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ['"Barlow Condensed"', '"Barlow"', "ui-sans-serif", "sans-serif"],
+        // kept for code snippets only — never for ordinary UI text
+        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       fontSize: {
-        // tight, deliberate scale (size / line-height)
-        "2xs": ["10px", "14px"],
-        xs: ["11px", "16px"],
-        sm: ["12.5px", "18px"],
-        base: ["13.5px", "20px"],
+        // M3-aligned type scale (size / line-height), sized for Barlow
+        "2xs": ["12px", "16px"],
+        xs: ["12.5px", "18px"],
+        sm: ["14px", "20px"],
+        base: ["15px", "22px"],
+        title: ["16px", "24px"],
+        lg: ["18px", "26px"],
+        xl: ["22px", "28px"],
       },
-      letterSpacing: {
-        label: "0.08em",
+      opacity: {
+        8: "0.08",
+        12: "0.12",
       },
       borderRadius: {
-        sm: "3px",
-        DEFAULT: "4px",
-        md: "5px",
-        lg: "6px",
-        xl: "7px",
-        "2xl": "8px",
+        sm: "4px",
+        DEFAULT: "6px",
+        md: "8px",
+        lg: "12px",
+        xl: "16px",
+        "2xl": "20px",
       },
       boxShadow: {
         card: "none",
-        float: "0 2px 4px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08)" /* Material elevation 4dp */,
+        // M3 elevation level 1 / 2
+        e1: "0 1px 2px rgba(25,28,32,0.10), 0 1px 3px 1px rgba(25,28,32,0.06)",
+        float: "0 2px 6px 2px rgba(25,28,32,0.08), 0 1px 2px rgba(25,28,32,0.12)",
+      },
+      transitionTimingFunction: {
+        standard: "cubic-bezier(0.2, 0, 0, 1)",
       },
       keyframes: {
-        "fade-in": { "0%": { opacity: "0", transform: "translateY(2px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
+        "fade-in": { "0%": { opacity: "0", transform: "translateY(-4px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
         pop: { "0%": { opacity: "0.6" }, "100%": { opacity: "1" } },
       },
       animation: {
-        "fade-in": "fade-in 0.2s ease-out",
+        "fade-in": "fade-in 0.18s cubic-bezier(0.2, 0, 0, 1)",
         pop: "pop 0.2s ease-out",
       },
     },

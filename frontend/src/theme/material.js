@@ -1,5 +1,11 @@
 /*
- * Google Material Design colour palette (2014 spec, material.io/design/color).
+ * ZrakVizija colour foundations.
+ *
+ *  m3  — Material Design 3 tonal roles (light scheme). Interface chrome only:
+ *        refined blue primary, subtle teal secondary, cool neutral surfaces.
+ *  md  — Material reference palettes. Green / yellow / orange / red are
+ *        RESERVED for pollution severity and environmental results.
+ *
  * Single source of truth: imported by tailwind.config.js AND by TS code
  * (map layers, charts, export, pollutant scales). Use these — no ad-hoc hexes.
  */
@@ -20,4 +26,46 @@ export const md = {
   deepPurple: { 50: "#EDE7F6", 100: "#D1C4E9", 200: "#B39DDB", 300: "#9575CD", 400: "#7E57C2", 500: "#673AB7", 600: "#5E35B1", 700: "#512DA8", 800: "#4527A0", 900: "#311B92" },
   white: "#FFFFFF",
   black: "#000000",
+};
+
+/** Primary tonal scale (blue, hue ≈ 215°) — tone 40 = primary. */
+export const primary = {
+  50: "#EEF3FC", 100: "#D8E3FB", 200: "#B2C8F1", 300: "#88A9E3", 400: "#5F89D1",
+  500: "#3F6FBD", 600: "#2C5DA8", 700: "#224B8A", 800: "#183A6C", 900: "#0B2A57",
+};
+
+/** Material 3 colour roles (light). */
+export const m3 = {
+  primary: primary[600],
+  onPrimary: "#FFFFFF",
+  primaryContainer: primary[100],
+  onPrimaryContainer: primary[900],
+
+  secondary: "#2D6A69",
+  onSecondary: "#FFFFFF",
+  secondaryContainer: "#CCE8E6",
+  onSecondaryContainer: "#0D3534",
+
+  surface: "#F7F8FB",
+  surfaceDim: "#D9DBE1",
+  surfaceContainerLowest: "#FFFFFF",
+  surfaceContainerLow: "#F2F4F7",
+  surfaceContainer: "#ECEEF2",
+  surfaceContainerHigh: "#E5E8EC",
+  surfaceContainerHighest: "#DFE2E7",
+
+  onSurface: "#191C20",
+  onSurfaceVariant: "#43474E",
+  onSurfaceMuted: "#5E636B",
+  outline: "#74777F",
+  outlineVariant: "#C4C7CE",
+
+  error: "#B3261E",
+  errorContainer: "#F9DEDC",
+  onErrorContainer: "#410E0B",
+
+  /* environmental result roles (built on md.green / md.red) */
+  positive: "#1E7B3A",
+  positiveContainer: "#DDF1E2",
+  onPositiveContainer: "#0D3A1A",
 };

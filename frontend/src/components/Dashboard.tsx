@@ -7,7 +7,7 @@ import {
   Wind,
   X,
 } from "lucide-react";
-import { Card } from "../lib";
+import { Card, IconButton, Segmented } from "../lib";
 import { useStore } from "../store";
 import { MapView } from "./MapView";
 import { Sliders } from "./Sliders";
@@ -27,13 +27,12 @@ interface WidgetDef {
   noPad?: boolean;
   right?: React.ReactNode;
   bare?: boolean;
-  index?: string;
 }
 
 const DEFAULT_IDS = ["airquality", "map", "sliders", "budget"];
 
 const ROWS = 20;
-const MARGIN = 1; // 1px gaps over the line-coloured backdrop = hairline dividers
+const MARGIN = 10; // gap between cards (and outer padding)
 
 export function Dashboard() {
   const [active, setActive] = useState<string[]>(DEFAULT_IDS);
@@ -68,7 +67,6 @@ export function Dashboard() {
     () => ({
       airquality: {
         id: "airquality",
-        index: "02",
         title: "Kakovost zraka",
         icon: <Wind className="h-3.5 w-3.5 text-brand-600" />,
         layout: { x: 8, y: 0, w: 4, h: short ? 6 : 7, minH: 4, minW: 3 },
@@ -77,14 +75,14 @@ export function Dashboard() {
       },
       map: {
         id: "map",
-        index: "01",
         title: "Zemljevid onesnaženosti",
         icon: <MapIcon className="h-3.5 w-3.5 text-brand-600" />,
         layout: { x: 0, y: 0, w: 8, h: 20, minH: 8, minW: 5 },
         noPad: true,
         right: (
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <Segmented
+              ariaLabel="Onesnaževalo"
               value={pollutant}
               onChange={(v) => setPollutant(v as any)}
               options={[
@@ -93,12 +91,13 @@ export function Dashboard() {
               ]}
             />
             <Segmented
+              ariaLabel="Prikaz"
               value={mapMode}
               onChange={(v) => setMapMode(v as MapMode)}
               options={[
-                { v: "before", l: "Prej" },
-                { v: "after", l: "Potem" },
-                { v: "diff", l: "Δ" },
+                { v: "before", l: "Izhodišče", title: "Stanje brez ukrepov" },
+                { v: "after", l: "Z ukrepi", title: "Simulirano stanje z ukrepi" },
+                { v: "diff", l: "Razlika", title: "Sprememba zaradi ukrepov" },
               ]}
             />
           </div>
@@ -109,7 +108,6 @@ export function Dashboard() {
       } as any,
       sliders: {
         id: "sliders",
-        index: "03",
         title: "Ukrepi",
         icon: <SlidersIcon className="h-3.5 w-3.5 text-brand-600" />,
         layout: { x: 8, y: short ? 6 : 7, w: 4, h: short ? 12 : 11, minH: 6, minW: 3 },
@@ -117,7 +115,6 @@ export function Dashboard() {
       },
       budget: {
         id: "budget",
-        index: "04",
         title: "Proračun",
         icon: <Wallet className="h-3.5 w-3.5 text-emerald-600" />,
         layout: { x: 8, y: 18, w: 4, h: 2, minH: 2, minW: 3 },
@@ -133,7 +130,7 @@ export function Dashboard() {
   const remove = (id: string) => setActive((a) => a.filter((x) => x !== id));
 
   return (
-    <div ref={gridRef} className="h-full overflow-hidden bg-line">
+    <div ref={gridRef} className="h-full overflow-hidden bg-paper">
       <ResponsiveGrid
         className="layout"
         layouts={{ lg: layout, md: layout }}
@@ -155,20 +152,20 @@ export function Dashboard() {
               <Card
                 dragHandle
                 bare={w.bare}
-                index={w.index}
                 title={w.bare ? undefined : w.title}
                 icon={w.icon}
                 noPad={w.noPad}
                 right={
                   <>
                     {w.right}
-                    <button
+                    <IconButton
                       onClick={() => remove(id)}
-                      className="rounded p-1 text-ink-3 opacity-0 transition hover:bg-paper hover:text-ink group-hover:opacity-100"
+                      className="opacity-0 group-hover:opacity-100"
                       title="Odstrani gradnik"
+                      aria-label="Odstrani gradnik"
                     >
-                      <X className="h-3.5 w-3.5" />
-                    </button>
+                      <X className="h-4 w-4" />
+                    </IconButton>
                   </>
                 }
               >
@@ -178,32 +175,6 @@ export function Dashboard() {
           );
         })}
       </ResponsiveGrid>
-    </div>
-  );
-}
-
-function Segmented({
-  value,
-  onChange,
-  options,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  options: { v: string; l: string }[];
-}) {
-  return (
-    <div className="flex items-center rounded-md border border-line bg-paper p-px">
-      {options.map((o) => (
-        <button
-          key={o.v}
-          onClick={() => onChange(o.v)}
-          className={`num rounded px-2 py-0.5 text-2xs font-medium transition ${
-            value === o.v ? "bg-ink text-surface" : "text-ink-2 hover:text-ink"
-          }`}
-        >
-          {o.l}
-        </button>
-      ))}
     </div>
   );
 }

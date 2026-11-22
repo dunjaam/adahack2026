@@ -77,11 +77,11 @@ export function Kpis() {
 
 export function DataNote() {
   return (
-    <div className="flex min-w-0 items-center gap-4">
+    <div className="flex min-w-0 items-center gap-5">
       <Badge kind="measured">Meritev ARSO</Badge>
       <Badge kind="model">Modelska ocena</Badge>
-      <span className="truncate text-2xs text-ink-3">
-        Izhodišče PM₂.₅: zimsko sidro 2025/26 · podatki ADA Hack 2026
+      <span className="truncate text-xs text-on-surface-muted">
+        Izhodišče PM₂.₅: zima 2025/26 · podatki ADA Hack 2026
       </span>
     </div>
   );

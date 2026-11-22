@@ -11,7 +11,7 @@ export function exportSummary(r: SimResult, district: string | null) {
         <td>${x.cs_ime} ${x.measured ? "📍" : "〜"}</td>
         <td>${num(x.pm25_before)}</td>
         <td>${num(x.pm25_after)}</td>
-        <td style="color:${x.delta_pm25 < 0 ? "#00796B" : "#616161"}">${num(x.delta_pm25)} (${num(x.delta_pct)}%)</td>
+        <td style="color:${x.delta_pm25 < 0 ? "#1E7B3A" : "#616161"}">${num(x.delta_pm25)} (${num(x.delta_pct)}%)</td>
       </tr>`
     )
     .join("");
@@ -19,14 +19,14 @@ export function exportSummary(r: SimResult, district: string | null) {
   const html = `<!doctype html><html lang="sl"><head><meta charset="utf-8">
   <title>ZrakVizija povzetek scenarija</title>
   <style>
-    body{font-family:system-ui,sans-serif;max-width:860px;margin:2rem auto;color:#212121;padding:0 1rem}
-    h1{color:#00796B;margin-bottom:.2rem} .muted{color:#616161;font-size:.85rem}
+    body{font-family:Barlow,system-ui,sans-serif;max-width:860px;margin:2rem auto;color:#212121;padding:0 1rem}
+    h1{color:#2C5DA8;margin-bottom:.2rem} .muted{color:#616161;font-size:.85rem}
     .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin:1.5rem 0}
     .kpi{border:1px solid #E0E0E0;border-radius:12px;padding:.9rem}
-    .kpi .v{font-size:1.4rem;font-weight:700;color:#00796B} .kpi .l{font-size:.75rem;color:#616161}
+    .kpi .v{font-size:1.4rem;font-weight:700;color:#2C5DA8} .kpi .l{font-size:.75rem;color:#616161}
     table{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.85rem}
     th,td{border-bottom:1px solid #E0E0E0;padding:.45rem .5rem;text-align:left}
-    th{color:#616161;font-weight:600} .note{background:#E0F2F1;border:1px solid #B2DFDB;border-radius:10px;padding:.8rem;font-size:.8rem;margin-top:1.5rem}
+    th{color:#616161;font-weight:600} .note{background:#CCE8E6;border:0;border-radius:12px;padding:.8rem;font-size:.8rem;margin-top:1.5rem}
   </style></head><body>
   <h1>ZrakVizija — povzetek scenarija</h1>
   <div class="muted">${r.municipality}${district ? " · " + district : ""} · izdelano ${d}</div>

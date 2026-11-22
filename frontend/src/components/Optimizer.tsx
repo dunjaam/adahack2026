@@ -35,7 +35,7 @@ export function Optimizer() {
         <button
           onClick={run}
           disabled={loading}
-          className="flex items-center gap-1.5 whitespace-nowrap rounded-xl bg-gradient-to-r from-brand-600 to-teal-600 px-3 py-2 text-sm font-medium text-white shadow-card transition hover:brightness-105 disabled:opacity-60"
+          className="flex items-center gap-1.5 whitespace-nowrap rounded-xl bg-primary px-3 py-2 text-sm font-medium text-white transition hover:shadow-e1 disabled:opacity-60"
         >
           <Sparkles className="h-4 w-4" />
           {loading ? "Optimiziram …" : "Optimiziraj"}
@@ -80,7 +80,7 @@ export function Optimizer() {
 
       {res && (
         <div className="min-h-0 flex-1 overflow-auto">
-          <div className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+          <div className="mb-1 text-sm font-medium text-on-surface-variant">
             Učinkovitost posameznih ukrepov
           </div>
           <div className="space-y-1.5">
@@ -103,7 +103,7 @@ function Mini({ label, v }: { label: string; v: string }) {
   return (
     <div className="rounded-lg bg-white/70 py-1.5">
       <div className="text-sm font-bold text-brand-700">{v}</div>
-      <div className="text-[10px] text-slate-400">{label}</div>
+      <div className="text-2xs text-slate-400">{label}</div>
     </div>
   );
 }

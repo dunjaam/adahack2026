@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { animate, motion, useAnimationControls, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
 import { useStore } from "../store";
-import { pmInk, num, SectionLabel } from "../lib";
+import { pmColor, pmInk, num } from "../lib";
 
 function statusLabel(pm: number) {
   if (pm < 10) return "Odličen zrak";
@@ -13,10 +13,6 @@ function statusLabel(pm: number) {
 }
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-
-/** In a monospace face the decimal comma takes a full cell; pull it in. */
-const tightSep = (s: string) =>
-  s.replace(/[,.](?=\d+$)/, (c) => `<span style="margin:0 -0.14em">${c}</span>`);
 
 /**
  * Centerpiece readout. Shows the simulated PM value as a large instrument-style
@@ -58,7 +54,7 @@ export function AirVisual() {
   }, [after, pm]);
   useMotionValueEvent(pm, "change", (v) => {
     if (!numRef.current) return;
-    numRef.current.innerHTML = tightSep(num(v, digits));
+    numRef.current.innerHTML = num(v, digits);
     numRef.current.style.color = pmInk(v);
   });
 
@@ -85,71 +81,81 @@ export function AirVisual() {
   }, [after, pulse]);
 
   const tone = !changed
-    ? "border-line text-ink-2"
+    ? "bg-surface-container-high text-on-surface-variant"
     : improved
-    ? "border-accent-200 bg-accent-50 text-accent-700"
-    : "border-danger-100 bg-danger-50 text-danger-700";
+    ? "bg-positive-container text-positive-on"
+    : "bg-error-container text-error-on";
 
   return (
-    <div className="flex h-full w-full flex-col justify-between px-4 pb-3 pt-2.5" style={{ containerType: "size" }}>
+    <div className="flex h-full w-full flex-col justify-between px-5 pb-4 pt-4" style={{ containerType: "size" }}>
       {/* context */}
-      <div className="flex items-baseline justify-between gap-3 pr-6">
-        <SectionLabel index="02" title={`Kakovost zraka · ${label} · ${selected ?? "vsa občina"}`} />
-        <span className="shrink-0 text-xs font-semibold transition-colors duration-700" style={{ color: pmInk(after) }}>
+      <div className="flex items-start justify-between gap-3 pr-10">
+        <div className="min-w-0">
+          <div className="truncate text-title font-medium text-on-surface">Kakovost zraka</div>
+          <div className="truncate text-xs text-on-surface-variant">
+            {label} · {selected ?? "vsa občina"} · zimsko povprečje
+          </div>
+        </div>
+        <span
+          className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-lg bg-surface-container-low px-2.5 text-xs font-medium transition-colors duration-700"
+          style={{ color: pmInk(after) }}
+        >
+          <span className="h-2 w-2 rounded-full transition-colors duration-700" style={{ background: pmColor(after) }} />
           {statusLabel(after)}
         </span>
       </div>
 
-      {/* baseline → simulated */}
-      <div className="flex min-h-0 flex-col justify-center gap-1">
-        <div
-          className="flex items-center gap-2 text-ink-3"
-          style={{ fontSize: "clamp(0.75rem, min(8cqh, 4.2cqw), 1.25rem)" }}
-        >
-          <span className="text-[0.72em] font-semibold uppercase tracking-label">
-            {changed ? "Izhodišče" : "Izhodišče · brez ukrepov"}
-          </span>
-          {changed && (
-            <>
-              <span className="num font-medium text-ink-2">{num(before, digits)}</span>
-              <ArrowRight className="h-[0.85em] w-[0.85em]" />
-              <span className="text-[0.72em] font-semibold uppercase tracking-label">Simulacija</span>
-            </>
-          )}
-        </div>
+      {/* simulated value, baseline underneath */}
+      <div className="flex min-h-0 flex-col justify-center">
         <motion.div animate={pulse} className="flex items-baseline gap-2">
           <span
             ref={numRef}
-            className="num font-semibold leading-[0.9]"
+            className="display-num leading-[0.88]"
             style={{
               color: pmInk(pm.get()),
-              fontSize: "clamp(2.5rem, min(44cqh, 21cqw), 8.5rem)",
-              letterSpacing: "-0.04em",
+              fontSize: "clamp(3rem, min(50cqh, 24cqw), 9.5rem)",
+              letterSpacing: "-0.01em",
             }}
-            dangerouslySetInnerHTML={{ __html: tightSep(num(pm.get(), digits)) }}
+            /* text is written imperatively each animation frame; keep React out of the node */
+            dangerouslySetInnerHTML={{ __html: num(pm.get(), digits) }}
           />
-          <span className="num font-medium text-ink-3" style={{ fontSize: "clamp(0.75rem, min(7cqh, 4cqw), 1.25rem)" }}>
+          <span className="font-medium text-on-surface-variant" style={{ fontSize: "clamp(0.9rem, min(8cqh, 4.4cqw), 1.4rem)" }}>
             µg/m³
           </span>
         </motion.div>
+        <div
+          className="mt-1 flex items-center gap-1.5 text-on-surface-variant"
+          style={{ fontSize: "clamp(0.8rem, min(7cqh, 3.6cqw), 1rem)" }}
+        >
+          {changed ? (
+            <>
+              <span>Izhodišče</span>
+              <span className="num font-medium text-on-surface">{num(before, digits)}</span>
+              <ArrowRight className="h-[0.9em] w-[0.9em]" />
+              <span>simulacija z ukrepi</span>
+            </>
+          ) : (
+            <span>Izhodišče brez ukrepov</span>
+          )}
+        </div>
       </div>
 
       {/* change indicator */}
-      <div className="flex items-center gap-2.5 border-t border-line-2 pt-2" style={{ fontSize: "clamp(0.8rem, min(7.5cqh, 4.2cqw), 1.2rem)" }}>
+      <div className="flex items-center gap-3" style={{ fontSize: "clamp(0.8rem, min(7cqh, 3.8cqw), 1.05rem)" }}>
         <motion.span
           animate={pulse}
-          className={`num inline-flex shrink-0 items-center gap-1 rounded border px-1.5 py-px font-semibold transition-colors duration-500 ${tone}`}
+          className={`num inline-flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1 font-semibold transition-colors duration-500 ${tone}`}
         >
-          {changed && (improved ? <ArrowDownRight className="h-[0.95em] w-[0.95em]" /> : <ArrowUpRight className="h-[0.95em] w-[0.95em]" />)}
+          {changed && (improved ? <ArrowDownRight className="h-[1em] w-[1em]" /> : <ArrowUpRight className="h-[1em] w-[1em]" />)}
           {changed ? (improved ? "−" : "+") : "±"}
-          <span ref={pctRef}>{num(pct.get(), pctDigits)}</span>% {label}
+          <span ref={pctRef}>{num(pct.get(), pctDigits)}</span>&nbsp;%
         </motion.span>
-        <span className="truncate text-[0.68em] text-ink-2">
+        <span className="truncate text-[0.85em] text-on-surface-variant">
           {!changed
-            ? "Premaknite drsnik za simulacijo ukrepov"
+            ? "Premaknite drsnik, da simulirate ukrepe"
             : improved
-            ? "ocenjeno zmanjšanje onesnaženosti"
-            : "ocenjeno povečanje onesnaženosti"}
+            ? "Ocenjeno zmanjšanje onesnaženosti"
+            : "Ocenjeno povečanje onesnaženosti"}
         </span>
       </div>
     </div>

@@ -69,23 +69,17 @@ export const int = (v: number) => Math.round(v).toLocaleString("sl-SI");
 
 // ---- UI primitives ---------------------------------------------------------
 
-/** Section label: mono index + uppercase title. The only titling style we use. */
-export function SectionLabel({ index, title, className = "" }: { index?: string; title: string; className?: string }) {
-  return (
-    <span className={`flex min-w-0 items-baseline gap-2 ${className}`}>
-      {index && <span className="num text-2xs text-ink-3">{index}</span>}
-      <span className="label truncate">{title}</span>
-    </span>
-  );
+/** Card / section title: M3 title-medium, sentence case, no numbering. */
+export function SectionLabel({ title, className = "" }: { index?: string; title: string; className?: string }) {
+  return <span className={`truncate text-title font-medium text-on-surface ${className}`}>{title}</span>;
 }
 
 /**
- * Workspace panel. Panels sit edge-to-edge in the grid; the 1px gaps between
- * them form hairline dividers, so panels themselves carry no border or radius.
+ * Workspace card (M3 filled card): white surface on the tinted app
+ * background, 16px corners, no border, no shadow.
  */
 export function Card({
   title,
-  index,
   right,
   children,
   className = "",
@@ -94,20 +88,21 @@ export function Card({
   bare = false,
 }: {
   title?: string;
+  /** @deprecated numbering removed from the design */
   index?: string;
-  /** kept for API compatibility; panels are icon-less by design */
+  /** kept for API compatibility; cards are icon-less by design */
   icon?: React.ReactNode;
   right?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
   dragHandle?: boolean;
   noPad?: boolean;
-  /** no header bar: the whole panel drags, `right` floats top-right on hover */
+  /** no header bar: the whole card drags, `right` floats top-right on hover */
   bare?: boolean;
 }) {
   if (bare) {
     return (
-      <div className={`group relative h-full overflow-hidden bg-surface ${dragHandle ? "widget-drag-handle" : ""} ${className}`}>
+      <div className={`group relative h-full overflow-hidden rounded-xl bg-surface ${dragHandle ? "widget-drag-handle" : ""} ${className}`}>
         {children}
         {right && (
           <div
@@ -121,26 +116,77 @@ export function Card({
     );
   }
   return (
-    <div className={`group flex h-full flex-col overflow-hidden bg-surface ${className}`}>
+    <div className={`group flex h-full flex-col overflow-hidden rounded-xl bg-surface ${className}`}>
       <div
-        className={`flex h-9 shrink-0 items-center justify-between gap-2 border-b border-line-2 px-3 ${dragHandle ? "widget-drag-handle" : ""}`}
+        className={`flex h-14 shrink-0 items-center justify-between gap-3 pl-5 pr-3 ${dragHandle ? "widget-drag-handle" : ""}`}
       >
-        {title ? <SectionLabel index={index} title={title} /> : <span />}
-        <div className="flex items-center gap-1.5" onMouseDown={(e) => e.stopPropagation()}>
+        {title ? <SectionLabel title={title} /> : <span />}
+        <div className="flex items-center gap-2" onMouseDown={(e) => e.stopPropagation()}>
           {right}
         </div>
       </div>
-      <div className={`min-h-0 flex-1 ${noPad ? "" : "overflow-auto px-3 py-2.5"}`}>{children}</div>
+      <div className={`min-h-0 flex-1 ${noPad ? "" : "overflow-auto px-5 pb-4"}`}>{children}</div>
     </div>
   );
 }
 
 export function Badge({ kind, children }: { kind: "measured" | "model" | "info"; children: React.ReactNode }) {
-  const dot = kind === "measured" ? "bg-accent-500" : kind === "model" ? "bg-warn" : "bg-ink-3";
+  const dot = kind === "measured" ? "bg-secondary" : kind === "model" ? "bg-primary-300" : "bg-outline";
   return (
-    <span className="inline-flex items-center gap-1.5 text-2xs font-medium text-ink-2">
-      <span className={`h-1.5 w-1.5 rounded-sm ${dot}`} />
+    <span className="inline-flex items-center gap-1.5 text-xs text-on-surface-variant">
+      <span className={`h-2 w-2 rounded-full ${dot}`} />
       {children}
     </span>
+  );
+}
+
+/** M3 standard icon button (40px target, 8 % / 12 % state layer). */
+export function IconButton({
+  children,
+  className = "",
+  ...rest
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      {...rest}
+      className={`state flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:text-on-surface disabled:opacity-40 ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+/** M3 segmented button (compact density). */
+export function Segmented({
+  value,
+  onChange,
+  options,
+  ariaLabel,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: { v: string; l: string; title?: string }[];
+  ariaLabel?: string;
+}) {
+  return (
+    <div role="radiogroup" aria-label={ariaLabel} className="flex h-8 items-stretch overflow-hidden rounded-full border border-outline-variant">
+      {options.map((o, i) => {
+        const on = value === o.v;
+        return (
+          <button
+            key={o.v}
+            role="radio"
+            aria-checked={on}
+            title={o.title}
+            onClick={() => onChange(o.v)}
+            className={`state min-w-[3rem] px-3 text-xs font-medium transition-colors ${
+              i > 0 ? "border-l border-outline-variant" : ""
+            } ${on ? "bg-secondary-container text-on-secondary-container" : "text-on-surface-variant hover:text-on-surface"}`}
+          >
+            {o.l}
+          </button>
+        );
+      })}
+    </div>
   );
 }

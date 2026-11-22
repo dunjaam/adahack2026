@@ -21,41 +21,42 @@ export function BudgetCard() {
   const over = spent > budget;
 
   const step =
-    "flex h-5 w-5 items-center justify-center rounded text-ink-3 transition hover:bg-paper hover:text-ink";
+    "state flex h-7 w-7 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:text-on-surface";
 
   return (
-    <div className="relative flex h-full w-full items-center gap-3 pl-4 pr-9">
-      <span className="label shrink-0">
-        <span className="num mr-2 font-normal text-ink-3">04</span>Proračun
-      </span>
-      <div className="flex min-w-0 items-baseline gap-1">
-        <span className="num text-xs text-ink-3">€</span>
-        <input
-          type="text"
-          inputMode="numeric"
-          value={int(budget)}
-          aria-label="Proračun v evrih"
-          onChange={(e) => setParam("budget_eur", Number(e.target.value.replace(/\D/g, "")) || 0)}
-          className="num w-[10ch] min-w-0 bg-transparent text-sm font-medium text-ink outline-none focus:text-accent-700"
-        />
-      </div>
-      <span className={`num min-w-0 flex-1 truncate text-2xs ${over ? "font-semibold text-danger-700" : "text-ink-3"}`}>
-        {over ? `presežek ${eur(spent - budget)}` : spent > 0 ? `${num(used, 0)}% porabljeno` : ""}
-      </span>
-      <div className="flex shrink-0 items-center">
-        <button onClick={() => setYears(years - 0.5)} className={step} aria-label="−0,5 leta">
-          <Minus className="h-3 w-3" />
-        </button>
-        <span className="num min-w-[6.5ch] text-center text-xs text-ink-2">
-          {years.toFixed(1)} {letText(years)}
+    <div className="flex h-full w-full flex-col justify-center gap-2 pl-5 pr-12">
+      <div className="flex items-center gap-3">
+        <span className="shrink-0 text-sm font-medium text-on-surface-variant">Proračun</span>
+        <label className="flex min-w-0 items-baseline gap-1 rounded-md px-1 transition-colors focus-within:bg-surface-container-low">
+          <span className="text-sm text-on-surface-variant">€</span>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={int(budget)}
+            aria-label="Proračun v evrih"
+            onChange={(e) => setParam("budget_eur", Number(e.target.value.replace(/\D/g, "")) || 0)}
+            className="num w-[10ch] min-w-0 bg-transparent text-sm font-medium text-on-surface outline-none"
+          />
+        </label>
+        <span className={`num min-w-0 flex-1 truncate text-xs ${over ? "font-medium text-error" : "text-on-surface-variant"}`}>
+          {over ? `Presežek ${eur(spent - budget)}` : spent > 0 ? `${num(used, 0)} % porabljeno` : "Ni še porabe"}
         </span>
-        <button onClick={() => setYears(years + 0.5)} className={step} aria-label="+0,5 leta">
-          <Plus className="h-3 w-3" />
-        </button>
+        <div className="flex shrink-0 items-center">
+          <button onClick={() => setYears(years - 0.5)} className={step} aria-label="Skrajšaj obdobje za pol leta">
+            <Minus className="h-3.5 w-3.5" />
+          </button>
+          <span className="num min-w-[6.5ch] text-center text-xs text-on-surface-variant">
+            {num(years, 1)} {letText(years)}
+          </span>
+          <button onClick={() => setYears(years + 0.5)} className={step} aria-label="Podaljšaj obdobje za pol leta">
+            <Plus className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 h-[2px] bg-line-2">
+      {/* M3 linear progress indicator */}
+      <div className="h-1 w-full overflow-hidden rounded-full bg-surface-container-high">
         <div
-          className={`h-full transition-[width] duration-500 ${over ? "bg-danger-700" : "bg-accent-500"}`}
+          className={`h-full rounded-full transition-[width] duration-500 ease-standard ${over ? "bg-error" : "bg-secondary"}`}
           style={{ width: `${used}%` }}
         />
       </div>

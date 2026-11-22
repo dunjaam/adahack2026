@@ -15,20 +15,29 @@ body,
 }
 
 body {
-  @apply bg-paper font-sans text-base text-ink antialiased;
+  @apply bg-paper font-sans text-sm text-on-surface antialiased;
   font-feature-settings: "kern", "liga";
 }
 
-/* numeric data everywhere: mono, tabular, slashed zero off */
-.num {
-  @apply font-mono tabular-nums;
-  font-feature-settings: "tnum";
-  letter-spacing: -0.01em;
+:focus-visible {
+  outline: 2px solid theme("colors.primary.DEFAULT");
+  outline-offset: 2px;
 }
 
-/* section label — the one way we title things */
+/* numbers in running UI: proportional Barlow, tabular figures */
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* large measurements: Barlow Condensed */
+.display-num {
+  @apply font-display font-semibold;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* the one small heading style — sentence case, no tracking */
 .label {
-  @apply text-2xs font-semibold uppercase tracking-label text-ink-2;
+  @apply text-sm font-medium text-on-surface-variant;
 }
 
 input[type="number"] {
@@ -40,11 +49,39 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+/* ---------- M3 state layers ----------------------------------------------- */
+/* hover 8 % / focus + pressed 12 % of the content colour */
+.state {
+  position: relative;
+  isolation: isolate;
+}
+.state::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+  transition: opacity 0.15s cubic-bezier(0.2, 0, 0, 1);
+}
+.state:hover::before {
+  opacity: 0.08;
+}
+.state:focus-visible::before,
+.state:active::before {
+  opacity: 0.12;
+}
+.state:disabled::before {
+  opacity: 0;
+}
+
 /* ---------- workspace grid ----------------------------------------------- */
 .react-grid-item.react-grid-placeholder {
-  background: theme("colors.accent.500") !important;
-  opacity: 0.08 !important;
-  border-radius: 0;
+  background: theme("colors.primary.DEFAULT") !important;
+  opacity: 0.1 !important;
+  border-radius: 16px;
 }
 .react-grid-item > .react-resizable-handle {
   z-index: 10;
@@ -52,7 +89,7 @@ input[type="number"]::-webkit-outer-spin-button {
   transition: opacity 0.15s;
 }
 .react-grid-item:hover > .react-resizable-handle {
-  opacity: 0.6;
+  opacity: 0.5;
 }
 .widget-drag-handle {
   cursor: grab;
@@ -61,64 +98,73 @@ input[type="number"]::-webkit-outer-spin-button {
   cursor: grabbing;
 }
 
-/* ---------- instrument slider -------------------------------------------- */
-/* hairline track, teal fill to the value, fader-style cursor */
-.instrument {
+/* ---------- M3 slider ----------------------------------------------------- */
+/* 4px track: primary active part, primary-container inactive; 20px handle */
+.m3-slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 16px;
+  height: 28px;
   background: transparent;
   cursor: pointer;
   outline: none;
   --pct: 0%;
 }
-.instrument:disabled {
-  opacity: 0.35;
+.m3-slider:disabled {
+  opacity: 0.38;
   cursor: not-allowed;
 }
-.instrument::-webkit-slider-runnable-track {
-  height: 2px;
+.m3-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
   background: linear-gradient(
     90deg,
-    theme("colors.accent.500") var(--pct),
-    theme("colors.line.DEFAULT") var(--pct)
+    theme("colors.primary.DEFAULT") var(--pct),
+    theme("colors.primary-container") var(--pct)
   );
 }
-.instrument::-webkit-slider-thumb {
+.m3-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 8px;
-  height: 16px;
-  margin-top: -7px;
-  border-radius: 2px;
-  background: theme("colors.ink.DEFAULT");
-  border: 2px solid theme("colors.surface");
-  box-shadow: 0 0 0 1px theme("colors.ink.DEFAULT");
-  transition: background 0.12s, box-shadow 0.12s;
+  width: 20px;
+  height: 20px;
+  margin-top: -8px;
+  border-radius: 999px;
+  background: theme("colors.primary.DEFAULT");
+  border: 0;
+  box-shadow: 0 1px 2px rgba(25, 28, 32, 0.25), 0 0 0 0 rgba(44, 93, 168, 0);
+  transition: box-shadow 0.15s cubic-bezier(0.2, 0, 0, 1), transform 0.15s cubic-bezier(0.2, 0, 0, 1);
 }
-.instrument:hover::-webkit-slider-thumb,
-.instrument:active::-webkit-slider-thumb {
-  background: theme("colors.accent.600");
-  box-shadow: 0 0 0 1px theme("colors.accent.600");
+.m3-slider:hover::-webkit-slider-thumb {
+  box-shadow: 0 1px 2px rgba(25, 28, 32, 0.25), 0 0 0 10px rgba(44, 93, 168, 0.08);
 }
-.instrument:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 1px theme("colors.accent.600"), 0 0 0 4px theme("colors.accent.100");
+.m3-slider:focus-visible::-webkit-slider-thumb,
+.m3-slider:active::-webkit-slider-thumb {
+  box-shadow: 0 1px 2px rgba(25, 28, 32, 0.25), 0 0 0 10px rgba(44, 93, 168, 0.14);
 }
-.instrument::-moz-range-track {
-  height: 2px;
-  background: theme("colors.line.DEFAULT");
+.m3-slider:active::-webkit-slider-thumb {
+  transform: scale(1.05);
 }
-.instrument::-moz-range-progress {
-  height: 2px;
-  background: theme("colors.accent.500");
+.m3-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: theme("colors.primary-container");
 }
-.instrument::-moz-range-thumb {
-  width: 4px;
-  height: 12px;
-  border-radius: 2px;
-  background: theme("colors.ink.DEFAULT");
-  border: 2px solid theme("colors.surface");
-  box-shadow: 0 0 0 1px theme("colors.ink.DEFAULT");
+.m3-slider::-moz-range-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: theme("colors.primary.DEFAULT");
+}
+.m3-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  border: 0;
+  background: theme("colors.primary.DEFAULT");
+  box-shadow: 0 1px 2px rgba(25, 28, 32, 0.25);
+}
+.m3-slider:hover::-moz-range-thumb,
+.m3-slider:focus-visible::-moz-range-thumb {
+  box-shadow: 0 1px 2px rgba(25, 28, 32, 0.25), 0 0 0 10px rgba(44, 93, 168, 0.1);
 }
 
 /* ---------- scrollbars ---------------------------------------------------- */
@@ -127,50 +173,56 @@ input[type="number"]::-webkit-outer-spin-button {
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: theme("colors.line.DEFAULT");
-  border-radius: 4px;
+  background: theme("colors.outline.variant");
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* ---------- leaflet chrome ------------------------------------------------ */
 .leaflet-container {
   font-family: inherit;
-  background: theme("colors.paper");
+  background: theme("colors.surface-container.low");
 }
-/* muted, warm-grey basemap so the data layer carries the colour */
-.leaflet-tile-pane {
-  filter: grayscale(1) contrast(0.9) brightness(1.05);
-  opacity: 0.85;
+/* neutral, low-distraction basemap: desaturated, lifted, softened */
+.zv-basemap {
+  filter: grayscale(1) contrast(0.78) brightness(1.12);
+  opacity: 0.9;
 }
 .leaflet-interactive {
   transition: fill 0.6s ease, stroke 0.3s ease, fill-opacity 0.4s ease;
 }
 .leaflet-bar,
 .leaflet-touch .leaflet-bar {
-  border: 1px solid theme("colors.line.DEFAULT") !important;
-  border-radius: 6px !important;
-  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 2px rgba(25, 28, 32, 0.1), 0 1px 3px 1px rgba(25, 28, 32, 0.06) !important;
   overflow: hidden;
 }
 .leaflet-bar a,
 .leaflet-touch .leaflet-bar a {
-  width: 28px !important;
-  height: 28px !important;
-  line-height: 28px !important;
-  font-size: 15px !important;
-  color: theme("colors.ink.DEFAULT") !important;
-  background: theme("colors.surface") !important;
-  border-bottom-color: theme("colors.line.DEFAULT") !important;
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  color: theme("colors.on-surface.variant") !important;
+  background: theme("colors.surface-container.lowest") !important;
+  border-bottom-color: theme("colors.surface-container.high") !important;
+  transition: background 0.15s;
 }
 .leaflet-bar a:hover {
-  background: theme("colors.paper") !important;
+  background: theme("colors.surface-container.high") !important;
+  color: theme("colors.on-surface.DEFAULT") !important;
 }
 .leaflet-tooltip {
-  @apply font-sans text-xs text-ink;
-  background: theme("colors.surface");
-  border: 1px solid theme("colors.line.DEFAULT");
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 6px 8px;
+  @apply font-sans text-sm text-on-surface;
+  background: theme("colors.surface-container.lowest");
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px 2px rgba(25, 28, 32, 0.08), 0 1px 2px rgba(25, 28, 32, 0.12);
+  padding: 8px 12px;
 }
 .leaflet-tooltip-top:before,
 .leaflet-tooltip-bottom:before,
@@ -179,10 +231,12 @@ input[type="number"]::-webkit-outer-spin-button {
   display: none;
 }
 .leaflet-control-attribution {
-  @apply font-sans text-2xs;
-  background: rgba(255, 255, 255, 0.85) !important;
-  color: theme("colors.ink.3") !important;
+  @apply font-sans;
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.8) !important;
+  color: theme("colors.on-surface.muted") !important;
+  border-top-left-radius: 8px;
 }
 .leaflet-control-attribution a {
-  color: theme("colors.ink.2") !important;
+  color: theme("colors.on-surface.variant") !important;
 }

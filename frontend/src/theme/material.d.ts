@@ -5,3 +5,14 @@ export declare const md: {
   lightBlue: Shades; blue: Shades; indigo: Shades; deepPurple: Shades;
   white: string; black: string;
 };
+export declare const primary: Shades;
+export declare const m3: Record<
+  | "primary" | "onPrimary" | "primaryContainer" | "onPrimaryContainer"
+  | "secondary" | "onSecondary" | "secondaryContainer" | "onSecondaryContainer"
+  | "surface" | "surfaceDim" | "surfaceContainerLowest" | "surfaceContainerLow"
+  | "surfaceContainer" | "surfaceContainerHigh" | "surfaceContainerHighest"
+  | "onSurface" | "onSurfaceVariant" | "onSurfaceMuted" | "outline" | "outlineVariant"
+  | "error" | "errorContainer" | "onErrorContainer"
+  | "positive" | "positiveContainer" | "onPositiveContainer",
+  string
+>;

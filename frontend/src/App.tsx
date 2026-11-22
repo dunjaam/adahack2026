@@ -8,10 +8,10 @@ import { DataNote } from "./components/Kpis";
 function Disclaimer() {
   return (
     <span
-      className="flex min-w-0 shrink-0 items-center gap-1.5 text-2xs text-ink-3"
+      className="flex min-w-0 shrink-0 items-center gap-1.5 text-xs text-on-surface-variant"
       title="Vse vrednosti, ki se spreminjajo ob ukrepih (PM2.5 / PM10, stroški, učinki), so modelska napoved — ne dejanske meritve. Izhodišče temelji na podatkih ADA Hack 2026."
     >
-      <Info className="h-3 w-3 shrink-0" />
+      <Info className="h-3.5 w-3.5 shrink-0" />
       <span className="truncate">Vrednosti ob ukrepih so modelska napoved, ne meritve.</span>
     </span>
   );
@@ -29,7 +29,7 @@ export default function App() {
     return (
       <div className="flex h-screen flex-col items-center justify-center gap-4 bg-paper">
         <img src="/zrakvizija-logo.svg" alt="ZrakVizija" className="w-44" />
-        <div className="label text-ink-3">Nalagam podatke …</div>
+        <div className="text-sm text-on-surface-variant">Nalagam podatke …</div>
       </div>
     );
   }
@@ -40,7 +40,7 @@ export default function App() {
       <main className="min-h-0 flex-1 overflow-hidden">
         <Dashboard />
       </main>
-      <footer className="flex h-7 shrink-0 items-center justify-between gap-4 border-t border-line bg-surface px-4">
+      <footer className="flex h-9 shrink-0 items-center justify-between gap-4 bg-paper px-5">
         <DataNote />
         <Disclaimer />
       </footer>
