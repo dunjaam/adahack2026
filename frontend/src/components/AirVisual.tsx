@@ -88,7 +88,7 @@ export function AirVisual() {
     ? "border-line text-ink-2"
     : improved
     ? "border-accent-200 bg-accent-50 text-accent-700"
-    : "border-[#F1C9C2] bg-[#FBEDEA] text-[#B42318]";
+    : "border-danger-100 bg-danger-50 text-danger-700";
 
   return (
     <div className="flex h-full w-full flex-col justify-between px-4 pb-3 pt-2.5" style={{ containerType: "size" }}>

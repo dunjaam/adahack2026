@@ -33,7 +33,7 @@ const SECTIONS = [
 
 export function DocsPage() {
   return (
-    <div className="min-h-screen bg-[#f6f8f7]">
+    <div className="min-h-screen bg-paper">
       {/* header */}
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-5 py-3">

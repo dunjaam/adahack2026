@@ -11,6 +11,19 @@ import {
 import L from "leaflet";
 import { useStore } from "../store";
 import { pmColor, num } from "../lib";
+import { md } from "../theme/material";
+
+/** linear blend between two #RRGGBB colours */
+function mix(a: string, b: string, t: number) {
+  const p = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const [x, y] = [p(a), p(b)];
+  return `rgb(${x.map((v, i) => Math.round(v + (y[i] - v) * t)).join(",")})`;
+}
+const RAMP = {
+  heating: [md.deepOrange[50], md.deepOrange[700]],
+  traffic: [md.indigo[50], md.indigo[700]],
+  diff: [md.green[50], md.green[700]],
+} as const;
 import { Flame, Car, MapPin, Wind } from "lucide-react";
 
 type MapMode = "before" | "after" | "diff";
@@ -52,20 +65,20 @@ export function MapView({ mode }: { mode: MapMode }) {
   const styleFn = (feature: any): L.PathOptions => {
     const p = feature.properties;
     const r = resById[p.cs_ime];
-    let fill = "#cbd5e1";
+    let fill: string = md.grey[300];
     if (layer === "heating") {
       const t = Math.min(1, (p.heating_emis_kg || 0) / 30000);
-      fill = `rgb(${Math.round(254)}, ${Math.round(226 - 160 * t)}, ${Math.round(210 - 180 * t)})`;
+      fill = mix(RAMP.heating[0], RAMP.heating[1], t);
     } else if (layer === "traffic") {
       const t = Math.min(1, (p.traffic_emis_kg || 0) / 70000);
-      fill = `rgb(${Math.round(226 - 120 * t)}, ${Math.round(232 - 150 * t)}, ${Math.round(254)})`;
+      fill = mix(RAMP.traffic[0], RAMP.traffic[1], t);
     } else {
       const before = pollutant === "pm25" ? p.pm25_winter : p.pm10_winter;
       const after = r ? (pollutant === "pm25" ? r.pm25_after : r.pm10_after) : before;
       if (mode === "diff") {
         const delta = r ? after - (pollutant === "pm25" ? r.pm25_before : r.pm10_before) : 0;
         const t = Math.min(1, Math.abs(delta) / 4);
-        fill = `rgb(${Math.round(236 - 180 * t)}, ${Math.round(253 - 20 * t)}, ${Math.round(245 - 60 * t)})`;
+        fill = mix(RAMP.diff[0], RAMP.diff[1], t);
       } else {
         fill = pmColor(mode === "after" ? after : before);
       }
@@ -74,7 +87,7 @@ export function MapView({ mode }: { mode: MapMode }) {
     return {
       fillColor: fill,
       weight: isSel ? 2.5 : 0.75,
-      color: isSel ? "#1C1D1B" : "#6B675F",
+      color: isSel ? md.grey[900] : md.grey[600],
       fillOpacity: layer === "sensitive" ? 0.25 : 0.72,
     };
   };
@@ -89,7 +102,7 @@ export function MapView({ mode }: { mode: MapMode }) {
       `<div style="font-family:'IBM Plex Mono',monospace;font-size:11px">${label} ${num(before)}${
         after != null ? ` → <b>${num(after)}</b>` : ""
       } µg/m³</div>` +
-      `<div style="color:#76736B;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-top:2px">${
+      `<div style="color:${md.grey[600]};font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-top:2px">${
         p.measured ? "meritev ARSO" : "modelska ocena"
       }</div>`;
   };
@@ -112,7 +125,7 @@ export function MapView({ mode }: { mode: MapMode }) {
     const p = feature.properties;
     lyr.on({
       click: () => selectDistrict(p.cs_ime),
-      mouseover: (e: any) => e.target.setStyle({ weight: 2, color: "#125F57" }),
+      mouseover: (e: any) => e.target.setStyle({ weight: 2, color: md.teal[700] }),
       mouseout: (e: any) => (e.target as any).setStyle(styleFn(feature)),
     });
     lyr.bindTooltip(tooltipHtml(feature), { sticky: true });
@@ -138,7 +151,7 @@ export function MapView({ mode }: { mode: MapMode }) {
               key={i}
               center={[s.lat, s.lon]}
               radius={4}
-              pathOptions={{ color: "#7c3aed", fillColor: "#a78bfa", fillOpacity: 0.9, weight: 1 }}
+              pathOptions={{ color: md.deepPurple[700], fillColor: md.deepPurple[300], fillOpacity: 0.9, weight: 1 }}
             >
               <Tooltip>{s.name} {s.type && `· ${s.type}`}</Tooltip>
             </CircleMarker>
@@ -196,16 +209,16 @@ function MapLegend({ mode, layer, pollutant }: { mode: MapMode; layer: string; p
   let body: React.ReactNode;
   if (layer === "heating") {
     title = "Emisije ogrevanja";
-    body = <Ramp from="rgb(254,226,210)" to="rgb(254,66,30)" lo="0" hi="30 000 kg PM₁₀/leto" />;
+    body = <Ramp from={RAMP.heating[0]} to={RAMP.heating[1]} lo="0" hi="30 000 kg PM₁₀/leto" />;
   } else if (layer === "traffic") {
     title = "Prometne emisije";
-    body = <Ramp from="rgb(226,232,254)" to="rgb(106,82,254)" lo="0" hi="70 000 kg PM₁₀/leto" />;
+    body = <Ramp from={RAMP.traffic[0]} to={RAMP.traffic[1]} lo="0" hi="70 000 kg PM₁₀/leto" />;
   } else if (layer === "sensitive") {
     title = "Občutljive lokacije";
     body = <div className="text-xs text-ink-2">Šole, vrtci, domovi za starejše</div>;
   } else if (mode === "diff") {
     title = `Δ ${label}`;
-    body = <Ramp from="rgb(236,253,245)" to="rgb(56,233,185)" lo="0" hi="−4 µg/m³" />;
+    body = <Ramp from={RAMP.diff[0]} to={RAMP.diff[1]} lo="0" hi="−4 µg/m³" />;
   } else {
     title = `${label} · ${mode === "after" ? "simulacija" : "izhodišče"}`;
     body = (

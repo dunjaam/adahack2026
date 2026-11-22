@@ -1,15 +1,16 @@
 import React from "react";
+import { md } from "./theme/material";
 
 /** EU/WHO-oriented PM colour scale (µg/m³). Green = clean, red = polluted. */
 export function pmColor(v: number): string {
   // breakpoints tuned for PM2.5 winter range
   const stops: [number, string][] = [
-    [0, "#2f7d52"],
-    [10, "#4fae60"],
-    [15, "#fde047"],
-    [20, "#fb923c"],
-    [25, "#ef4444"],
-    [35, "#b91c1c"],
+    [0, md.green[700]],
+    [10, md.lightGreen[500]],
+    [15, md.yellow[600]],
+    [20, md.orange[500]],
+    [25, md.red[500]],
+    [35, md.red[900]],
   ];
   if (v <= stops[0][0]) return stops[0][1];
   for (let i = 1; i < stops.length; i++) {
@@ -40,12 +41,12 @@ function hex(h: string): [number, number, number] {
  */
 export function pmInk(v: number): string {
   const stops: [number, string][] = [
-    [0, "#1E6B46"],
-    [10, "#2E7D45"],
-    [15, "#8A6A00"],
-    [20, "#B4530F"],
-    [25, "#B42318"],
-    [35, "#8A1C14"],
+    [0, md.green[800]],
+    [10, md.lightGreen[900]],
+    [15, md.yellow[900]],
+    [20, md.orange[900]],
+    [25, md.red[800]],
+    [35, md.red[900]],
   ];
   if (v <= stops[0][0]) return stops[0][1];
   for (let i = 1; i < stops.length; i++) {
@@ -135,7 +136,7 @@ export function Card({
 }
 
 export function Badge({ kind, children }: { kind: "measured" | "model" | "info"; children: React.ReactNode }) {
-  const dot = kind === "measured" ? "bg-accent-500" : kind === "model" ? "bg-[#B4530F]" : "bg-ink-3";
+  const dot = kind === "measured" ? "bg-accent-500" : kind === "model" ? "bg-warn" : "bg-ink-3";
   return (
     <span className="inline-flex items-center gap-1.5 text-2xs font-medium text-ink-2">
       <span className={`h-1.5 w-1.5 rounded-sm ${dot}`} />

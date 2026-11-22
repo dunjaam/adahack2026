@@ -39,7 +39,7 @@ export function BudgetCard() {
           className="num w-[10ch] min-w-0 bg-transparent text-sm font-medium text-ink outline-none focus:text-accent-700"
         />
       </div>
-      <span className={`num min-w-0 flex-1 truncate text-2xs ${over ? "font-semibold text-[#B42318]" : "text-ink-3"}`}>
+      <span className={`num min-w-0 flex-1 truncate text-2xs ${over ? "font-semibold text-danger-700" : "text-ink-3"}`}>
         {over ? `presežek ${eur(spent - budget)}` : spent > 0 ? `${num(used, 0)}% porabljeno` : ""}
       </span>
       <div className="flex shrink-0 items-center">
@@ -55,7 +55,7 @@ export function BudgetCard() {
       </div>
       <div className="absolute inset-x-0 bottom-0 h-[2px] bg-line-2">
         <div
-          className={`h-full transition-[width] duration-500 ${over ? "bg-[#B42318]" : "bg-accent-500"}`}
+          className={`h-full transition-[width] duration-500 ${over ? "bg-danger-700" : "bg-accent-500"}`}
           style={{ width: `${used}%` }}
         />
       </div>

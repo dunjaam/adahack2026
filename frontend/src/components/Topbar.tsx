@@ -79,7 +79,7 @@ export function Topbar() {
         <div className="ml-auto flex items-center gap-1.5">
           <span className="mr-2 flex items-center gap-1.5 text-2xs font-medium uppercase tracking-label text-ink-2">
             <span
-              className={`h-1.5 w-1.5 rounded-full ${simulating ? "animate-pulse bg-[#B4530F]" : "bg-accent-500"}`}
+              className={`h-1.5 w-1.5 rounded-full ${simulating ? "animate-pulse bg-warn" : "bg-accent-500"}`}
             />
             {simulating ? "Računam" : "Simulacija v živo"}
           </span>

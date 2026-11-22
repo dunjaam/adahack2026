@@ -138,7 +138,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 /* muted, warm-grey basemap so the data layer carries the colour */
 .leaflet-tile-pane {
-  filter: grayscale(1) sepia(0.12) contrast(0.88) brightness(1.06);
+  filter: grayscale(1) contrast(0.9) brightness(1.05);
   opacity: 0.85;
 }
 .leaflet-interactive {
@@ -169,7 +169,7 @@ input[type="number"]::-webkit-outer-spin-button {
   background: theme("colors.surface");
   border: 1px solid theme("colors.line.DEFAULT");
   border-radius: 4px;
-  box-shadow: 0 4px 14px rgba(28, 29, 27, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 6px 8px;
 }
 .leaflet-tooltip-top:before,
@@ -180,7 +180,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .leaflet-control-attribution {
   @apply font-sans text-2xs;
-  background: rgba(251, 250, 247, 0.85) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
   color: theme("colors.ink.3") !important;
 }
 .leaflet-control-attribution a {

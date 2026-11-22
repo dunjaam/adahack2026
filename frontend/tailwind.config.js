@@ -1,57 +1,54 @@
 /** @type {import('tailwindcss').Config} */
+import { md } from "./src/theme/material.js";
 
 /*
- * ZrakVizija design system
+ * ZrakVizija design system — Google Material Design palette only.
  * ------------------------------------------------------------------
- * Paper  — warm off-white surfaces           (paper, surface)
- * Ink    — charcoal typography, 3 strengths  (ink, ink-2, ink-3)
- * Line   — hairline dividers                 (line, line-2)
- * Accent — deep teal for interaction/state   (accent / brand / teal)
- * Pollutant severity colours live in lib.tsx (pmColor / pmInk) and
- * are never used for UI chrome.
+ * paper / surface   Grey 100 / White
+ * ink, ink-2, ink-3 Grey 900 / 700 / 600   (primary / secondary / hint text)
+ * line, line-2      Grey 300 / 200         (dividers)
+ * accent            Teal                    (interaction, positive change)
+ * danger / warn     Red / Orange            (over budget, worsening)
+ * Pollutant severity scales live in lib.tsx and also use md.* only.
  *
- * `slate` and `brand` are remapped onto the warm neutral and teal scales
- * so every existing component inherits the system consistently.
+ * Tailwind's default colour names are remapped onto Material palettes so
+ * every component (incl. Docs, charts) is Material without per-file edits.
  */
-const neutral = {
-  50: "#F7F5F0",
-  100: "#EFECE6",
-  200: "#E2DED6",
-  300: "#CFCAC0",
-  400: "#8F8A80", // tertiary text — still ≥4.5:1 on paper at 11px+
-  500: "#6B675F",
-  600: "#4E4B45",
-  700: "#383631",
-  800: "#26251F",
-  900: "#1A1A17",
-};
-
-const teal = {
-  50: "#E8F1EF",
-  100: "#CFE3DF",
-  200: "#A3CAC3",
-  300: "#6FAAA1",
-  400: "#3E8A80",
-  500: "#1D7268",
-  600: "#125F57",
-  700: "#0E4F49",
-  800: "#0B3F3A",
-  900: "#082F2B",
-};
-
 export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        paper: "#F4F2ED",
-        surface: "#FBFAF7",
-        ink: { DEFAULT: "#1C1D1B", 2: "#45443F", 3: "#76736B" },
-        line: { DEFAULT: "#DCD8CF", 2: "#E9E6DF" },
-        accent: { DEFAULT: teal[500], ...teal },
-        brand: teal,
-        teal,
-        slate: neutral,
+        paper: md.grey[100],
+        surface: md.white,
+        ink: { DEFAULT: md.grey[900], 2: md.grey[700], 3: md.grey[600] },
+        line: { DEFAULT: md.grey[300], 2: md.grey[200] },
+        accent: { DEFAULT: md.teal[500], ...md.teal },
+        danger: { DEFAULT: md.red[700], ...md.red },
+        warn: { DEFAULT: md.orange[800], ...md.orange },
+        brand: md.teal,
+        teal: md.teal,
+        slate: md.grey,
+        gray: md.grey,
+        zinc: md.grey,
+        stone: md.grey,
+        neutral: md.grey,
+        red: md.red,
+        rose: md.red,
+        orange: md.orange,
+        amber: md.amber,
+        yellow: md.yellow,
+        lime: md.lightGreen,
+        green: md.green,
+        emerald: md.green,
+        sky: md.lightBlue,
+        cyan: md.lightBlue,
+        blue: md.blue,
+        indigo: md.indigo,
+        violet: md.deepPurple,
+        purple: md.deepPurple,
+        white: md.white,
+        black: md.black,
       },
       fontFamily: {
         sans: ['"IBM Plex Sans"', "ui-sans-serif", "system-ui", "sans-serif"],
@@ -77,7 +74,7 @@ export default {
       },
       boxShadow: {
         card: "none",
-        float: "0 1px 2px rgba(28,29,27,0.06), 0 6px 20px rgba(28,29,27,0.08)",
+        float: "0 2px 4px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08)" /* Material elevation 4dp */,
       },
       keyframes: {
         "fade-in": { "0%": { opacity: "0", transform: "translateY(2px)" }, "100%": { opacity: "1", transform: "translateY(0)" } },
