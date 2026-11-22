@@ -6,6 +6,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------- base ---------------------------------------------------------- */
 html,
 body,
 #root {
@@ -14,21 +15,44 @@ body,
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
-  background: #f6f8f7;
-  color: #0f172a;
-  -webkit-font-smoothing: antialiased;
+  @apply bg-paper font-sans text-base text-ink antialiased;
+  font-feature-settings: "kern", "liga";
 }
 
-/* react-grid-layout polish */
+/* numeric data everywhere: mono, tabular, slashed zero off */
+.num {
+  @apply font-mono tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: -0.01em;
+}
+
+/* section label — the one way we title things */
+.label {
+  @apply text-2xs font-semibold uppercase tracking-label text-ink-2;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* ---------- workspace grid ----------------------------------------------- */
 .react-grid-item.react-grid-placeholder {
-  background: #4fae60 !important;
-  opacity: 0.15 !important;
-  border-radius: 1rem;
+  background: theme("colors.accent.500") !important;
+  opacity: 0.08 !important;
+  border-radius: 0;
 }
 .react-grid-item > .react-resizable-handle {
   z-index: 10;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.react-grid-item:hover > .react-resizable-handle {
+  opacity: 0.6;
 }
 .widget-drag-handle {
   cursor: grab;
@@ -37,63 +61,128 @@ body {
   cursor: grabbing;
 }
 
-/* range slider — slim track, small refined thumb */
-input[type="range"] {
+/* ---------- instrument slider -------------------------------------------- */
+/* hairline track, teal fill to the value, fader-style cursor */
+.instrument {
   -webkit-appearance: none;
   appearance: none;
-  height: 4px;
-  border-radius: 9999px;
-  background: #e2e8f0;
-  outline: none;
+  width: 100%;
+  height: 16px;
+  background: transparent;
   cursor: pointer;
+  outline: none;
+  --pct: 0%;
 }
-input[type="range"]:disabled {
-  opacity: 0.4;
+.instrument:disabled {
+  opacity: 0.35;
   cursor: not-allowed;
 }
-input[type="range"]::-webkit-slider-thumb {
+.instrument::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    theme("colors.accent.500") var(--pct),
+    theme("colors.line.DEFAULT") var(--pct)
+  );
+}
+.instrument::-webkit-slider-thumb {
   -webkit-appearance: none;
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 9999px;
-  background: #fff;
-  border: 2px solid #4fae60;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.2);
-  cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.15s ease;
+  width: 8px;
+  height: 16px;
+  margin-top: -7px;
+  border-radius: 2px;
+  background: theme("colors.ink.DEFAULT");
+  border: 2px solid theme("colors.surface");
+  box-shadow: 0 0 0 1px theme("colors.ink.DEFAULT");
+  transition: background 0.12s, box-shadow 0.12s;
 }
-input[type="range"]::-moz-range-thumb {
-  width: 10px;
-  height: 10px;
-  border-radius: 9999px;
-  background: #fff;
-  border: 2px solid #4fae60;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.2);
-  cursor: pointer;
+.instrument:hover::-webkit-slider-thumb,
+.instrument:active::-webkit-slider-thumb {
+  background: theme("colors.accent.600");
+  box-shadow: 0 0 0 1px theme("colors.accent.600");
 }
-input[type="range"]:hover::-webkit-slider-thumb {
-  transform: scale(1.15);
+.instrument:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 1px theme("colors.accent.600"), 0 0 0 4px theme("colors.accent.100");
 }
-input[type="range"]:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 4px rgba(79, 174, 96, 0.25);
+.instrument::-moz-range-track {
+  height: 2px;
+  background: theme("colors.line.DEFAULT");
+}
+.instrument::-moz-range-progress {
+  height: 2px;
+  background: theme("colors.accent.500");
+}
+.instrument::-moz-range-thumb {
+  width: 4px;
+  height: 12px;
+  border-radius: 2px;
+  background: theme("colors.ink.DEFAULT");
+  border: 2px solid theme("colors.surface");
+  box-shadow: 0 0 0 1px theme("colors.ink.DEFAULT");
 }
 
+/* ---------- scrollbars ---------------------------------------------------- */
 ::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
+  background: theme("colors.line.DEFAULT");
+  border-radius: 4px;
 }
 
+/* ---------- leaflet chrome ------------------------------------------------ */
 .leaflet-container {
   font-family: inherit;
-  background: #eef2f1;
+  background: theme("colors.paper");
 }
-
-/* smooth before/after colour transitions on district polygons */
+/* muted, warm-grey basemap so the data layer carries the colour */
+.leaflet-tile-pane {
+  filter: grayscale(1) sepia(0.12) contrast(0.88) brightness(1.06);
+  opacity: 0.85;
+}
 .leaflet-interactive {
   transition: fill 0.6s ease, stroke 0.3s ease, fill-opacity 0.4s ease;
+}
+.leaflet-bar,
+.leaflet-touch .leaflet-bar {
+  border: 1px solid theme("colors.line.DEFAULT") !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+.leaflet-bar a,
+.leaflet-touch .leaflet-bar a {
+  width: 28px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+  font-size: 15px !important;
+  color: theme("colors.ink.DEFAULT") !important;
+  background: theme("colors.surface") !important;
+  border-bottom-color: theme("colors.line.DEFAULT") !important;
+}
+.leaflet-bar a:hover {
+  background: theme("colors.paper") !important;
+}
+.leaflet-tooltip {
+  @apply font-sans text-xs text-ink;
+  background: theme("colors.surface");
+  border: 1px solid theme("colors.line.DEFAULT");
+  border-radius: 4px;
+  box-shadow: 0 4px 14px rgba(28, 29, 27, 0.1);
+  padding: 6px 8px;
+}
+.leaflet-tooltip-top:before,
+.leaflet-tooltip-bottom:before,
+.leaflet-tooltip-left:before,
+.leaflet-tooltip-right:before {
+  display: none;
+}
+.leaflet-control-attribution {
+  @apply font-sans text-2xs;
+  background: rgba(251, 250, 247, 0.85) !important;
+  color: theme("colors.ink.3") !important;
+}
+.leaflet-control-attribution a {
+  color: theme("colors.ink.2") !important;
 }

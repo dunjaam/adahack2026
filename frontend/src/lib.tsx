@@ -34,18 +34,57 @@ function hex(h: string): [number, number, number] {
   return [parseInt(n.slice(0, 2), 16), parseInt(n.slice(2, 4), 16), parseInt(n.slice(4, 6), 16)];
 }
 
+/**
+ * Same severity hues as pmColor, darkened so they stay legible as TEXT on the
+ * warm paper background (pmColor's yellow is unreadable at small sizes).
+ */
+export function pmInk(v: number): string {
+  const stops: [number, string][] = [
+    [0, "#1E6B46"],
+    [10, "#2E7D45"],
+    [15, "#8A6A00"],
+    [20, "#B4530F"],
+    [25, "#B42318"],
+    [35, "#8A1C14"],
+  ];
+  if (v <= stops[0][0]) return stops[0][1];
+  for (let i = 1; i < stops.length; i++) {
+    if (v <= stops[i][0]) {
+      const [a, ca] = stops[i - 1];
+      const [b, cb] = stops[i];
+      return lerpColor(ca, cb, (v - a) / (b - a));
+    }
+  }
+  return stops[stops.length - 1][1];
+}
+
 export const eur = (v: number) => {
-  if (Math.abs(v) >= 1_000_000) return `€${(v / 1_000_000).toFixed(2)} mio`;
-  if (Math.abs(v) >= 1000) return `€${(v / 1000).toFixed(0)}k`;
+  if (Math.abs(v) >= 1_000_000) return `€${num(v / 1_000_000, 2)} mio`;
+  if (Math.abs(v) >= 1000) return `€${num(v / 1000, 0)}k`;
   return `€${Math.round(v)}`;
 };
 export const num = (v: number, d = 1) => v.toLocaleString("sl-SI", { maximumFractionDigits: d, minimumFractionDigits: d });
 export const int = (v: number) => Math.round(v).toLocaleString("sl-SI");
 
 // ---- UI primitives ---------------------------------------------------------
+
+/** Section label: mono index + uppercase title. The only titling style we use. */
+export function SectionLabel({ index, title, className = "" }: { index?: string; title: string; className?: string }) {
+  return (
+    <span className={`flex min-w-0 items-baseline gap-2 ${className}`}>
+      {index && <span className="num text-2xs text-ink-3">{index}</span>}
+      <span className="label truncate">{title}</span>
+    </span>
+  );
+}
+
+/**
+ * Workspace panel. Panels sit edge-to-edge in the grid; the 1px gaps between
+ * them form hairline dividers, so panels themselves carry no border or radius.
+ */
 export function Card({
   title,
-  icon,
+  index,
   right,
   children,
   className = "",
@@ -54,24 +93,24 @@ export function Card({
   bare = false,
 }: {
   title?: string;
+  index?: string;
+  /** kept for API compatibility; panels are icon-less by design */
   icon?: React.ReactNode;
   right?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
   dragHandle?: boolean;
   noPad?: boolean;
-  /** no header bar: the whole card drags, `right` floats top-right on hover */
+  /** no header bar: the whole panel drags, `right` floats top-right on hover */
   bare?: boolean;
 }) {
   if (bare) {
     return (
-      <div
-        className={`group relative h-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card ${dragHandle ? "widget-drag-handle" : ""} ${className}`}
-      >
+      <div className={`group relative h-full overflow-hidden bg-surface ${dragHandle ? "widget-drag-handle" : ""} ${className}`}>
         {children}
         {right && (
           <div
-            className="absolute right-1.5 top-1.5 z-10 flex items-center gap-1 opacity-0 transition group-hover:opacity-100"
+            className="absolute right-2 top-2 z-10 flex items-center gap-1 opacity-0 transition group-hover:opacity-100"
             onMouseDown={(e) => e.stopPropagation()}
           >
             {right}
@@ -80,36 +119,26 @@ export function Card({
       </div>
     );
   }
-  const showHeader = title || right || dragHandle;
   return (
-    <div className={`flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card ${className}`}>
-      {showHeader && (
-        <div
-          className={`flex items-center justify-between gap-2 px-3 py-1 ${title ? "border-b border-slate-100" : ""} ${dragHandle ? "widget-drag-handle" : ""}`}
-        >
-          <div className="flex min-w-0 items-center gap-1.5 truncate text-[12.5px] font-semibold text-slate-700">
-            {title && icon}
-            {title && <span>{title}</span>}
-          </div>
-          <div className="flex items-center gap-1" onMouseDown={(e) => e.stopPropagation()}>
-            {right}
-          </div>
+    <div className={`group flex h-full flex-col overflow-hidden bg-surface ${className}`}>
+      <div
+        className={`flex h-9 shrink-0 items-center justify-between gap-2 border-b border-line-2 px-3 ${dragHandle ? "widget-drag-handle" : ""}`}
+      >
+        {title ? <SectionLabel index={index} title={title} /> : <span />}
+        <div className="flex items-center gap-1.5" onMouseDown={(e) => e.stopPropagation()}>
+          {right}
         </div>
-      )}
-      <div className={`min-h-0 flex-1 ${noPad ? "" : "overflow-auto p-3"}`}>{children}</div>
+      </div>
+      <div className={`min-h-0 flex-1 ${noPad ? "" : "overflow-auto px-3 py-2.5"}`}>{children}</div>
     </div>
   );
 }
 
 export function Badge({ kind, children }: { kind: "measured" | "model" | "info"; children: React.ReactNode }) {
-  const styles =
-    kind === "measured"
-      ? "bg-brand-50 text-brand-700 border-brand-200"
-      : kind === "model"
-      ? "bg-amber-50 text-amber-700 border-amber-200"
-      : "bg-slate-100 text-slate-600 border-slate-200";
+  const dot = kind === "measured" ? "bg-accent-500" : kind === "model" ? "bg-[#B4530F]" : "bg-ink-3";
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium ${styles}`}>
+    <span className="inline-flex items-center gap-1.5 text-2xs font-medium text-ink-2">
+      <span className={`h-1.5 w-1.5 rounded-sm ${dot}`} />
       {children}
     </span>
   );

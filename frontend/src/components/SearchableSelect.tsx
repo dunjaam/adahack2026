@@ -45,18 +45,18 @@ export function SearchableSelect({
     <div className={`relative ${width}`} ref={ref}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-left text-sm shadow-card transition hover:border-brand-300"
+        className="flex h-7 w-full items-center gap-2 rounded-md border border-line bg-surface px-2.5 text-left text-sm transition hover:border-ink-3"
       >
         {icon}
-        <span className={`flex-1 truncate ${current ? "text-slate-800" : "text-slate-400"}`}>
+        <span className={`flex-1 truncate ${current ? "font-medium text-ink" : "text-ink-3"}`}>
           {current ? current.label : placeholder}
         </span>
-        <ChevronDown className={`h-4 w-4 text-slate-400 transition ${open ? "rotate-180" : ""}`} />
+        <ChevronDown className={`h-3.5 w-3.5 text-ink-3 transition ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (
-        <div className="absolute z-[1200] mt-2 w-full animate-fade-in overflow-hidden rounded-xl border border-slate-200 bg-white shadow-float">
-          <div className="flex items-center gap-2 border-b border-slate-100 px-3 py-2">
-            <Search className="h-4 w-4 text-slate-400" />
+        <div className="absolute z-[1200] mt-1 w-full animate-fade-in overflow-hidden rounded-md border border-line bg-surface shadow-float">
+          <div className="flex items-center gap-2 border-b border-line-2 px-2.5 py-1.5">
+            <Search className="h-3.5 w-3.5 text-ink-3" />
             <input
               autoFocus
               value={q}
@@ -77,13 +77,13 @@ export function SearchableSelect({
                   setOpen(false);
                   setQ("");
                 }}
-                className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm hover:bg-brand-50"
+                className="flex w-full items-center justify-between gap-2 px-2.5 py-1.5 text-left text-sm hover:bg-paper"
               >
                 <span>
-                  <span className="font-medium text-slate-800">{o.label}</span>
-                  {o.sub && <span className="ml-2 text-xs text-slate-400">{o.sub}</span>}
+                  <span className="text-ink">{o.label}</span>
+                  {o.sub && <span className="num ml-2 text-2xs text-ink-3">{o.sub}</span>}
                 </span>
-                {o.value === value && <Check className="h-4 w-4 text-brand-600" />}
+                {o.value === value && <Check className="h-3.5 w-3.5 text-accent-600" />}
               </button>
             ))}
           </div>

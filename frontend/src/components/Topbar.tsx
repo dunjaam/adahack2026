@@ -48,65 +48,55 @@ export function Topbar() {
         sub: `${d.pm25_winter} µg/m³`,
       })) ?? [];
 
+  const tool =
+    "flex h-7 w-7 items-center justify-center rounded-md border border-line bg-surface text-ink-2 transition hover:border-ink-3 hover:text-ink";
+
   return (
-    <header className="sticky top-0 z-[1000] border-b border-slate-200 bg-white/90 backdrop-blur">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-2.5">
-        {/* brand — horizontal lockup, left aligned */}
+    <header className="z-[1000] shrink-0 border-b border-line bg-surface">
+      <div className="flex h-12 items-center gap-4 px-4">
+        {/* brand */}
         <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-brand-100 bg-gradient-to-br from-white to-brand-50 shadow-card">
-            <BrandIcon className="h-6 w-6" />
-          </span>
-          <span className="text-[19px] font-semibold leading-none tracking-tight text-ink">
-            ZrakVizija
-          </span>
+          <BrandIcon className="h-6 w-6" />
+          <div className="flex items-baseline gap-2.5">
+            <span className="text-[15px] font-semibold tracking-[-0.01em] text-ink">ZrakVizija</span>
+            <span className="hidden text-2xs font-medium uppercase tracking-label text-ink-3 md:inline">
+              Okoljski digitalni dvojček
+            </span>
+          </div>
         </div>
 
-        <div className="hidden h-8 w-px bg-slate-200 sm:block" />
+        <div className="h-5 w-px bg-line" />
 
         <SearchableSelect
           value={selected}
           options={[{ value: "__all__", label: "Vsa občina", sub: "agregat" }, ...districtOpts]}
           onChange={(v) => selectDistrict(v === "__all__" ? null : v)}
-          icon={<MapPin className="h-4 w-4 text-teal-500" />}
+          icon={<MapPin className="h-3.5 w-3.5 text-ink-3" />}
           placeholder="Vsa občina"
-          width="w-60"
+          width="w-56"
         />
 
-        <div className="ml-auto flex items-center gap-2">
-          <span
-            className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ${
-              simulating ? "bg-amber-50 text-amber-600" : "bg-brand-50 text-brand-600"
-            }`}
-          >
-            <span className={`h-1.5 w-1.5 rounded-full ${simulating ? "bg-amber-500 animate-pulse" : "bg-brand-500"}`} />
-            {simulating ? "Računam …" : "Simulacija v živo"}
+        <div className="ml-auto flex items-center gap-1.5">
+          <span className="mr-2 flex items-center gap-1.5 text-2xs font-medium uppercase tracking-label text-ink-2">
+            <span
+              className={`h-1.5 w-1.5 rounded-full ${simulating ? "animate-pulse bg-[#B4530F]" : "bg-accent-500"}`}
+            />
+            {simulating ? "Računam" : "Simulacija v živo"}
           </span>
-          <a
-            href="/docs"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Navodila"
-            aria-label="Navodila"
-            className="flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-50"
-          >
-            <BookOpen className="h-4 w-4" />
+          <a href="/docs" target="_blank" rel="noopener noreferrer" title="Navodila" aria-label="Navodila" className={tool}>
+            <BookOpen className="h-3.5 w-3.5" />
           </a>
-          <button
-            onClick={resetParams}
-            title="Ponastavi"
-            aria-label="Ponastavi"
-            className="flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-50"
-          >
-            <RotateCcw className="h-4 w-4" />
+          <button onClick={resetParams} title="Ponastavi ukrepe" aria-label="Ponastavi" className={tool}>
+            <RotateCcw className="h-3.5 w-3.5" />
           </button>
           <button
             onClick={() => result && exportSummary(result, selected)}
             disabled={!result}
             title="Izvozi povzetek"
-            aria-label="Izvozi povzetek"
-            className="flex items-center justify-center rounded-xl bg-brand-600 p-2 text-white shadow-card transition hover:bg-brand-700 disabled:opacity-50"
+            className="flex h-7 items-center gap-1.5 rounded-md bg-ink px-2.5 text-xs font-medium text-surface transition hover:bg-accent-600 disabled:opacity-40"
           >
-            <Download className="h-4 w-4" />
+            <Download className="h-3.5 w-3.5" />
+            Izvoz
           </button>
         </div>
       </div>

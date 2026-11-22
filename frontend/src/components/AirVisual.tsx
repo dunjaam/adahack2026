@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { animate, motion, useAnimationControls, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
 import { useStore } from "../store";
-import { pmColor, num } from "../lib";
+import { pmInk, num, SectionLabel } from "../lib";
 
 function statusLabel(pm: number) {
   if (pm < 10) return "Odličen zrak";
@@ -13,6 +13,10 @@ function statusLabel(pm: number) {
 }
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+/** In a monospace face the decimal comma takes a full cell; pull it in. */
+const tightSep = (s: string) =>
+  s.replace(/[,.](?=\d+$)/, (c) => `<span style="margin:0 -0.14em">${c}</span>`);
 
 /**
  * Centerpiece readout. Shows the simulated PM value as a large instrument-style
@@ -54,8 +58,8 @@ export function AirVisual() {
   }, [after, pm]);
   useMotionValueEvent(pm, "change", (v) => {
     if (!numRef.current) return;
-    numRef.current.textContent = num(v, digits);
-    numRef.current.style.color = pmColor(v);
+    numRef.current.innerHTML = tightSep(num(v, digits));
+    numRef.current.style.color = pmInk(v);
   });
 
   // --- percentage counts too ---
@@ -77,77 +81,70 @@ export function AirVisual() {
       first.current = false;
       return;
     }
-    pulse.start({ scale: [1, 1.035, 1], transition: { duration: 0.45, ease: "easeOut" } });
+    pulse.start({ opacity: [0.55, 1], transition: { duration: 0.5, ease: "easeOut" } });
   }, [after, pulse]);
 
   const tone = !changed
-    ? "bg-slate-100 text-slate-500"
+    ? "border-line text-ink-2"
     : improved
-    ? "bg-brand-50 text-brand-700"
-    : "bg-red-50 text-red-600";
+    ? "border-accent-200 bg-accent-50 text-accent-700"
+    : "border-[#F1C9C2] bg-[#FBEDEA] text-[#B42318]";
 
   return (
-    <div
-      className="flex h-full w-full flex-col justify-between px-4 pb-3 pt-2.5"
-      style={{ containerType: "size" }}
-    >
+    <div className="flex h-full w-full flex-col justify-between px-4 pb-3 pt-2.5" style={{ containerType: "size" }}>
       {/* context */}
-      <div className="flex items-center justify-between gap-2 pr-6 text-[13px]">
-        <span className="truncate font-semibold text-slate-600">
-          {label} <span className="font-normal text-slate-400">· {selected ?? "vsa občina"}</span>
-        </span>
-        <span className="shrink-0 font-semibold transition-colors duration-700" style={{ color: pmColor(after) }}>
+      <div className="flex items-baseline justify-between gap-3 pr-6">
+        <SectionLabel index="02" title={`Kakovost zraka · ${label} · ${selected ?? "vsa občina"}`} />
+        <span className="shrink-0 text-xs font-semibold transition-colors duration-700" style={{ color: pmInk(after) }}>
           {statusLabel(after)}
         </span>
       </div>
 
       {/* baseline → simulated */}
-      <div className="flex min-h-0 flex-col justify-center">
+      <div className="flex min-h-0 flex-col justify-center gap-1">
         <div
-          className="flex items-center gap-1.5 font-semibold tabular-nums text-slate-400"
-          style={{ fontSize: "clamp(0.8rem, min(9cqh, 5cqw), 1.6rem)" }}
+          className="flex items-center gap-2 text-ink-3"
+          style={{ fontSize: "clamp(0.75rem, min(8cqh, 4.2cqw), 1.25rem)" }}
         >
-          {changed ? (
+          <span className="text-[0.72em] font-semibold uppercase tracking-label">
+            {changed ? "Izhodišče" : "Izhodišče · brez ukrepov"}
+          </span>
+          {changed && (
             <>
-              <span className="text-[0.75em] font-medium">izhodišče</span>
-              <span>{num(before, digits)}</span>
-              <ArrowRight className="h-[0.9em] w-[0.9em]" />
+              <span className="num font-medium text-ink-2">{num(before, digits)}</span>
+              <ArrowRight className="h-[0.85em] w-[0.85em]" />
+              <span className="text-[0.72em] font-semibold uppercase tracking-label">Simulacija</span>
             </>
-          ) : (
-            <span className="text-[0.75em] font-medium">izhodišče · brez ukrepov</span>
           )}
         </div>
-        <motion.div animate={pulse} className="flex origin-left items-baseline gap-2">
+        <motion.div animate={pulse} className="flex items-baseline gap-2">
           <span
             ref={numRef}
-            className="font-extrabold leading-[0.9] tracking-tighter tabular-nums"
-            style={{ color: pmColor(pm.get()), fontSize: "clamp(2.5rem, min(46cqh, 24cqw), 9rem)" }}
-          >
-            {num(pm.get(), digits)}
-          </span>
-          <span
-            className="font-semibold text-slate-400"
-            style={{ fontSize: "clamp(0.8rem, min(8cqh, 4.5cqw), 1.5rem)" }}
-          >
+            className="num font-semibold leading-[0.9]"
+            style={{
+              color: pmInk(pm.get()),
+              fontSize: "clamp(2.5rem, min(44cqh, 21cqw), 8.5rem)",
+              letterSpacing: "-0.04em",
+            }}
+            dangerouslySetInnerHTML={{ __html: tightSep(num(pm.get(), digits)) }}
+          />
+          <span className="num font-medium text-ink-3" style={{ fontSize: "clamp(0.75rem, min(7cqh, 4cqw), 1.25rem)" }}>
             µg/m³
           </span>
         </motion.div>
       </div>
 
       {/* change indicator */}
-      <div
-        className="flex items-center gap-2"
-        style={{ fontSize: "clamp(0.8rem, min(8cqh, 4.5cqw), 1.35rem)" }}
-      >
+      <div className="flex items-center gap-2.5 border-t border-line-2 pt-2" style={{ fontSize: "clamp(0.8rem, min(7.5cqh, 4.2cqw), 1.2rem)" }}>
         <motion.span
           animate={pulse}
-          className={`inline-flex shrink-0 items-center gap-1 rounded-lg px-2 py-0.5 font-bold tabular-nums transition-colors duration-500 ${tone}`}
+          className={`num inline-flex shrink-0 items-center gap-1 rounded border px-1.5 py-px font-semibold transition-colors duration-500 ${tone}`}
         >
-          {changed && (improved ? <ArrowDownRight className="h-[1em] w-[1em]" /> : <ArrowUpRight className="h-[1em] w-[1em]" />)}
-          {changed ? (improved ? "−" : "+") : ""}
+          {changed && (improved ? <ArrowDownRight className="h-[0.95em] w-[0.95em]" /> : <ArrowUpRight className="h-[0.95em] w-[0.95em]" />)}
+          {changed ? (improved ? "−" : "+") : "±"}
           <span ref={pctRef}>{num(pct.get(), pctDigits)}</span>% {label}
         </motion.span>
-        <span className="truncate text-[0.7em] text-slate-500">
+        <span className="truncate text-[0.68em] text-ink-2">
           {!changed
             ? "Premaknite drsnik za simulacijo ukrepov"
             : improved

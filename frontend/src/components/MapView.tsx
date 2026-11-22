@@ -73,8 +73,8 @@ export function MapView({ mode }: { mode: MapMode }) {
     const isSel = p.cs_ime === selected;
     return {
       fillColor: fill,
-      weight: isSel ? 3 : 1,
-      color: isSel ? "#047857" : "#94a3b8",
+      weight: isSel ? 2.5 : 0.75,
+      color: isSel ? "#1C1D1B" : "#6B675F",
       fillOpacity: layer === "sensitive" ? 0.25 : 0.72,
     };
   };
@@ -84,9 +84,14 @@ export function MapView({ mode }: { mode: MapMode }) {
     const r = resById[p.cs_ime];
     const after = r ? (pollutant === "pm25" ? r.pm25_after : r.pm10_after) : null;
     const before = pollutant === "pm25" ? p.pm25_winter : p.pm10_winter;
-    return `<b>${p.cs_ime}</b><br/>${pollutant.toUpperCase()}: ${num(before)}${
-      after != null ? ` → <b>${num(after)}</b>` : ""
-    } µg/m³<br/>${p.measured ? "📍 meritev" : "〜 ocena"}`;
+    const label = pollutant === "pm25" ? "PM₂.₅" : "PM₁₀";
+    return `<div style="font-weight:600;margin-bottom:2px">${p.cs_ime}</div>` +
+      `<div style="font-family:'IBM Plex Mono',monospace;font-size:11px">${label} ${num(before)}${
+        after != null ? ` → <b>${num(after)}</b>` : ""
+      } µg/m³</div>` +
+      `<div style="color:#76736B;font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-top:2px">${
+        p.measured ? "meritev ARSO" : "modelska ocena"
+      }</div>`;
   };
 
   const geoRef = useRef<L.GeoJSON | null>(null);
@@ -107,14 +112,14 @@ export function MapView({ mode }: { mode: MapMode }) {
     const p = feature.properties;
     lyr.on({
       click: () => selectDistrict(p.cs_ime),
-      mouseover: (e: any) => e.target.setStyle({ weight: 3, color: "#0d9488" }),
+      mouseover: (e: any) => e.target.setStyle({ weight: 2, color: "#125F57" }),
       mouseout: (e: any) => (e.target as any).setStyle(styleFn(feature)),
     });
     lyr.bindTooltip(tooltipHtml(feature), { sticky: true });
   };
 
   if (!geojson)
-    return <div className="flex h-full items-center justify-center text-slate-400">Nalagam zemljevid …</div>;
+    return <div className="flex h-full items-center justify-center text-sm text-ink-3">Nalagam zemljevid …</div>;
 
   return (
     <div className="relative h-full w-full">
@@ -158,43 +163,90 @@ function LayerSwitcher() {
     { k: "sensitive", label: "Občutljive lok.", icon: <MapPin className="h-3.5 w-3.5" /> },
   ] as const;
   return (
-    <div className="absolute left-3 top-3 z-[500] flex flex-col gap-1 rounded-xl border border-slate-200 bg-white/95 p-1.5 shadow-float backdrop-blur">
-      <div className="px-2 pb-1 pt-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">Sloji</div>
-      {items.map((it) => (
-        <button
-          key={it.k}
-          onClick={() => setLayer(it.k)}
-          className={`flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium transition ${
-            layer === it.k ? "bg-brand-600 text-white" : "text-slate-600 hover:bg-slate-100"
-          }`}
-        >
-          {it.icon}
-          {it.label}
-        </button>
-      ))}
+    <div className="absolute left-3 top-3 z-[500] w-40 overflow-hidden rounded-md border border-line bg-surface/95">
+      <div className="label border-b border-line-2 px-2.5 py-1.5">Sloji</div>
+      <div className="p-1">
+        {items.map((it) => {
+          const on = layer === it.k;
+          return (
+            <button
+              key={it.k}
+              onClick={() => setLayer(it.k)}
+              className={`flex w-full items-center gap-2 rounded px-2 py-1 text-xs font-medium transition ${
+                on ? "bg-ink text-surface" : "text-ink-2 hover:bg-paper hover:text-ink"
+              }`}
+            >
+              {it.icon}
+              {it.label}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
 
+/** Stepped legend using the exact pmColor breakpoints (µg/m³). */
+const PM_STEPS = [0, 10, 15, 20, 25, 35];
+
 function MapLegend({ mode, layer, pollutant }: { mode: MapMode; layer: string; pollutant: string }) {
   const dieselCount = useStore((s) => s.result?.params.diesel_cars_replaced ?? 0);
-  let content: React.ReactNode;
-  if (layer === "heating") content = <span>Emisije ogrevanja (kg PM10/leto) — svetlo → temno</span>;
-  else if (layer === "traffic") content = <span>Prometne emisije (kg PM10/leto) — svetlo → temno</span>;
-  else if (layer === "sensitive") content = <span>Občutljive lokacije (šole, vrtci, domovi)</span>;
-  else if (mode === "diff") content = <span>Δ {pollutant.toUpperCase()} — temnejše zeleno = večje izboljšanje</span>;
-  else
-    content = (
-      <div className="flex items-center gap-2">
-        <span>{pollutant.toUpperCase()} {mode === "after" ? "(potem)" : "(prej)"}:</span>
-        <div className="h-2 w-28 rounded-full" style={{ background: "linear-gradient(90deg,#10b981,#fde047,#ef4444,#b91c1c)" }} />
-        <span className="text-slate-400">0 → 35+ µg/m³</span>
+  const label = pollutant === "pm25" ? "PM₂.₅" : "PM₁₀";
+  let title: string;
+  let body: React.ReactNode;
+  if (layer === "heating") {
+    title = "Emisije ogrevanja";
+    body = <Ramp from="rgb(254,226,210)" to="rgb(254,66,30)" lo="0" hi="30 000 kg PM₁₀/leto" />;
+  } else if (layer === "traffic") {
+    title = "Prometne emisije";
+    body = <Ramp from="rgb(226,232,254)" to="rgb(106,82,254)" lo="0" hi="70 000 kg PM₁₀/leto" />;
+  } else if (layer === "sensitive") {
+    title = "Občutljive lokacije";
+    body = <div className="text-xs text-ink-2">Šole, vrtci, domovi za starejše</div>;
+  } else if (mode === "diff") {
+    title = `Δ ${label}`;
+    body = <Ramp from="rgb(236,253,245)" to="rgb(56,233,185)" lo="0" hi="−4 µg/m³" />;
+  } else {
+    title = `${label} · ${mode === "after" ? "simulacija" : "izhodišče"}`;
+    body = (
+      <div>
+        <div className="flex h-2 overflow-hidden rounded-sm">
+          {PM_STEPS.map((v, i) => (
+            <div key={v} className="flex-1" style={{ background: pmColor(i < PM_STEPS.length - 1 ? (v + PM_STEPS[i + 1]) / 2 : v) }} />
+          ))}
+        </div>
+        <div className="num mt-1 flex text-2xs text-ink-2">
+          {PM_STEPS.map((v, i) => (
+            <span key={v} className="flex-1">
+              {i === PM_STEPS.length - 1 ? `${v}+` : v}
+            </span>
+          ))}
+        </div>
       </div>
     );
+  }
   return (
-    <div className="absolute bottom-3 left-3 z-[500] rounded-xl border border-slate-200 bg-white/95 px-3 py-2 text-[11px] text-slate-600 shadow-float backdrop-blur">
-      {content}
-      {dieselCount > 0 && layer === "pollution" && mode !== "before" && <div>Zamenjani dizli · vse vožnje v MOL</div>}
+    <div className="absolute bottom-3 left-3 z-[500] w-56 rounded-md border border-line bg-surface/95 px-2.5 py-2">
+      <div className="mb-1.5 flex items-baseline justify-between gap-2">
+        <span className="label">{title}</span>
+        {layer === "pollution" && mode !== "diff" && <span className="num text-2xs text-ink-3">µg/m³</span>}
+      </div>
+      {body}
+      {dieselCount > 0 && layer === "pollution" && mode !== "before" && (
+        <div className="mt-1.5 border-t border-line-2 pt-1.5 text-2xs text-ink-3">Zamenjani dizli · vse vožnje v MOL</div>
+      )}
+    </div>
+  );
+}
+
+function Ramp({ from, to, lo, hi }: { from: string; to: string; lo: string; hi: string }) {
+  return (
+    <div>
+      <div className="h-2 rounded-sm" style={{ background: `linear-gradient(90deg, ${from}, ${to})` }} />
+      <div className="num mt-1 flex justify-between text-2xs text-ink-2">
+        <span>{lo}</span>
+        <span>{hi}</span>
+      </div>
     </div>
   );
 }

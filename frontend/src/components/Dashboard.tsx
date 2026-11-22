@@ -27,12 +27,13 @@ interface WidgetDef {
   noPad?: boolean;
   right?: React.ReactNode;
   bare?: boolean;
+  index?: string;
 }
 
 const DEFAULT_IDS = ["airquality", "map", "sliders", "budget"];
 
 const ROWS = 20;
-const MARGIN = 8;
+const MARGIN = 1; // 1px gaps over the line-coloured backdrop = hairline dividers
 
 export function Dashboard() {
   const [active, setActive] = useState<string[]>(DEFAULT_IDS);
@@ -41,6 +42,7 @@ export function Dashboard() {
   // size the grid so all widgets fit the viewport height (no page scroll)
   const gridRef = useRef<HTMLDivElement>(null);
   const [rowH, setRowH] = useState(30);
+  const [short, setShort] = useState(false); // small laptop: give controls a row
   useEffect(() => {
     const el = gridRef.current;
     if (!el) return;
@@ -48,6 +50,7 @@ export function Dashboard() {
       const h = el.clientHeight;
       const rh = Math.max(14, Math.floor((h - MARGIN * (ROWS + 1)) / ROWS));
       setRowH(rh);
+      setShort(h < 720);
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -65,14 +68,16 @@ export function Dashboard() {
     () => ({
       airquality: {
         id: "airquality",
+        index: "02",
         title: "Kakovost zraka",
         icon: <Wind className="h-3.5 w-3.5 text-brand-600" />,
-        layout: { x: 8, y: 0, w: 4, h: 7, minH: 4, minW: 3 },
+        layout: { x: 8, y: 0, w: 4, h: short ? 6 : 7, minH: 4, minW: 3 },
         bare: true,
         body: <AirVisual />,
       },
       map: {
         id: "map",
+        index: "01",
         title: "Zemljevid onesnaženosti",
         icon: <MapIcon className="h-3.5 w-3.5 text-brand-600" />,
         layout: { x: 0, y: 0, w: 8, h: 20, minH: 8, minW: 5 },
@@ -104,13 +109,15 @@ export function Dashboard() {
       } as any,
       sliders: {
         id: "sliders",
-        title: "Simulacija ukrepov",
+        index: "03",
+        title: "Ukrepi",
         icon: <SlidersIcon className="h-3.5 w-3.5 text-brand-600" />,
-        layout: { x: 8, y: 7, w: 4, h: 11, minH: 6, minW: 3 },
+        layout: { x: 8, y: short ? 6 : 7, w: 4, h: short ? 12 : 11, minH: 6, minW: 3 },
         body: <Sliders />,
       },
       budget: {
         id: "budget",
+        index: "04",
         title: "Proračun",
         icon: <Wallet className="h-3.5 w-3.5 text-emerald-600" />,
         layout: { x: 8, y: 18, w: 4, h: 2, minH: 2, minW: 3 },
@@ -118,7 +125,7 @@ export function Dashboard() {
         body: <BudgetCard />,
       },
     }),
-    [mapMode, pollutant, setPollutant]
+    [mapMode, pollutant, setPollutant, short]
   );
 
   const layout: Layout[] = active.map((id) => ({ i: id, ...widgets[id].layout }));
@@ -126,7 +133,7 @@ export function Dashboard() {
   const remove = (id: string) => setActive((a) => a.filter((x) => x !== id));
 
   return (
-    <div ref={gridRef} className="h-full overflow-hidden">
+    <div ref={gridRef} className="h-full overflow-hidden bg-line">
       <ResponsiveGrid
         className="layout"
         layouts={{ lg: layout, md: layout }}
@@ -148,6 +155,7 @@ export function Dashboard() {
               <Card
                 dragHandle
                 bare={w.bare}
+                index={w.index}
                 title={w.bare ? undefined : w.title}
                 icon={w.icon}
                 noPad={w.noPad}
@@ -156,7 +164,7 @@ export function Dashboard() {
                     {w.right}
                     <button
                       onClick={() => remove(id)}
-                      className="rounded-md p-0.5 text-slate-300 transition hover:bg-red-50 hover:text-red-500"
+                      className="rounded p-1 text-ink-3 opacity-0 transition hover:bg-paper hover:text-ink group-hover:opacity-100"
                       title="Odstrani gradnik"
                     >
                       <X className="h-3.5 w-3.5" />
@@ -184,13 +192,13 @@ function Segmented({
   options: { v: string; l: string }[];
 }) {
   return (
-    <div className="flex items-center rounded-lg bg-slate-100 p-0.5">
+    <div className="flex items-center rounded-md border border-line bg-paper p-px">
       {options.map((o) => (
         <button
           key={o.v}
           onClick={() => onChange(o.v)}
-          className={`rounded-md px-1.5 py-0.5 text-[11px] font-medium transition ${
-            value === o.v ? "bg-white text-brand-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
+          className={`num rounded px-2 py-0.5 text-2xs font-medium transition ${
+            value === o.v ? "bg-ink text-surface" : "text-ink-2 hover:text-ink"
           }`}
         >
           {o.l}
