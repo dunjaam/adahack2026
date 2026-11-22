@@ -108,7 +108,7 @@ export function Dashboard() {
         id: "budget",
         title: "Proračun",
         icon: <Wallet className="h-4 w-4 text-emerald-600" />,
-        layout: { x: 8, y: 19, w: 4, h: 6, minH: 5, minW: 3 },
+        layout: { x: 8, y: 19, w: 4, h: 5, minH: 4, minW: 3 },
         body: <BudgetCard />,
       },
       optimizer: {
