@@ -37,10 +37,14 @@ export function exportSummary(r: SimResult, district: string | null) {
     <div class="kpi"><div class="v">${r.eur_per_ug_m3 ? eur(r.eur_per_ug_m3) : "—"}</div><div class="l">€ / µg/m³</div></div>
   </div>
   <h3>Ukrepi</h3>
+  ${r.params.diesel_cars_replaced > 0 ? `<p>Ocena PM predpostavlja vse vožnje zamenjanih dizlov v MOL.
+    Če vse potekajo zunaj MOL, je skupna ocena z drugimi ukrepi ${num(r.municipality_pm25_after_outside, 3)} µg/m³ PM2.5.</p>` : ""}
   <ul>
     <li>Elektrifikacija avtobusov: <b>${r.params.electric_bus_pct}%</b> (${r.cost.n_buses} e-busov, ${eur(r.cost.bus_cost)})</li>
     <li>Zamenjanih kurišč na trda goriva: <b>${int(r.params.wood_systems_replaced)}</b> (${eur(r.cost.wood_cost)})</li>
-    <li>Znižanje prometnih emisij: <b>${r.params.traffic_reduction_pct}%</b> (${eur(r.cost.traffic_cost)})</li>
+    <li>Obnova stavb pred 1980: <b>${int(r.cost.n_retrofits)}</b> (${eur(r.cost.retrofit_cost)})</li>
+    <li>Zamenjava dizlov EURO 4: <b>${int(r.params.diesel_cars_replaced)}</b> (${eur(r.cost.diesel_cost)} subvencij).
+      Preprečene emisije v kg/leto: NOₓ ${num(r.diesel_avoided_kg_per_year.nox_kg)}, PM₂.₅ ${num(r.diesel_avoided_kg_per_year.pm25_kg)}, PM₁₀ ${num(r.diesel_avoided_kg_per_year.pm10_kg)}.</li>
     <li>Proračun: <b>${eur(r.params.budget_eur)}</b> — ${r.within_budget ? "✅ znotraj proračuna" : "⚠️ presega proračun"}</li>
   </ul>
   <h3>Vpliv po četrtnih skupnostih</h3>

@@ -19,7 +19,7 @@
     "step": 0.01,
     "unit": "delež",
     "direction": "higher_worse",
-    "description_sl": "Ocena deleža stanovanj, ki se ogrevajo na trda goriva (drva, premog, peleti)."
+    "description_sl": "Ocena deleža stanovanj na trda goriva (drva, premog, peleti). Najpomembnejša značilka v SHAP razvrstitvi za *ogrevalni* del PM10. V simulatorju učinek drsnika »Zamenjava kurišč« omeji še delež ogrevanja v skupnem PM — v prometno obremenjenih četrtnih skupnostih je torej majhen."
   },
   {
     "name": "pct_district",

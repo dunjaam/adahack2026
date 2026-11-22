@@ -14,7 +14,8 @@ export type PollutantKey = "pm25" | "pm10";
 const DEFAULT_PARAMS: SimParams = {
   electric_bus_pct: 0,
   wood_systems_replaced: 0,
-  traffic_reduction_pct: 0,
+  diesel_cars_replaced: 0,
+  pre1980_retrofit_pct: 0,
   budget_eur: 1_000_000,
 };
 
@@ -25,6 +26,7 @@ interface AppState {
   selectedDistrict: string | null;
   params: SimParams;
   result: SimResult | null;
+  calculatedParams: SimParams | null;
   history: HistoryResult | null;
   loading: boolean;
   simulating: boolean;
@@ -50,6 +52,7 @@ interface AppState {
 }
 
 let simTimer: ReturnType<typeof setTimeout> | null = null;
+let simRequest = 0;
 
 export const useStore = create<AppState>((set, get) => ({
   municipality: null,
@@ -58,6 +61,7 @@ export const useStore = create<AppState>((set, get) => ({
   selectedDistrict: null,
   params: { ...DEFAULT_PARAMS },
   result: null,
+  calculatedParams: null,
   history: null,
   loading: true,
   simulating: false,
@@ -111,18 +115,19 @@ export const useStore = create<AppState>((set, get) => ({
 
   runSim: async () => {
     const { params, selectedDistrict } = get();
+    const request = ++simRequest;
     set({ simulating: true });
     try {
       const result = await api.simulate(params, selectedDistrict);
-      set({ result });
+      if (request === simRequest && get().params === params) set({ result, calculatedParams: params });
     } finally {
-      set({ simulating: false });
+      if (request === simRequest) set({ simulating: false });
     }
   },
 
   saveScenario: (name) => {
     const { params, result, selectedDistrict, scenarios } = get();
-    if (!result) return;
+    if (!result || get().calculatedParams !== params) return;
     const sc: Scenario = {
       id: Math.random().toString(36).slice(2, 9),
       name: name || `Scenarij ${scenarios.length + 1}`,

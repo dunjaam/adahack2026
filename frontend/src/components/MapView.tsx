@@ -62,7 +62,7 @@ export function MapView({ mode }: { mode: MapMode }) {
       const before = pollutant === "pm25" ? p.pm25_winter : p.pm10_winter;
       const after = r ? (pollutant === "pm25" ? r.pm25_after : r.pm10_after) : before;
       if (mode === "diff") {
-        const delta = (r ? r.delta_pm25 : 0) * (pollutant === "pm25" ? 1 : 1 / 0.72);
+        const delta = r ? after - (pollutant === "pm25" ? r.pm25_before : r.pm10_before) : 0;
         const t = Math.min(1, Math.abs(delta) / 4);
         fill = `rgb(${Math.round(236 - 180 * t)}, ${Math.round(253 - 20 * t)}, ${Math.round(245 - 60 * t)})`;
       } else {
@@ -175,6 +175,7 @@ function LayerSwitcher() {
 }
 
 function MapLegend({ mode, layer, pollutant }: { mode: MapMode; layer: string; pollutant: string }) {
+  const dieselCount = useStore((s) => s.result?.params.diesel_cars_replaced ?? 0);
   let content: React.ReactNode;
   if (layer === "heating") content = <span>Emisije ogrevanja (kg PM10/leto) — svetlo → temno</span>;
   else if (layer === "traffic") content = <span>Prometne emisije (kg PM10/leto) — svetlo → temno</span>;
@@ -191,6 +192,7 @@ function MapLegend({ mode, layer, pollutant }: { mode: MapMode; layer: string; p
   return (
     <div className="absolute bottom-3 left-3 z-[500] rounded-xl border border-slate-200 bg-white/95 px-3 py-2 text-[11px] text-slate-600 shadow-float backdrop-blur">
       {content}
+      {dieselCount > 0 && layer === "pollution" && mode !== "before" && <div>Zamenjani dizli · vse vožnje v MOL</div>}
     </div>
   );
 }
