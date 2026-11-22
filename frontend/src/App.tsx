@@ -47,15 +47,15 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="flex h-screen flex-col overflow-hidden">
       <Topbar />
       <DisclaimerBar />
-      <main className="mx-auto max-w-[1600px]">
+      <main className="min-h-0 flex-1 overflow-hidden">
         <Dashboard />
-        <div className="px-5 pb-8">
-          <DataNote />
-        </div>
       </main>
+      <footer className="shrink-0 border-t border-slate-200 bg-white px-4 py-1.5">
+        <DataNote />
+      </footer>
     </div>
   );
 }

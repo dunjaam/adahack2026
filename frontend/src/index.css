@@ -37,29 +37,46 @@ body {
   cursor: grabbing;
 }
 
-/* range slider */
+/* range slider — slim track, small refined thumb */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  height: 6px;
+  height: 4px;
   border-radius: 9999px;
   background: #e2e8f0;
   outline: none;
+  cursor: pointer;
+}
+input[type="range"]:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
   border-radius: 9999px;
-  background: #4fae60;
-  border: 3px solid #fff;
-  box-shadow: 0 1px 4px rgba(16, 24, 40, 0.25);
+  background: #fff;
+  border: 2px solid #4fae60;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.2);
   cursor: pointer;
-  transition: transform 0.1s ease;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
 }
-input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.12);
+input[type="range"]::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 2px solid #4fae60;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.2);
+  cursor: pointer;
+}
+input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px rgba(79, 174, 96, 0.25);
 }
 
 ::-webkit-scrollbar {

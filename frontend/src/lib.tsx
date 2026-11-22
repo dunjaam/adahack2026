@@ -65,9 +65,9 @@ export function Card({
     <div className={`flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card ${className}`}>
       {showHeader && (
         <div
-          className={`flex items-center justify-between gap-2 px-3 py-1.5 ${title ? "border-b border-slate-100" : ""} ${dragHandle ? "widget-drag-handle" : ""}`}
+          className={`flex items-center justify-between gap-2 px-3 py-1 ${title ? "border-b border-slate-100" : ""} ${dragHandle ? "widget-drag-handle" : ""}`}
         >
-          <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+          <div className="flex min-w-0 items-center gap-1.5 truncate text-[12.5px] font-semibold text-slate-700">
             {title && icon}
             {title && <span>{title}</span>}
           </div>
@@ -76,7 +76,7 @@ export function Card({
           </div>
         </div>
       )}
-      <div className={`min-h-0 flex-1 ${noPad ? "" : "overflow-auto p-4"}`}>{children}</div>
+      <div className={`min-h-0 flex-1 ${noPad ? "" : "overflow-auto p-3"}`}>{children}</div>
     </div>
   );
 }

@@ -132,13 +132,13 @@ export function AirVisual() {
   }, []);
 
   return (
-    <div className="relative h-full w-full overflow-hidden">
+    <div className="relative h-full w-full overflow-hidden" style={{ containerType: "size" }}>
       <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 h-full w-full" />
 
-      <div className="relative flex h-full flex-col justify-between gap-2 p-5">
+      <div className="relative flex h-full flex-col justify-between gap-1 px-3.5 py-2.5">
         {/* top row: label + improvement badge */}
-        <div className="flex items-start justify-between">
-          <div className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+        <div className="flex items-center justify-between gap-2">
+          <div className="truncate text-[10.5px] font-semibold uppercase tracking-wider text-slate-500">
             Kakovost zraka · {pollutant.toUpperCase()} {selected ? `· ${selected}` : "· vsa občina"}
           </div>
           <AnimatePresence mode="wait">
@@ -149,11 +149,11 @@ export function AirVisual() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -6, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
-                className={`flex items-center gap-1 rounded-full px-3 py-1 text-sm font-bold shadow-sm ${
+                className={`flex shrink-0 items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-bold shadow-sm ${
                   improved ? "bg-brand-50 text-brand-700" : "bg-red-50 text-red-600"
                 }`}
               >
-                {improved ? <ArrowDownRight className="h-4 w-4" /> : <ArrowUpRight className="h-4 w-4" />}
+                {improved ? <ArrowDownRight className="h-3.5 w-3.5" /> : <ArrowUpRight className="h-3.5 w-3.5" />}
                 <span ref={pctRef}>{num(Math.abs(pctRaw))}</span>%
               </motion.div>
             )}
@@ -161,48 +161,54 @@ export function AirVisual() {
         </div>
 
         {/* hero number */}
-        <div className="flex items-end gap-4">
-          <div className="flex items-end gap-2">
+        <div className="flex min-h-0 items-end gap-3">
+          <div className="flex shrink-0 items-end gap-1.5">
             <span
               ref={numRef}
               className="font-bold leading-[0.85] tabular-nums tracking-tight"
-              style={{ color: pmColor(after), fontSize: "clamp(3.5rem, 9vw, 7rem)" }}
+              style={{ color: pmColor(after), fontSize: "clamp(1.75rem, min(30cqh, 17cqw), 5rem)" }}
             >
               {num(after, digits)}
             </span>
-            <span className="pb-2 text-lg font-medium text-slate-400">µg/m³</span>
+            <span className="pb-1 text-xs font-medium text-slate-400">µg/m³</span>
           </div>
-          <div className="pb-2.5">
-            <div className="text-sm font-semibold" style={{ color: pmColor(after) }}>
+          <div className="min-w-0 pb-1 leading-tight">
+            <div className="truncate text-[13px] font-semibold" style={{ color: pmColor(after) }}>
               {statusLabel(after)}
             </div>
-            <div className="text-xs text-slate-400">
+            <div className="truncate text-[11px] text-slate-500">
               izhodišče <span className="font-semibold text-slate-500">{num(before, digits)}</span> µg/m³
             </div>
-            {result && <div className="text-xs text-slate-600">Skupni strošek ukrepov · {eur(result.cost.total_cost)}</div>}
+            {result && result.cost.total_cost > 0 && (
+              <div className="truncate text-[11px] text-slate-500">
+                strošek <span className="font-semibold text-slate-700">{eur(result.cost.total_cost)}</span>
+              </div>
+            )}
           </div>
         </div>
 
         {withDiesel && outside !== undefined && (
-          <p className="text-xs text-slate-600">
-            Prikazana ocena velja, če vse vožnje zamenjanih vozil potekajo v MOL.
-            Če vse potekajo zunaj MOL, je ocena z drugimi izbranimi ukrepi {num(outside, digits)} µg/m³.
-            {" "}Razlika zaradi dizlov: {dieselEffect > 0 && dieselEffect < 0.001 ? "< 0,001" : num(dieselEffect, 3)} µg/m³.
+          <p
+            className="truncate text-[10.5px] text-slate-500"
+            title={`Prikazana ocena velja, če vse vožnje zamenjanih vozil potekajo v MOL. Če vse potekajo zunaj MOL, je ocena ${num(outside, digits)} µg/m³.`}
+          >
+            Vožnje zunaj MOL: {num(outside, digits)} µg/m³ · dizli{" "}
+            {dieselEffect > 0 && dieselEffect < 0.001 ? "< 0,001" : `−${num(dieselEffect, 3)}`} µg/m³
           </p>
         )}
 
         {/* colour scale with animated marker */}
         <div className="relative">
           <div
-            className="h-2.5 w-full rounded-full"
+            className="h-1.5 w-full rounded-full"
             style={{ background: "linear-gradient(90deg,#2f7d52 0%,#4fae60 18%,#fde047 42%,#fb923c 64%,#ef4444 83%,#b91c1c 100%)" }}
           />
           <div
             ref={markerRef}
-            className="absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white shadow-md transition-[background] duration-500"
+            className="absolute top-[3px] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-md transition-[background] duration-500"
             style={{ left: `${scalePos(after)}%`, background: pmColor(after) }}
           />
-          <div className="mt-1 flex justify-between text-[10px] text-slate-400">
+          <div className="mt-0.5 flex justify-between text-[9.5px] text-slate-400">
             <span>čisto</span>
             <span>meja EU 25</span>
             <span>onesnaženo</span>
