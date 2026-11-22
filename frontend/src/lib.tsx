@@ -51,6 +51,7 @@ export function Card({
   className = "",
   dragHandle = false,
   noPad = false,
+  bare = false,
 }: {
   title?: string;
   icon?: React.ReactNode;
@@ -59,7 +60,26 @@ export function Card({
   className?: string;
   dragHandle?: boolean;
   noPad?: boolean;
+  /** no header bar: the whole card drags, `right` floats top-right on hover */
+  bare?: boolean;
 }) {
+  if (bare) {
+    return (
+      <div
+        className={`group relative h-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card ${dragHandle ? "widget-drag-handle" : ""} ${className}`}
+      >
+        {children}
+        {right && (
+          <div
+            className="absolute right-1.5 top-1.5 z-10 flex items-center gap-1 opacity-0 transition group-hover:opacity-100"
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            {right}
+          </div>
+        )}
+      </div>
+    );
+  }
   const showHeader = title || right || dragHandle;
   return (
     <div className={`flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card ${className}`}>

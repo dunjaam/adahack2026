@@ -26,7 +26,7 @@ interface WidgetDef {
   body: React.ReactNode;
   noPad?: boolean;
   right?: React.ReactNode;
-  hideTitle?: boolean;
+  bare?: boolean;
 }
 
 const DEFAULT_IDS = ["airquality", "map", "sliders", "budget"];
@@ -67,9 +67,8 @@ export function Dashboard() {
         id: "airquality",
         title: "Kakovost zraka",
         icon: <Wind className="h-3.5 w-3.5 text-brand-600" />,
-        layout: { x: 8, y: 0, w: 4, h: 6, minH: 5, minW: 3 },
-        noPad: true,
-        hideTitle: true,
+        layout: { x: 8, y: 0, w: 4, h: 7, minH: 4, minW: 3 },
+        bare: true,
         body: <AirVisual />,
       },
       map: {
@@ -107,14 +106,15 @@ export function Dashboard() {
         id: "sliders",
         title: "Simulacija ukrepov",
         icon: <SlidersIcon className="h-3.5 w-3.5 text-brand-600" />,
-        layout: { x: 8, y: 6, w: 4, h: 11, minH: 6, minW: 3 },
+        layout: { x: 8, y: 7, w: 4, h: 11, minH: 6, minW: 3 },
         body: <Sliders />,
       },
       budget: {
         id: "budget",
         title: "Proračun",
         icon: <Wallet className="h-3.5 w-3.5 text-emerald-600" />,
-        layout: { x: 8, y: 17, w: 4, h: 3, minH: 3, minW: 3 },
+        layout: { x: 8, y: 18, w: 4, h: 2, minH: 2, minW: 3 },
+        bare: true,
         body: <BudgetCard />,
       },
     }),
@@ -137,6 +137,7 @@ export function Dashboard() {
         compactType={null}
         isBounded
         draggableHandle=".widget-drag-handle"
+        draggableCancel="input,button,textarea,select,label"
         onResizeStop={() => window.dispatchEvent(new Event("resize"))}
         onDragStop={() => window.dispatchEvent(new Event("resize"))}
       >
@@ -146,7 +147,8 @@ export function Dashboard() {
             <div key={id}>
               <Card
                 dragHandle
-                title={w.hideTitle ? undefined : w.title}
+                bare={w.bare}
+                title={w.bare ? undefined : w.title}
                 icon={w.icon}
                 noPad={w.noPad}
                 right={
