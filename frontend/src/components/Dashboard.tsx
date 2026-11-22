@@ -62,7 +62,7 @@ export function Dashboard() {
         id: "airquality",
         title: "Kakovost zraka",
         icon: <Wind className="h-4 w-4 text-brand-600" />,
-        layout: { x: 0, y: 0, w: 12, h: 8, minH: 6, minW: 5 },
+        layout: { x: 0, y: 0, w: 5, h: 6, minH: 6, minW: 5 },
         noPad: true,
         body: <AirVisual />,
       },
@@ -108,7 +108,7 @@ export function Dashboard() {
         id: "budget",
         title: "Proračun",
         icon: <Wallet className="h-4 w-4 text-emerald-600" />,
-        layout: { x: 8, y: 19, w: 4, h: 4, minH: 3, minW: 3 },
+        layout: { x: 8, y: 19, w: 4, h: 6, minH: 5, minW: 3 },
         body: <BudgetCard />,
       },
       optimizer: {

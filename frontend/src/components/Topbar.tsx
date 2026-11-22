@@ -53,10 +53,10 @@ export function Topbar() {
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-2.5">
         {/* brand — horizontal lockup, left aligned */}
         <div className="flex items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-100 bg-gradient-to-br from-white to-brand-50 shadow-card">
-            <BrandIcon className="h-8 w-8" />
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-brand-100 bg-gradient-to-br from-white to-brand-50 shadow-card">
+            <BrandIcon className="h-6 w-6" />
           </span>
-          <span className="text-[22px] font-semibold leading-none tracking-tight text-ink">
+          <span className="text-[19px] font-semibold leading-none tracking-tight text-ink">
             ZrakVizija
           </span>
         </div>
