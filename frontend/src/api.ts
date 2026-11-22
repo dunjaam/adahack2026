@@ -33,8 +33,8 @@ export const api = {
     ),
   simulate: (params: SimParams, focus: string | null) =>
     postJSON<SimResult>("/api/simulate", { params, focus }),
-  optimize: (budget_eur: number) =>
-    postJSON<OptimizeResult>("/api/optimize", { budget_eur }),
+  optimize: (budget_eur: number, diesel_cars_replaced: number) =>
+    postJSON<OptimizeResult>("/api/optimize", { budget_eur, diesel_cars_replaced }),
   history: (cs: string | null) =>
     getJSON<HistoryResult>("/api/history" + (cs ? `?cs=${encodeURIComponent(cs)}` : "")),
 };

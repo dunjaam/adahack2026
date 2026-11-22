@@ -18,7 +18,7 @@ frontend/               # React + TypeScript + Tailwind + Leaflet + Recharts + r
 1. *Prediction model* — prednaučen RandomForest oceni ogrevalni prispevek k PM10 iz
    značilk stavb/ogrevanja/vremena (SHAP atribucija). Izhodišče PM2.5 je izmerjeno
    zimsko sidro 2025/26 iz paketa.
-2. *Simulation model* — politike (e-busi, zamenjava kurišč, znižanje prometa)
+2. *Simulation model* — politike (e-busi, zamenjava kurišč, obnova stavb)
    pretvori v prej/potem PM2.5/PM10 po območjih, strošek in vpliv. Fizikalno
    utemeljen odziv; prediction model lahko odziv le izostri.
 

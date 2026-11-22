@@ -101,7 +101,7 @@ export function Dashboard() {
         id: "sliders",
         title: "Simulacija ukrepov",
         icon: <SlidersIcon className="h-4 w-4 text-brand-600" />,
-        layout: { x: 8, y: 8, w: 4, h: 11, minH: 9, minW: 3 },
+        layout: { x: 8, y: 8, w: 4, h: 14, minH: 12, minW: 3 },
         body: <Sliders />,
       },
       budget: {
@@ -115,7 +115,7 @@ export function Dashboard() {
         id: "optimizer",
         title: "Optimizacija investicije",
         icon: <Sparkles className="h-4 w-4 text-brand-600" />,
-        layout: { x: 8, y: 23, w: 4, h: 9, minH: 6, minW: 3 },
+        layout: { x: 8, y: 26, w: 4, h: 9, minH: 6, minW: 3 },
         body: <Optimizer />,
       },
       beforeafter: {

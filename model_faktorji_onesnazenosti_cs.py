@@ -3,7 +3,12 @@ Air pollution factor attribution model for Ljubljana's 17 city districts (četrt
 
 Outputs:
   output/cs_faktorji_atribucija.csv      - per-CS factor shares & heating type mix
-  output/cs_ml_feature_importance.csv    - global RF feature importances
+  output/cs_ml_feature_importance.csv    - RF/SHAP importances over the HEATING-ONLY
+                                           PM10 increment (target: gral_pm10_kurilna).
+                                           NOT an importance over total PM2.5 — for the
+                                           simulator-aligned policy ranking use the
+                                           sensitivity() function in backend/simulation.py
+                                           (also exposed as GET /api/sensitivity).
   output/cs_ml_shap_per_cs.csv           - SHAP values per CS × feature
   output/charts/01_heating_vs_traffic.png
   output/charts/02_heating_type_breakdown.png
@@ -313,7 +318,10 @@ feature_metadata = [
     {"name": "pct_solid", "label_sl": "Delež ogrevanja na trda goriva",
      "group": "Mešanica ogrevanja", "min": 0.0, "max": 1.0, "step": 0.01, "unit": "delež",
      "direction": "higher_worse",
-     "description_sl": "Ocena deleža stanovanj, ki se ogrevajo na trda goriva (drva, premog, peleti)."},
+     "description_sl": "Ocena deleža stanovanj na trda goriva (drva, premog, peleti). "
+                        "Najpomembnejša značilka v SHAP razvrstitvi za *ogrevalni* del PM10. "
+                        "V simulatorju učinek drsnika »Zamenjava kurišč« omeji še delež ogrevanja "
+                        "v skupnem PM — v prometno obremenjenih četrtnih skupnostih je torej majhen."},
     {"name": "pct_gas", "label_sl": "Delež ogrevanja na plin",
      "group": "Mešanica ogrevanja", "min": 0.0, "max": 1.0, "step": 0.01, "unit": "delež",
      "direction": "neutral",
@@ -415,10 +423,12 @@ fig, ax = plt.subplots(figsize=(9, 5))
 imp = importance_df.sort_values("mean_abs_shap")
 labels = imp["feature"].map(FEATURE_LABELS_SL).fillna(imp["feature"])
 ax.barh(labels, imp["mean_abs_shap"], color="#4c72b0")
-ax.set_xlabel("Povprečni prispevek k napovedi PM10 (µg/m³, |SHAP|)")
+ax.set_xlabel("Povprečni prispevek k napovedi ogrevalnega PM10 (µg/m³, |SHAP|)")
 ax.set_title(
-    "Kateri dejavniki najbolj vplivajo na napoved PM10 iz ogrevanja\n"
-    f"(model: naključni gozd, 5-kratna CV RMSE = {cv_rmse:.3f} µg/m³)"
+    "Dejavniki ogrevalnega prispevka k PM10 (GRAL)\n"
+    "Ranga ne enačite z učinkom simulatorskih ukrepov — tam šteje celoten PM "
+    "(ogrevanje + promet + ozadje); glej /api/sensitivity.\n"
+    f"(naključni gozd, 5-kratna CV RMSE = {cv_rmse:.3f} µg/m³)"
 )
 ax.margins(y=0.02)
 fig.tight_layout()

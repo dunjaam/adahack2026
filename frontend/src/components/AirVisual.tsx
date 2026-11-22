@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { animate, AnimatePresence, motion, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { useStore } from "../store";
-import { pmColor, num } from "../lib";
+import { pmColor, num, eur } from "../lib";
 
 const CLEAN = 5;
 const DIRTY = 32;
@@ -30,17 +30,22 @@ export function AirVisual() {
 
   let before = result?.municipality_pm25_before ?? 18;
   let after = result?.municipality_pm25_after ?? 18;
+  let outside = pollutant === "pm25" ? result?.municipality_pm25_after_outside : result?.municipality_pm10_after_outside;
   if (result && selected) {
     const d = result.districts.find((x) => x.cs_ime === selected);
     if (d) {
       before = pollutant === "pm25" ? d.pm25_before : d.pm10_before;
       after = pollutant === "pm25" ? d.pm25_after : d.pm10_after;
+      outside = pollutant === "pm25" ? d.pm25_after_outside : d.pm10_after_outside;
     }
   } else if (result && pollutant === "pm10") {
     before = result.municipality_pm10_before;
     after = result.municipality_pm10_after;
   }
   const pctRaw = before ? ((after - before) / before) * 100 : 0;
+  const withDiesel = (result?.params.diesel_cars_replaced ?? 0) > 0;
+  const dieselEffect = Math.max(0, (outside ?? after) - after);
+  const digits = withDiesel ? 3 : 1;
   const improved = pctRaw < -0.1;
   const worsened = pctRaw > 0.1;
 
@@ -54,7 +59,7 @@ export function AirVisual() {
   }, [after, pm]);
   useMotionValueEvent(pm, "change", (v) => {
     if (numRef.current) {
-      numRef.current.textContent = num(v);
+      numRef.current.textContent = num(v, digits);
       numRef.current.style.color = pmColor(v);
     }
     if (markerRef.current) markerRef.current.style.left = `${scalePos(v)}%`;
@@ -163,7 +168,7 @@ export function AirVisual() {
               className="font-bold leading-[0.85] tabular-nums tracking-tight"
               style={{ color: pmColor(after), fontSize: "clamp(3.5rem, 9vw, 7rem)" }}
             >
-              {num(after)}
+              {num(after, digits)}
             </span>
             <span className="pb-2 text-lg font-medium text-slate-400">µg/m³</span>
           </div>
@@ -172,10 +177,19 @@ export function AirVisual() {
               {statusLabel(after)}
             </div>
             <div className="text-xs text-slate-400">
-              izhodišče <span className="font-semibold text-slate-500">{num(before)}</span> µg/m³
+              izhodišče <span className="font-semibold text-slate-500">{num(before, digits)}</span> µg/m³
             </div>
+            {result && <div className="text-xs text-slate-600">Skupni strošek ukrepov · {eur(result.cost.total_cost)}</div>}
           </div>
         </div>
+
+        {withDiesel && outside !== undefined && (
+          <p className="text-xs text-slate-600">
+            Prikazana ocena velja, če vse vožnje zamenjanih vozil potekajo v MOL.
+            Če vse potekajo zunaj MOL, je ocena z drugimi izbranimi ukrepi {num(outside, digits)} µg/m³.
+            {" "}Razlika zaradi dizlov: {dieselEffect > 0 && dieselEffect < 0.001 ? "< 0,001" : num(dieselEffect, 3)} µg/m³.
+          </p>
+        )}
 
         {/* colour scale with animated marker */}
         <div className="relative">
