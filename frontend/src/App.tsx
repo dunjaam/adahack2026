@@ -1,8 +1,33 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Info, X } from "lucide-react";
 import { useStore } from "./store";
 import { Topbar } from "./components/Topbar";
 import { Dashboard } from "./components/Dashboard";
 import { DataNote } from "./components/Kpis";
+
+function DisclaimerBar() {
+  const [open, setOpen] = useState(true);
+  if (!open) return null;
+  return (
+    <div className="border-b border-amber-100 bg-amber-50/80">
+      <div className="mx-auto flex max-w-[1600px] items-center gap-2 px-5 py-2 text-[12px] text-amber-800">
+        <Info className="h-4 w-4 shrink-0 text-amber-500" />
+        <span>
+          <b>Opozorilo:</b> vse vrednosti, ki se spreminjajo ob ukrepih (PM2.5 / PM10,
+          stroški, učinki) so <b>modelska napoved</b> — ne dejanske meritve. Izhodišče
+          temelji na podatkih ADA Hack 2026.
+        </span>
+        <button
+          onClick={() => setOpen(false)}
+          className="ml-auto rounded p-0.5 text-amber-400 transition hover:bg-amber-100 hover:text-amber-600"
+          aria-label="Zapri"
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const init = useStore((s) => s.init);
@@ -24,6 +49,7 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <Topbar />
+      <DisclaimerBar />
       <main className="mx-auto max-w-[1600px]">
         <Dashboard />
         <div className="px-5 pb-8">

@@ -101,7 +101,7 @@ export function Dashboard() {
         id: "sliders",
         title: "Simulacija ukrepov",
         icon: <SlidersIcon className="h-4 w-4 text-brand-600" />,
-        layout: { x: 8, y: 8, w: 4, h: 14, minH: 12, minW: 3 },
+        layout: { x: 8, y: 8, w: 4, h: 10, minH: 8, minW: 3 },
         body: <Sliders />,
       },
       budget: {

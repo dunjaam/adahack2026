@@ -5,6 +5,7 @@ import {
   MapContainer,
   TileLayer,
   Tooltip,
+  ZoomControl,
   useMap,
 } from "react-leaflet";
 import L from "leaflet";
@@ -117,7 +118,8 @@ export function MapView({ mode }: { mode: MapMode }) {
 
   return (
     <div className="relative h-full w-full">
-      <MapContainer center={[46.0569, 14.5058]} zoom={12} className="h-full w-full" zoomControl scrollWheelZoom>
+      <MapContainer center={[46.0569, 14.5058]} zoom={12} className="h-full w-full" zoomControl={false} scrollWheelZoom>
+        <ZoomControl position="topright" />
         <TileLayer
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap"
