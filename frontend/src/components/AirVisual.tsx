@@ -2,15 +2,7 @@ import { useEffect, useRef } from "react";
 import { animate, motion, useAnimationControls, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from "lucide-react";
 import { useStore } from "../store";
-import { pmColor, pmInk, num } from "../lib";
-
-function statusLabel(pm: number) {
-  if (pm < 10) return "Odličen zrak";
-  if (pm < 15) return "Dober zrak";
-  if (pm < 20) return "Zmerno onesnažen";
-  if (pm < 25) return "Onesnažen";
-  return "Zelo onesnažen";
-}
+import { pmInk, num } from "../lib";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -89,20 +81,13 @@ export function AirVisual() {
   return (
     <div className="flex h-full w-full flex-col justify-between px-5 pb-4 pt-4" style={{ containerType: "size" }}>
       {/* context */}
-      <div className="flex items-start justify-between gap-3 pr-10">
+      <div className="pr-10">
         <div className="min-w-0">
           <div className="truncate text-title font-medium text-on-surface">Kakovost zraka</div>
           <div className="truncate text-xs text-on-surface-variant">
             {label} · {selected ?? "vsa občina"} · zimsko povprečje
           </div>
         </div>
-        <span
-          className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-lg bg-surface-container-low px-2.5 text-xs font-medium transition-colors duration-700"
-          style={{ color: pmInk(after) }}
-        >
-          <span className="h-2 w-2 rounded-full transition-colors duration-700" style={{ background: pmColor(after) }} />
-          {statusLabel(after)}
-        </span>
       </div>
 
       {/* simulated value, baseline underneath */}
@@ -113,19 +98,19 @@ export function AirVisual() {
             className="display-num leading-[0.88]"
             style={{
               color: pmInk(pm.get()),
-              fontSize: "clamp(3rem, min(50cqh, 24cqw), 9.5rem)",
+              fontSize: "clamp(3.5rem, min(58cqh, 30cqw), 12rem)",
               letterSpacing: "-0.01em",
             }}
             /* text is written imperatively each animation frame; keep React out of the node */
             dangerouslySetInnerHTML={{ __html: num(pm.get(), digits) }}
           />
-          <span className="font-medium text-on-surface-variant" style={{ fontSize: "clamp(0.9rem, min(8cqh, 4.4cqw), 1.4rem)" }}>
+          <span className="font-medium text-on-surface-variant" style={{ fontSize: "clamp(1rem, min(9cqh, 5cqw), 1.75rem)" }}>
             µg/m³
           </span>
         </motion.div>
         <div
-          className="mt-1 flex items-center gap-1.5 text-on-surface-variant"
-          style={{ fontSize: "clamp(0.8rem, min(7cqh, 3.6cqw), 1rem)" }}
+          className="mt-1.5 flex items-center gap-1.5 text-on-surface-variant"
+          style={{ fontSize: "clamp(0.85rem, min(7.5cqh, 4cqw), 1.15rem)" }}
         >
           {changed ? (
             <>
@@ -141,7 +126,7 @@ export function AirVisual() {
       </div>
 
       {/* change indicator */}
-      <div className="flex items-center gap-3" style={{ fontSize: "clamp(0.8rem, min(7cqh, 3.8cqw), 1.05rem)" }}>
+      <div className="flex items-center gap-3" style={{ fontSize: "clamp(0.85rem, min(8cqh, 4.2cqw), 1.2rem)" }}>
         <motion.span
           animate={pulse}
           className={`num inline-flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1 font-semibold transition-colors duration-500 ${tone}`}

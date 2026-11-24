@@ -80,6 +80,7 @@ export function SectionLabel({ title, className = "" }: { index?: string; title:
  */
 export function Card({
   title,
+  heading,
   right,
   children,
   className = "",
@@ -88,6 +89,8 @@ export function Card({
   bare = false,
 }: {
   title?: string;
+  /** custom header content in place of the plain title (e.g. a view switch) */
+  heading?: React.ReactNode;
   /** @deprecated numbering removed from the design */
   index?: string;
   /** kept for API compatibility; cards are icon-less by design */
@@ -120,7 +123,7 @@ export function Card({
       <div
         className={`flex h-14 shrink-0 items-center justify-between gap-3 pl-5 pr-3 ${dragHandle ? "widget-drag-handle" : ""}`}
       >
-        {title ? <SectionLabel title={title} /> : <span />}
+        {heading ?? (title ? <SectionLabel title={title} /> : <span />)}
         <div className="flex items-center gap-2" onMouseDown={(e) => e.stopPropagation()}>
           {right}
         </div>
@@ -184,6 +187,46 @@ export function Segmented({
             } ${on ? "bg-secondary-container text-on-secondary-container" : "text-on-surface-variant hover:text-on-surface"}`}
           >
             {o.l}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * Card heading that doubles as a view switch: each view is a title, the active
+ * one in full ink with a primary underline, the others muted.
+ */
+export function TitleSwitch({
+  value,
+  onChange,
+  options,
+  ariaLabel,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: { v: string; l: string }[];
+  ariaLabel?: string;
+}) {
+  return (
+    <div role="tablist" aria-label={ariaLabel} className="flex min-w-0 items-stretch gap-5 self-stretch">
+      {options.map((o) => {
+        const on = value === o.v;
+        return (
+          <button
+            key={o.v}
+            role="tab"
+            aria-selected={on}
+            onClick={() => onChange(o.v)}
+            className={`relative truncate text-title font-medium transition-colors ${
+              on ? "text-on-surface" : "text-on-surface-muted hover:text-on-surface"
+            }`}
+          >
+            {o.l}
+            <span
+              className={`absolute inset-x-0 bottom-0 h-[3px] rounded-t-full bg-primary transition-opacity ${on ? "opacity-100" : "opacity-0"}`}
+            />
           </button>
         );
       })}

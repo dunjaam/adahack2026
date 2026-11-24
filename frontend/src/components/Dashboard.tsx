@@ -7,7 +7,7 @@ import {
   Wind,
   X,
 } from "lucide-react";
-import { Card, IconButton, Segmented } from "../lib";
+import { Card, IconButton, Segmented, TitleSwitch } from "../lib";
 import { useStore } from "../store";
 import { MapView } from "./MapView";
 import { AirQualityPlot } from "./AirQualityPlot";
@@ -28,6 +28,7 @@ interface WidgetDef {
   body: React.ReactNode;
   noPad?: boolean;
   right?: React.ReactNode;
+  heading?: React.ReactNode;
   bare?: boolean;
 }
 
@@ -82,17 +83,19 @@ export function Dashboard() {
         icon: <MapIcon className="h-3.5 w-3.5 text-brand-600" />,
         layout: { x: 0, y: 0, w: 8, h: 20, minH: 8, minW: 5 },
         noPad: true,
+        heading: (
+          <TitleSwitch
+            ariaLabel="Pogled"
+            value={mapTab}
+            onChange={(v) => setMapTab(v as MapTab)}
+            options={[
+              { v: "map", l: "Zemljevid onesnaženosti" },
+              { v: "plot", l: "Napoved skozi čas" },
+            ]}
+          />
+        ),
         right: (
           <div className="flex items-center gap-2">
-            <Segmented
-              ariaLabel="Pogled"
-              value={mapTab}
-              onChange={(v) => setMapTab(v as MapTab)}
-              options={[
-                { v: "map", l: "Zemljevid" },
-                { v: "plot", l: "Graf" },
-              ]}
-            />
             <Segmented
               ariaLabel="Onesnaževalo"
               value={pollutant}
@@ -167,6 +170,7 @@ export function Dashboard() {
                 dragHandle
                 bare={w.bare}
                 title={w.bare ? undefined : w.title}
+                heading={w.heading}
                 icon={w.icon}
                 noPad={w.noPad}
                 right={

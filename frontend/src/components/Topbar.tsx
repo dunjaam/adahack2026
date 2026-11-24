@@ -37,7 +37,6 @@ export function Topbar() {
   const selectDistrict = useStore((s) => s.selectDistrict);
   const resetParams = useStore((s) => s.resetParams);
   const result = useStore((s) => s.result);
-  const simulating = useStore((s) => s.simulating);
 
   const districtOpts =
     municipality?.districts
@@ -71,15 +70,6 @@ export function Topbar() {
         />
 
         <div className="ml-auto flex items-center gap-1">
-          <span
-            className="mr-2 hidden h-8 items-center gap-2 rounded-lg bg-surface-container-high px-3 text-xs font-medium text-on-surface-variant sm:flex"
-            aria-live="polite"
-          >
-            <span
-              className={`h-2 w-2 rounded-full transition-colors ${simulating ? "animate-pulse bg-primary-300" : "bg-secondary"}`}
-            />
-            {simulating ? "Računam …" : "Simulacija v živo"}
-          </span>
           <a
             href="/docs"
             target="_blank"
